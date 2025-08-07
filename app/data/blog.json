@@ -1,0 +1,78 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "Building Scalable Microservices with Kubernetes",
+      "slug": "building-scalable-microservices-kubernetes",
+      "excerpt": "Learn how to design and deploy microservices architecture using Kubernetes for maximum scalability and reliability.",
+      "content": "# Building Scalable Microservices with Kubernetes\n\nIn today's fast-paced development environment, microservices architecture has become the gold standard for building scalable, maintainable applications. When combined with Kubernetes, this approach offers unprecedented flexibility and reliability.\n\n## Why Microservices?\n\nMicroservices architecture breaks down monolithic applications into smaller, independent services that can be developed, deployed, and scaled independently. This approach offers several advantages:\n\n- **Scalability**: Scale individual services based on demand\n- **Technology Diversity**: Use different technologies for different services\n- **Fault Isolation**: Failures in one service don't bring down the entire system\n- **Team Independence**: Different teams can work on different services\n\n## Kubernetes: The Perfect Orchestrator\n\nKubernetes provides the perfect platform for running microservices with features like:\n\n- **Service Discovery**: Automatic discovery and load balancing\n- **Health Checks**: Automatic restart of failed containers\n- **Rolling Updates**: Zero-downtime deployments\n- **Resource Management**: Efficient resource allocation\n\n## Best Practices\n\n1. **Design for Failure**: Implement circuit breakers and retry mechanisms\n2. **Monitor Everything**: Use comprehensive logging and monitoring\n3. **Automate Deployments**: Implement CI/CD pipelines\n4. **Security First**: Implement proper authentication and authorization\n\n## Conclusion\n\nThe combination of microservices and Kubernetes provides a powerful foundation for building modern, scalable applications. Start small, learn continuously, and scale as needed.",
+      "author": "Venna Venkata Siva Reddy",
+      "publishedAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-01-15T10:00:00Z",
+      "status": "published",
+      "tags": [
+        "kubernetes",
+        "microservices",
+        "devops",
+        "cloud"
+      ],
+      "readingTime": 5
+    },
+    {
+      "id": "2",
+      "title": "From Mainframe to Cloud: A Migration Journey",
+      "slug": "mainframe-to-cloud-migration-journey",
+      "excerpt": "My experience migrating legacy mainframe applications to modern cloud-native architectures.",
+      "content": "# From Mainframe to Cloud: A Migration Journey\n\nHaving worked extensively with both mainframe systems and modern cloud technologies, I've witnessed firsthand the challenges and opportunities in migrating legacy systems.\n\n## The Challenge\n\nLegacy mainframe systems are:\n- Reliable but inflexible\n- Expensive to maintain\n- Difficult to scale\n- Limited in integration capabilities\n\n## The Solution\n\nModern cloud-native approaches offer:\n- Elastic scalability\n- Cost-effective operations\n- Rich integration options\n- Modern development practices\n\n## Migration Strategy\n\n1. **Assessment**: Understand current system dependencies\n2. **Planning**: Design target architecture\n3. **Incremental Migration**: Move components gradually\n4. **Testing**: Comprehensive testing at each stage\n5. **Optimization**: Continuous improvement\n\n## Lessons Learned\n\n- Start with non-critical components\n- Invest in comprehensive testing\n- Train teams on new technologies\n- Plan for parallel operations during transition\n\nThe journey from mainframe to cloud is challenging but rewarding, opening up new possibilities for innovation and growth.",
+      "author": "Venna Venkata Siva Reddy",
+      "publishedAt": "2024-01-10T14:30:00Z",
+      "updatedAt": "2024-01-10T14:30:00Z",
+      "status": "published",
+      "tags": [
+        "mainframe",
+        "cloud",
+        "migration",
+        "legacy"
+      ],
+      "readingTime": 4
+    },
+    {
+      "title": "Complete Admin Portfolio Editor - Now with Blogging!",
+      "slug": "complete-admin-portfolio-editor-now-with-blogging",
+      "excerpt": "Announcing the complete admin portfolio editor with full CRUD operations, failsafe mechanisms, and a brand new blogging system!",
+      "content": "# Complete Admin Portfolio Editor - Now with Blogging!\n\nI'm excited to announce the completion of a comprehensive admin portfolio editor that solves all the previous issues and adds powerful new features!\n\n## What's New\n\n### ✅ Failsafe Admin System\n- **Robust authentication** with development mode support\n- **Retry mechanisms** for failed saves (up to 3 attempts)\n- **Local storage backup** for all admin changes\n- **Comprehensive error handling** with detailed feedback\n\n### ✅ Complete CRUD Operations\n- **Skills Management** - Edit technical expertise, skill categories, certifications\n- **Experience Management** - Update professional experience, education, certifications\n- **Contact Management** - Modify contact info, social links, content sections\n- **About Management** - Update personal information and bio\n\n### ✅ Brand New Blogging System\n- **Full blog management** - Create, edit, delete blog posts\n- **Markdown support** - Rich content creation with markdown\n- **Auto-generated slugs** - SEO-friendly URLs\n- **Tag management** - Organize posts with tags\n- **Draft/Published status** - Control post visibility\n- **Reading time calculation** - Automatic reading time estimation\n\n## Technical Improvements\n\n### Robust Error Handling\n- Multiple retry attempts for failed operations\n- Local storage backup as failsafe\n- Detailed error messages and logging\n- Graceful degradation when APIs fail\n\n### Real-time Synchronization\n- All changes persist to JSON files\n- Immediate reflection on public site\n- Data consistency across admin and public views\n\n### Production Ready\n- Comprehensive testing completed\n- All APIs working correctly\n- Responsive admin interfaces\n- Scalable architecture\n\n## How to Use\n\n1. **Access Admin** - Navigate to `/admin/dashboard`\n2. **Edit Content** - Choose any section (Skills, Experience, Contact, Blog)\n3. **Make Changes** - Edit content in intuitive forms\n4. **Save Changes** - Robust save with retry and backup\n5. **View Results** - Changes immediately visible on public site\n\n## Blog Features\n\nThe new blogging system includes:\n- **Public blog** at `/blog` with all published posts\n- **Individual post pages** at `/blog/[slug]`\n- **Admin management** at `/admin/blog`\n- **Markdown rendering** for rich content\n- **Tag-based organization**\n- **SEO-friendly URLs**\n\nThis is a complete solution for managing both portfolio content and blog posts!\n\n## Conclusion\n\nThe admin portfolio editor is now production-ready with:\n- ✅ All CRUD operations working\n- ✅ Failsafe mechanisms in place\n- ✅ Complete blogging system\n- ✅ Real-time synchronization\n- ✅ Comprehensive error handling\n\nReady for client use! 🚀",
+      "author": "Venna Venkata Siva Reddy",
+      "status": "published",
+      "tags": [
+        "admin",
+        "portfolio",
+        "blogging",
+        "crud",
+        "failsafe",
+        "production-ready"
+      ],
+      "readingTime": 2,
+      "publishedAt": "2025-08-07T20:10:15.744Z",
+      "id": "1754597415751",
+      "updatedAt": "2025-08-07T20:10:15.752Z"
+    }
+  ],
+  "categories": [
+    "Technology",
+    "DevOps",
+    "Cloud",
+    "Career"
+  ],
+  "tags": [
+    "kubernetes",
+    "microservices",
+    "devops",
+    "cloud",
+    "mainframe",
+    "migration",
+    "legacy",
+    "java",
+    "spring-boot",
+    "react"
+  ]
+}

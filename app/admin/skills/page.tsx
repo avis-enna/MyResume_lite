@@ -49,23 +49,66 @@ export default function AdminSkills() {
     }
   };
 
+  // Load skills data with local storage fallback
   const loadSkillsData = async () => {
     try {
       const response = await fetch('/api/admin/skills');
       if (response.ok) {
         const data = await response.json();
         setSkillsData(data);
+        console.log('Skills data loaded from API');
+      } else {
+        console.error('Failed to load from API, checking local storage backup');
+        loadFromBackup();
       }
     } catch (error) {
       console.error('Error loading skills data:', error);
+      loadFromBackup();
     }
   };
 
-  const handleSave = async () => {
-    if (!skillsData) return;
-    
-    setSaving(true);
+  // Load from local storage backup
+  const loadFromBackup = () => {
     try {
+      const backup = localStorage.getItem('admin-skills-backup');
+      if (backup) {
+        const { data, timestamp } = JSON.parse(backup);
+        const backupAge = Date.now() - timestamp;
+        const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+
+        if (backupAge < maxAge) {
+          setSkillsData(data);
+          console.log('Skills data loaded from local storage backup');
+          alert('Loaded data from local backup. Please save to sync with server.');
+        } else {
+          console.log('Local backup is too old, ignoring');
+        }
+      }
+    } catch (error) {
+      console.error('Error loading from backup:', error);
+    }
+  };
+
+  // Robust save function with retry mechanism and local storage backup
+  const handleSave = async (retryCount = 0) => {
+    if (!skillsData) return;
+
+    setSaving(true);
+
+    // Save to local storage as backup
+    try {
+      localStorage.setItem('admin-skills-backup', JSON.stringify({
+        data: skillsData,
+        timestamp: Date.now()
+      }));
+      console.log('Skills data backed up to local storage');
+    } catch (error) {
+      console.warn('Failed to backup to local storage:', error);
+    }
+
+    try {
+      console.log('Attempting to save skills data, attempt:', retryCount + 1);
+
       const response = await fetch('/api/admin/skills', {
         method: 'PUT',
         headers: {
@@ -74,14 +117,36 @@ export default function AdminSkills() {
         body: JSON.stringify(skillsData),
       });
 
+      const responseData = await response.json();
+      console.log('Save response:', responseData);
+
       if (response.ok) {
         alert('Skills data updated successfully!');
+        // Clear backup on successful save
+        localStorage.removeItem('admin-skills-backup');
       } else {
-        alert('Failed to update skills data');
+        console.error('Save failed with status:', response.status, responseData);
+
+        // Retry up to 3 times
+        if (retryCount < 2) {
+          console.log('Retrying save in 2 seconds...');
+          setTimeout(() => handleSave(retryCount + 1), 2000);
+          return;
+        }
+
+        alert(`Failed to update skills data: ${responseData.error || 'Unknown error'}\n\nData has been saved to local storage as backup.`);
       }
     } catch (error) {
       console.error('Error saving skills data:', error);
-      alert('Error saving skills data');
+
+      // Retry up to 3 times
+      if (retryCount < 2) {
+        console.log('Retrying save in 2 seconds...');
+        setTimeout(() => handleSave(retryCount + 1), 2000);
+        return;
+      }
+
+      alert(`Error saving skills data: ${error.message}\n\nData has been saved to local storage as backup.`);
     } finally {
       setSaving(false);
     }

@@ -20,6 +20,7 @@ export default function Navigation() {
             <a href="#skills" className={`text-xs font-light tracking-[0.15em] uppercase transition-colors duration-300 ${isDarkMode ? 'text-gray-400 hover:text-white border-b border-transparent hover:border-white' : 'text-stone-600 hover:text-stone-800 border-b border-transparent hover:border-stone-700'}`}>expertise</a>
             <a href="#experience" className={`text-xs font-light tracking-[0.15em] uppercase transition-colors duration-300 ${isDarkMode ? 'text-gray-400 hover:text-white border-b border-transparent hover:border-white' : 'text-stone-600 hover:text-stone-800 border-b border-transparent hover:border-stone-700'}`}>experience</a>
             <a href="#projects" className={`text-xs font-light tracking-[0.15em] uppercase transition-colors duration-300 ${isDarkMode ? 'text-gray-400 hover:text-white border-b border-transparent hover:border-white' : 'text-stone-600 hover:text-stone-800 border-b border-transparent hover:border-stone-700'}`}>portfolio</a>
+            <a href="/blog" className={`text-xs font-light tracking-[0.15em] uppercase transition-colors duration-300 ${isDarkMode ? 'text-gray-400 hover:text-white border-b border-transparent hover:border-white' : 'text-stone-600 hover:text-stone-800 border-b border-transparent hover:border-stone-700'}`}>blog</a>
             <a href="#contact" className={`text-xs font-light tracking-[0.15em] uppercase transition-colors duration-300 ${isDarkMode ? 'text-gray-400 hover:text-white border-b border-transparent hover:border-white' : 'text-stone-600 hover:text-stone-800 border-b border-transparent hover:border-stone-700'}`}>contact</a>
             <div className="flex items-center space-x-3">
               <button 
@@ -62,6 +63,7 @@ export default function Navigation() {
               <a href="#skills" className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`}>skills</a>
               <a href="#experience" className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`}>experience</a>
               <a href="#projects" className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`}>projects</a>
+              <a href="/blog" className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`}>blog</a>
               <a href="#contact" className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`}>contact</a>
               <div className="flex items-center space-x-3 pt-4">
                 <span className={`text-sm transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>

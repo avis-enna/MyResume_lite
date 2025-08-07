@@ -87,6 +87,13 @@ export default function AdminDashboard() {
       href: '/admin/contact',
       icon: '📧',
       color: 'from-teal-600 to-green-600'
+    },
+    {
+      title: 'Blog',
+      description: 'Manage blog posts and content',
+      href: '/admin/blog',
+      icon: '📝',
+      color: 'from-indigo-600 to-purple-600'
     }
   ];
 
