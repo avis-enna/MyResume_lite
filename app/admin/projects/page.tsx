@@ -58,22 +58,31 @@ export default function ProjectsAdmin() {
   const saveProject = async (project: Project) => {
     setSaving(true);
     try {
+      console.log('Saving project:', project);
+      console.log('Action:', editingProject ? 'update' : 'create');
+
       const response = await fetch('/api/admin/projects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ project, action: editingProject ? 'update' : 'create' }),
       });
 
+      const data = await response.json();
+      console.log('Save response:', data);
+
       if (response.ok) {
+        console.log('Save successful, reloading projects...');
         await loadProjects();
         setEditingProject(null);
         setShowAddForm(false);
+        alert(`Project ${editingProject ? 'updated' : 'created'} successfully! Total projects: ${data.projectCount || 'unknown'}`);
       } else {
-        alert('Failed to save project');
+        console.error('Save failed:', data);
+        alert(`Failed to save project: ${data.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Save error:', error);
-      alert('Failed to save project');
+      alert(`Network error while saving project: ${error}`);
     } finally {
       setSaving(false);
     }
@@ -221,10 +230,12 @@ function ProjectForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.id) {
-      formData.id = formData.title.toLowerCase().replace(/\s+/g, '-');
+    const projectToSave = { ...formData };
+    if (!projectToSave.id) {
+      projectToSave.id = projectToSave.title.toLowerCase().replace(/\s+/g, '-');
     }
-    onSave(formData);
+    console.log('Submitting project:', projectToSave);
+    onSave(projectToSave);
   };
 
   const handleTechnologiesChange = (value: string) => {
