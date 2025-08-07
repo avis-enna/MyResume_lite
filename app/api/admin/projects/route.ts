@@ -1,21 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '../../../lib/admin-auth';
-import { getProjectsData, updateProjectsData } from '../../projects/route';
+import { getProjectsData, updateProjectsData, addProject, updateProject, deleteProject } from '../../../lib/projects-data';
 
 // Load projects (from shared data source)
 function loadProjects() {
   return getProjectsData();
-}
-
-// Save projects (to shared data source)
-function saveProjects(projects: any[]) {
-  try {
-    updateProjectsData(projects);
-    return true;
-  } catch (error) {
-    console.error('Error saving projects:', error);
-    return false;
-  }
 }
 
 export async function GET() {
@@ -32,25 +21,26 @@ export async function POST(request: NextRequest) {
   try {
     await requireAuth();
     const { project, action } = await request.json();
-    
-    let projects = loadProjects();
-    
+
+    console.log(`Admin API: ${action} project`, project.id);
+
     if (action === 'create') {
-      projects.push(project);
+      addProject(project);
     } else if (action === 'update') {
-      const index = projects.findIndex((p: any) => p.id === project.id);
-      if (index !== -1) {
-        projects[index] = project;
-      }
+      updateProject(project.id, project);
     }
-    
-    if (saveProjects(projects)) {
-      return NextResponse.json({ success: true });
-    } else {
-      return NextResponse.json({ error: 'Failed to save' }, { status: 500 });
-    }
+
+    return NextResponse.json({
+      success: true,
+      message: `Project ${action}d successfully`,
+      projectCount: getProjectsData().length
+    });
   } catch (error) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    console.error('Admin POST error:', error);
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
 
@@ -59,27 +49,24 @@ export async function DELETE(request: NextRequest) {
     await requireAuth();
     const { projectId } = await request.json();
 
-    console.log('Deleting project with ID:', projectId);
+    console.log('Admin API: Deleting project with ID:', projectId);
 
-    let projects = loadProjects();
-    const originalLength = projects.length;
-    projects = projects.filter((p: any) => p.id !== projectId);
+    const deleted = deleteProject(projectId);
+    const remainingCount = getProjectsData().length;
 
-    console.log(`Projects before: ${originalLength}, after: ${projects.length}`);
-
-    if (saveProjects(projects)) {
-      console.log('Project deleted successfully');
+    if (deleted) {
+      console.log('Admin API: Project deleted successfully');
       return NextResponse.json({
         success: true,
         message: `Project ${projectId} deleted successfully`,
-        remainingProjects: projects.length
+        remainingProjects: remainingCount
       });
     } else {
-      console.error('Failed to save projects after deletion');
-      return NextResponse.json({ error: 'Failed to delete' }, { status: 500 });
+      console.error('Admin API: Project not found for deletion');
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
   } catch (error) {
-    console.error('Delete error:', error);
+    console.error('Admin DELETE error:', error);
     if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
