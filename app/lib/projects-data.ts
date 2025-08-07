@@ -1,7 +1,13 @@
-// Shared projects data store - single source of truth
+// Shared projects data store - single source of truth with file persistence
 // This ensures admin and public APIs use the exact same data reference
 
-let projectsData: any[] = [
+import fs from 'fs';
+import path from 'path';
+
+const DATA_FILE_PATH = path.join(process.cwd(), 'app/data/projects.json');
+
+// Default projects data
+const defaultProjectsData = [
   {
     "id": "log-analysis",
     "title": "Log Analysis System",
@@ -52,6 +58,44 @@ let projectsData: any[] = [
   }
 ];
 
+// Load projects from file or use defaults
+function loadProjectsFromFile(): any[] {
+  try {
+    if (fs.existsSync(DATA_FILE_PATH)) {
+      const fileContent = fs.readFileSync(DATA_FILE_PATH, 'utf8');
+      const data = JSON.parse(fileContent);
+      console.log('Projects loaded from file:', data.length, 'projects');
+      return data;
+    } else {
+      console.log('Projects file not found, using defaults');
+      saveProjectsToFile(defaultProjectsData);
+      return defaultProjectsData;
+    }
+  } catch (error) {
+    console.error('Error loading projects from file:', error);
+    return defaultProjectsData;
+  }
+}
+
+// Save projects to file
+function saveProjectsToFile(projects: any[]): void {
+  try {
+    // Ensure directory exists
+    const dir = path.dirname(DATA_FILE_PATH);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(projects, null, 2));
+    console.log('Projects saved to file:', projects.length, 'projects');
+  } catch (error) {
+    console.error('Error saving projects to file:', error);
+  }
+}
+
+// Initialize projects data from file
+let projectsData: any[] = loadProjectsFromFile();
+
 // Function to get projects data
 export function getProjectsData() {
   return projectsData;
@@ -60,12 +104,14 @@ export function getProjectsData() {
 // Function to update projects data
 export function updateProjectsData(newProjects: any[]) {
   projectsData = [...newProjects];
+  saveProjectsToFile(projectsData);
   console.log('Projects data updated. New count:', projectsData.length);
 }
 
 // Function to add a project
 export function addProject(project: any) {
   projectsData.push(project);
+  saveProjectsToFile(projectsData);
   console.log('Project added. New count:', projectsData.length);
 }
 
@@ -74,6 +120,7 @@ export function updateProject(projectId: string, updatedProject: any) {
   const index = projectsData.findIndex(p => p.id === projectId);
   if (index !== -1) {
     projectsData[index] = updatedProject;
+    saveProjectsToFile(projectsData);
     console.log('Project updated:', projectId);
   }
 }
@@ -83,6 +130,9 @@ export function deleteProject(projectId: string) {
   const originalLength = projectsData.length;
   projectsData = projectsData.filter(p => p.id !== projectId);
   const deleted = originalLength > projectsData.length;
+  if (deleted) {
+    saveProjectsToFile(projectsData);
+  }
   console.log(`Delete project ${projectId}: ${deleted ? 'SUCCESS' : 'NOT FOUND'}. Count: ${originalLength} → ${projectsData.length}`);
   return deleted;
 }
