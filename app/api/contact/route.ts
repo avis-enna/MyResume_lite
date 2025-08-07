@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { processFormData, securityHeaders, rateLimit } from '../../lib/security'
+import { getContactData } from '../../lib/contact-data'
 
 export async function POST(request: NextRequest) {
   try {
@@ -215,18 +216,18 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Handle other HTTP methods securely
+// Handle GET requests to serve contact data
 export async function GET() {
-  return NextResponse.json(
-    { error: 'Method not allowed' },
-    {
-      status: 405,
-      headers: {
-        ...securityHeaders,
-        'Allow': 'POST'
-      }
-    }
-  )
+  try {
+    const contactData = await getContactData();
+    return NextResponse.json(contactData);
+  } catch (error) {
+    console.error('Error fetching contact data:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch contact data' },
+      { status: 500 }
+    );
+  }
 }
 
 export async function PUT() {

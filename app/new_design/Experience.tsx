@@ -1,73 +1,93 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { useDarkMode } from "./DarkModeContext";
+
+interface Experience {
+  id: number;
+  title: string;
+  company: string;
+  location: string;
+  period: string;
+  description: string[];
+  technologies: string[];
+}
+
+interface Education {
+  degree: string;
+  field: string;
+  institution: string;
+  location: string;
+  period: string;
+  cgpa: string;
+}
+
+interface Certification {
+  name: string;
+  issuer: string;
+  year: string;
+  status: string;
+}
+
+interface ExperienceData {
+  experiences: Experience[];
+  education: Education;
+  certifications: Certification[];
+}
 
 export default function Experience() {
   const { isDarkMode } = useDarkMode();
+  const [experienceData, setExperienceData] = useState<ExperienceData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const experiences = [
-    {
-      id: 1,
-      title: "Software Engineer",
-      company: "Cisco Systems",
-      location: "Bengaluru, India",
-      period: "August 2024 - Present",
-      description: [
-        "Led the migration of the IoT Control Center's core services from Docker to a scalable Kubernetes (k8s) architecture, significantly improving service reliability and deployment velocity",
-        "Managed Kubernetes applications using Helm charts for packaging and deployed a GitOps workflow with FluxCD for automated, declarative continuous delivery",
-        "Developed and maintained resilient Java Spring Boot microservices for the HLR-level network service, designing and exposing both REST and SOAP APIs",
-        "Implemented Single Sign-On (SSO) for new services using Duo, enhancing security and streamlining user access",
-        "Built and supported frontend modules in React for internal service management dashboards",
-        "Leveraged CCNA certification to collaborate with the network engineering team on troubleshooting and configuring network devices",
-        "Developed a data analytics tool by integrating with Jira APIs to pull, model, and visualize project data, enabling predictive insights into team productivity"
-      ],
-      technologies: ["Kubernetes", "Docker", "Helm", "FluxCD", "Java", "Spring Boot", "React", "REST APIs", "SOAP", "SSO", "Jira APIs"]
-    },
-    {
-      id: 2,
-      title: "Trainee",
-      company: "Cognizant Technology Solutions",
-      location: "Bengaluru, India", 
-      period: "November 2023 - May 2024",
-      description: [
-        "Maintained and enhanced a large-scale mainframe banking application, gaining deep experience in enterprise-level systems",
-        "Developed and modified COBOL programs to implement new business logic and functionality changes",
-        "Automated and optimized batch processing jobs using JCL, debugged JCL failures, and implemented changes to system-generated reports",
-        "Worked extensively with core mainframe technologies including DB2 for database management and VSAM for indexed data storage"
-      ],
-      technologies: ["COBOL", "JCL", "DB2", "VSAM", "Mainframe", "Banking Systems"]
+  useEffect(() => {
+    fetchExperienceData();
+  }, []);
+
+  const fetchExperienceData = async () => {
+    try {
+      const response = await fetch('/api/experience');
+      if (response.ok) {
+        const data = await response.json();
+        setExperienceData(data);
+      }
+    } catch (error) {
+      console.error('Error fetching experience data:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
-
-  const education = {
-    degree: "Bachelor of Engineering (B.E.)",
-    field: "Electronics and Telecommunication Engineering",
-    institution: "Sir M Visvesvaraya Institute of Technology",
-    location: "Bengaluru, India",
-    period: "",
-    cgpa: ""
   };
 
-  const certifications = [
-    {
-      name: "Cisco Certified DevNet Associate (DEVASC)",
-      issuer: "Cisco",
-      year: "",
-      status: "Certified"
-    },
-    {
-      name: "Cisco Certified Network Associate (CCNA)",
-      issuer: "Cisco",
-      year: "",
-      status: "Certified"
-    },
-    {
-      name: "Cisco Certified Cybersecurity Associate (CCCA)",
-      issuer: "Cisco", 
-      year: "",
-      status: "Certified"
-    }
-  ];
+  if (loading) {
+    return (
+      <section id="experience" className={`min-h-screen py-20 transition-colors duration-300 ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
+        <div className="container mx-auto px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Loading experience section...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!experienceData) {
+    return (
+      <section id="experience" className={`min-h-screen py-20 transition-colors duration-300 ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
+        <div className="container mx-auto px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center">
+              <p className={`transition-colors duration-300 ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>Failed to load experience section</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+
 
   return (
     <section id="experience" className={`min-h-screen py-20 transition-colors duration-300 ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
@@ -83,10 +103,10 @@ export default function Experience() {
             <h3 className={`text-2xl font-light mb-12 text-center transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-stone-800'}`}>Professional Experience</h3>
             
             <div className="space-y-12">
-              {experiences.map((exp, index) => (
+              {experienceData.experiences.map((exp, index) => (
                 <div key={exp.id} className="relative">
                   {/* Timeline line */}
-                  {index < experiences.length - 1 && (
+                  {index < experienceData.experiences.length - 1 && (
                     <div className={`absolute left-6 top-16 w-px h-32 transition-colors duration-300 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`}></div>
                   )}
                   
@@ -147,21 +167,21 @@ export default function Experience() {
               <h3 className={`text-2xl font-light mb-8 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-black'}`}>Education</h3>
               <div className={`p-8 rounded-lg border transition-colors duration-300 ${isDarkMode ? 'bg-gray-900/10 border-gray-800/30' : 'bg-gray-50 border-gray-200'}`}>
                 <h4 className={`text-lg font-medium mb-2 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                  {education.degree}
+                  {experienceData.education.degree}
                 </h4>
                 <p className={`text-base mb-1 transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                  {education.field}
+                  {experienceData.education.field}
                 </p>
                 <p className={`text-sm mb-2 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                  {education.institution}
+                  {experienceData.education.institution}
                 </p>
                 <p className={`text-sm mb-2 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                  {education.location}
+                  {experienceData.education.location}
                 </p>
-                {education.period && (
+                {experienceData.education.period && (
                   <div className="flex justify-between items-center mt-4">
                     <span className={`text-sm transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {education.period}
+                      {experienceData.education.period}
                     </span>
                   </div>
                 )}
@@ -172,7 +192,7 @@ export default function Experience() {
             <div>
               <h3 className={`text-2xl font-light mb-8 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-black'}`}>Certifications</h3>
               <div className="space-y-4">
-                {certifications.map((cert, index) => (
+                {experienceData.certifications.map((cert, index) => (
                   <div key={index} className={`p-6 rounded-lg border transition-colors duration-300 ${isDarkMode ? 'bg-gray-900/10 border-gray-800/30' : 'bg-gray-50 border-gray-200'}`}>
                     <h4 className={`text-base font-medium mb-1 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-black'}`}>
                       {cert.name}

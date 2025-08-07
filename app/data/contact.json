@@ -1,0 +1,33 @@
+{
+  "contactInfo": {
+    "email": "vsivareddy.venna@gmail.com",
+    "phone": "+91 93989 61541",
+    "location": "Bengaluru, India"
+  },
+  "socialLinks": [
+    {
+      "name": "LinkedIn",
+      "url": "https://linkedin.com/in/sivavenna",
+      "icon": "linkedin"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com/avis-enna",
+      "icon": "github"
+    },
+    {
+      "name": "Email",
+      "url": "mailto:sivareddy.venna@gmail.com",
+      "icon": "email"
+    }
+  ],
+  "content": {
+    "title": "contact",
+    "subtitle": "Let's work together",
+    "description": "I'm always interested in hearing about new opportunities and exciting projects. Whether you have a question or just want to say hi, I'll try my best to get back to you!",
+    "orderOfService": {
+      "title": "order of service",
+      "description": "Available for freelance projects, full-time opportunities, and consulting work. Let's discuss how we can work together to bring your ideas to life."
+    }
+  }
+}

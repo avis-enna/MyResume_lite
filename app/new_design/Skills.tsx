@@ -1,60 +1,76 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { useDarkMode } from "./DarkModeContext";
+
+interface SkillCategory {
+  id: string;
+  title: string;
+  skills: string[];
+}
+
+interface SkillsData {
+  skillCategories: SkillCategory[];
+  certifications: string[];
+  technicalExpertise: {
+    title: string;
+    description: string;
+  };
+}
 
 export default function Skills() {
   const { isDarkMode } = useDarkMode();
+  const [skillsData, setSkillsData] = useState<SkillsData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const skillCategories = [
-    {
-      title: "Cloud & DevOps",
-      skills: [
-        "Kubernetes", "Docker", "Helm", "FluxCD", "CI/CD", "AWS", "GCP"
-      ]
-    },
-    {
-      title: "Programming Languages",
-      skills: [
-        "Java", "Python", "JavaScript", "SQL", "Shell Scripting", "COBOL"
-      ]
-    },
-    {
-      title: "Backend",
-      skills: [
-        "Spring Boot", "REST APIs", "SOAP Web Services", "Microservices"
-      ]
-    },
-    {
-      title: "Frontend",
-      skills: [
-        "React", "JavaScript", "HTML", "CSS"
-      ]
-    },
-    {
-      title: "Databases",
-      skills: [
-        "SQL", "MongoDB", "IBM DB2", "VSAM"
-      ]
-    },
-    {
-      title: "Mainframe",
-      skills: [
-        "JCL", "COBOL"
-      ]
-    },
-    {
-      title: "Networking",
-      skills: [
-        "TCP/IP", "HTTP", "Network Device Configuration & Troubleshooting"
-      ]
+  useEffect(() => {
+    fetchSkillsData();
+  }, []);
+
+  const fetchSkillsData = async () => {
+    try {
+      const response = await fetch('/api/skills');
+      if (response.ok) {
+        const data = await response.json();
+        setSkillsData(data);
+      }
+    } catch (error) {
+      console.error('Error fetching skills data:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const certifications = [
-    "Cisco Certified DevNet Associate (DEVASC)",
-    "Cisco Certified Network Associate (CCNA)",
-    "Cisco Certified Cybersecurity Associate (CCCA)"
-  ];
+  if (loading) {
+    return (
+      <section id="skills" className={`min-h-screen py-20 transition-colors duration-300 ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
+        <div className="container mx-auto px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Loading skills section...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!skillsData) {
+    return (
+      <section id="skills" className={`min-h-screen py-20 transition-colors duration-300 ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
+        <div className="container mx-auto px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center">
+              <p className={`transition-colors duration-300 ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>Failed to load skills section</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+
 
   return (
     <section id="skills" className={`min-h-screen py-20 transition-colors duration-300 ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
@@ -67,7 +83,7 @@ export default function Skills() {
 
           {/* Skills Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {skillCategories.map((category, categoryIndex) => (
+            {skillsData.skillCategories.map((category, categoryIndex) => (
               <div key={categoryIndex} className={`p-8 rounded-lg border transition-colors duration-300 ${isDarkMode ? 'bg-gray-900/10 border-gray-800/30' : 'bg-stone-50 border-stone-200'}`}>
                 <h3 className={`text-lg font-medium mb-6 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-stone-800'}`}>
                   {category.title}
@@ -87,17 +103,27 @@ export default function Skills() {
           </div>
 
           {/* Certifications */}
-          <div className="text-center">
+          <div className="text-center mb-16">
             <h3 className={`text-2xl font-light mb-8 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-stone-800'}`}>
               Professional Certifications
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
-              {certifications.map((cert, index) => (
+              {skillsData.certifications.map((cert, index) => (
                 <div key={index} className={`px-6 py-3 rounded-full border transition-colors duration-300 ${isDarkMode ? 'bg-gray-900/20 border-gray-700 text-gray-300' : 'bg-stone-100 border-stone-300 text-stone-700'}`}>
                   <span className="text-sm font-medium">{cert}</span>
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Technical Expertise */}
+          <div className="text-center">
+            <h3 className={`text-2xl font-light mb-8 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-stone-800'}`}>
+              {skillsData.technicalExpertise.title}
+            </h3>
+            <p className={`text-lg leading-relaxed max-w-4xl mx-auto transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-stone-700'}`}>
+              {skillsData.technicalExpertise.description}
+            </p>
           </div>
 
           {/* Technical Expertise Summary */}
