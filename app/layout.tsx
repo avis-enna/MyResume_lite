@@ -136,8 +136,8 @@ export default function RootLayout({
       <body className="overflow-x-hidden">
         <SecurityProvider>
           {children}
-          <PerformanceMonitor />
-          <SecurityMonitor />
+          {/* <PerformanceMonitor /> */}
+          {/* <SecurityMonitor /> */}
         </SecurityProvider>
       </body>
     </html>
