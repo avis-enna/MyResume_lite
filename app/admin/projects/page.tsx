@@ -83,20 +83,28 @@ export default function ProjectsAdmin() {
     if (!confirm('Are you sure you want to delete this project?')) return;
 
     try {
+      console.log('Attempting to delete project:', projectId);
+
       const response = await fetch('/api/admin/projects', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ projectId }),
       });
 
+      const data = await response.json();
+      console.log('Delete response:', data);
+
       if (response.ok) {
+        console.log('Delete successful, reloading projects...');
         await loadProjects();
+        alert(`Project deleted successfully! ${data.remainingProjects || 0} projects remaining.`);
       } else {
-        alert('Failed to delete project');
+        console.error('Delete failed:', data);
+        alert(`Failed to delete project: ${data.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Delete error:', error);
-      alert('Failed to delete project');
+      alert(`Network error while deleting project: ${error}`);
     }
   };
 
