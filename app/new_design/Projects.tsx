@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDarkMode } from "./DarkModeContext";
 
 interface Project {
@@ -18,9 +18,37 @@ interface Project {
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   const { isDarkMode } = useDarkMode();
 
-  const projects: Project[] = [
+  // Load projects from API
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const response = await fetch('/api/projects');
+        const data = await response.json();
+        if (data.success) {
+          setProjects(data.projects);
+        } else {
+          console.error('Failed to load projects:', data.error);
+          // Fallback to default projects if API fails
+          setProjects(defaultProjects);
+        }
+      } catch (error) {
+        console.error('Error loading projects:', error);
+        // Fallback to default projects if API fails
+        setProjects(defaultProjects);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProjects();
+  }, []);
+
+  // Default projects as fallback
+  const defaultProjects: Project[] = [
     {
       id: "log-analysis",
       title: "Log Analysis System",
@@ -76,8 +104,15 @@ export default function Projects() {
             <div className={`w-24 h-px mx-auto transition-colors duration-300 ${isDarkMode ? 'bg-white' : 'bg-stone-400'}`}></div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12">
-            {projects.map((project) => (
+          {loading ? (
+            <div className="text-center py-12">
+              <div className={`text-lg transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Loading projects...
+              </div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-12">
+              {projects.map((project) => (
               <div key={project.id} className="group">
                 <div className={`rounded-lg overflow-hidden mb-6 transition-all duration-300 ${isDarkMode ? 'bg-gray-900/10 border border-gray-800/30 hover:bg-gray-800/20 hover:border-gray-700/50' : 'bg-gray-50 border border-gray-200 hover:shadow-lg'}`}>
                   <div className={`aspect-video flex items-center justify-center transition-colors duration-300 ${isDarkMode ? 'bg-gray-900/20' : 'bg-gray-100'}`}>
@@ -143,14 +178,17 @@ export default function Projects() {
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
-          <div className="text-center mt-12">
-            <button className={`transition-colors font-medium border-b pb-1 ${isDarkMode ? 'text-white hover:text-gray-300 border-white hover:border-gray-300' : 'text-black hover:text-gray-600 border-black hover:border-gray-600'}`}>
-              show more projects
-            </button>
-          </div>
+          {!loading && (
+            <div className="text-center mt-12">
+              <button className={`transition-colors font-medium border-b pb-1 ${isDarkMode ? 'text-white hover:text-gray-300 border-white hover:border-gray-300' : 'text-black hover:text-gray-600 border-black hover:border-gray-600'}`}>
+                show more projects
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
