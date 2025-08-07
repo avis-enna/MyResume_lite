@@ -42,7 +42,7 @@ function saveProjects(projects: any[]) {
 
 export async function GET() {
   try {
-    requireAuth();
+    await requireAuth();
     const projects = loadProjects();
     return NextResponse.json({ projects });
   } catch (error) {
@@ -52,7 +52,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    requireAuth();
+    await requireAuth();
     const { project, action } = await request.json();
     
     let projects = loadProjects();
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    requireAuth();
+    await requireAuth();
     const { projectId } = await request.json();
     
     let projects = loadProjects();

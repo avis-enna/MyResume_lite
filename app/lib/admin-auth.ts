@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers';
 
-export function checkAdminAuth(): boolean {
+export async function checkAdminAuth(): Promise<boolean> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const sessionToken = cookieStore.get('admin-session');
     
     if (!sessionToken) {
@@ -24,8 +24,8 @@ export function checkAdminAuth(): boolean {
   }
 }
 
-export function requireAuth() {
-  if (!checkAdminAuth()) {
+export async function requireAuth() {
+  if (!(await checkAdminAuth())) {
     throw new Error('Unauthorized');
   }
 }

@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       const sessionToken = Buffer.from(`${username}:${Date.now()}`).toString('base64');
       
       // Set cookie
-      const cookieStore = cookies();
+      const cookieStore = await cookies();
       cookieStore.set('admin-session', sessionToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
