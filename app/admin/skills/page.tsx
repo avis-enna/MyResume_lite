@@ -90,7 +90,7 @@ export default function AdminSkills() {
   };
 
   // Robust save function with retry mechanism and local storage backup
-  const handleSave = async (retryCount = 0) => {
+  const handleSaveInternal = async (retryCount = 0) => {
     if (!skillsData) return;
 
     setSaving(true);
@@ -130,7 +130,7 @@ export default function AdminSkills() {
         // Retry up to 3 times
         if (retryCount < 2) {
           console.log('Retrying save in 2 seconds...');
-          setTimeout(() => handleSave(retryCount + 1), 2000);
+          setTimeout(() => handleSaveInternal(retryCount + 1), 2000);
           return;
         }
 
@@ -142,7 +142,7 @@ export default function AdminSkills() {
       // Retry up to 3 times
       if (retryCount < 2) {
         console.log('Retrying save in 2 seconds...');
-        setTimeout(() => handleSave(retryCount + 1), 2000);
+        setTimeout(() => handleSaveInternal(retryCount + 1), 2000);
         return;
       }
 
@@ -150,6 +150,11 @@ export default function AdminSkills() {
     } finally {
       setSaving(false);
     }
+  };
+
+  // Click handler for the save button
+  const handleSave = () => {
+    handleSaveInternal(0);
   };
 
   const updateSkillCategory = (categoryId: string, field: keyof SkillCategory, value: any) => {

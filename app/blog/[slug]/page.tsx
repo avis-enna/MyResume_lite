@@ -12,10 +12,10 @@ export default function BlogPostPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (params.slug) {
+    if (params?.slug) {
       loadPost(params.slug as string);
     }
-  }, [params.slug]);
+  }, [params?.slug]);
 
   const loadPost = async (slug: string) => {
     try {
