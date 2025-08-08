@@ -6,6 +6,8 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'react-icons'],
   },
 
+
+
   // Image optimization
   images: {
     domains: ['images.unsplash.com', 'via.placeholder.com'],
@@ -18,14 +20,30 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
 
-  // Bundle analyzer (only in analyze mode)
-  ...(process.env.ANALYZE === 'true' && {
-    webpack: (config) => {
+  // Bundle analyzer and webpack optimizations
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Optimize serverless functions
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+          },
+        },
+      };
+    }
+
+    // Bundle analyzer (only in analyze mode)
+    if (process.env.ANALYZE === 'true') {
       const { BundleAnalyzerPlugin } = require('@next/bundle-analyzer')();
       config.plugins.push(new BundleAnalyzerPlugin());
-      return config;
-    },
-  }),
+    }
+
+    return config;
+  },
 
   // Security and SEO headers
   async headers() {

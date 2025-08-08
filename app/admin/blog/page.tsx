@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { BlogPost, BlogData } from '../../lib/blog-data';
+import { BlogPost, BlogData } from '../../lib/blog-types';
 
 export default function AdminBlogPage() {
   const [blogData, setBlogData] = useState<BlogData | null>(null);

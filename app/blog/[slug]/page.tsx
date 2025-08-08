@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { BlogPost } from '../../lib/blog-data';
+import { BlogPost } from '../../lib/blog-types';
 
 export default function BlogPostPage() {
   const params = useParams();

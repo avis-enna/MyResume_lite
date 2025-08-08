@@ -1,26 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-
-export interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  publishedAt: string;
-  updatedAt: string;
-  status: 'draft' | 'published';
-  tags: string[];
-  featuredImage?: string;
-  readingTime: number;
-}
-
-export interface BlogData {
-  posts: BlogPost[];
-  categories: string[];
-  tags: string[];
-}
+import { BlogPost, BlogData } from './blog-types';
 
 const BLOG_DATA_FILE = path.join(process.cwd(), 'app/data/blog.json');
 
