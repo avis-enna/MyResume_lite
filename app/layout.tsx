@@ -1,58 +1,40 @@
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
-import PerformanceMonitor from './components/PerformanceMonitor'
-import { SecurityProvider } from './components/SecurityProvider'
-import SecurityMonitor from './components/SecurityMonitor'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://my-resume-o2do89dyl-sivavennas-projects.vercel.app'),
-  title: 'Venna Venkata Siva Reddy - Backend Developer & Cybersecurity Specialist | Bengaluru',
-  description: 'Experienced Backend Developer and Cybersecurity Specialist from Bengaluru, India. Expert in Node.js, Python, PostgreSQL, React, and network security. Available for full-time opportunities and freelance projects.',
+  metadataBase: new URL('https://my-resume-lite.vercel.app'),
+  title: 'Venna Venkata Siva Reddy - Backend Developer | Portfolio',
+  description: 'Experienced Backend Developer specializing in Node.js, Python, PostgreSQL, and React. Available for full-time opportunities.',
   keywords: [
     'backend developer',
-    'cybersecurity specialist',
     'software engineer',
     'Node.js developer',
     'Python developer',
     'PostgreSQL expert',
     'React developer',
-    'full stack developer',
-    'network security',
-    'Bengaluru developer',
-    'India software engineer',
-    'web development',
-    'API development',
-    'database design',
-    'secure coding',
-    'portfolio'
+    'full stack developer'
   ],
-  authors: [{ name: 'Venna Venkata Siva Reddy', url: 'https://my-resume-o2do89dyl-sivavennas-projects.vercel.app' }],
+  authors: [{ name: 'Venna Venkata Siva Reddy' }],
   creator: 'Venna Venkata Siva Reddy',
   publisher: 'Venna Venkata Siva Reddy',
-  category: 'Technology',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title: 'Venna Venkata Siva Reddy - Backend Developer & Cybersecurity Specialist',
-    description: 'Experienced Backend Developer and Cybersecurity Specialist from Bengaluru, India. Expert in Node.js, Python, PostgreSQL, and network security.',
-    url: 'https://my-resume-o2do89dyl-sivavennas-projects.vercel.app',
-    siteName: 'Venna Venkata Siva Reddy - Professional Portfolio',
-    images: [
-      {
-        url: '/profile-photo.png',
-        width: 1200,
-        height: 630,
-        alt: 'Venna Venkata Siva Reddy - Backend Developer and Cybersecurity Specialist',
-      },
-    ],
+    type: 'website',
     locale: 'en_US',
-    type: 'profile',
+    url: 'https://my-resume-lite.vercel.app',
+    title: 'Venna Venkata Siva Reddy - Backend Developer | Portfolio',
+    description: 'Experienced Backend Developer specializing in Node.js, Python, PostgreSQL, and React.',
+    siteName: 'Venna Venkata Siva Reddy Portfolio',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Venna Venkata Siva Reddy - Backend Developer & Cybersecurity Specialist',
-    description: 'Experienced Backend Developer and Cybersecurity Specialist from Bengaluru, India. Expert in Node.js, Python, PostgreSQL, and network security.',
-    images: ['/profile-photo.png'],
-    creator: '@sivavenna',
-    site: '@sivavenna',
+    title: 'Venna Venkata Siva Reddy - Backend Developer | Portfolio',
+    description: 'Experienced Backend Developer specializing in Node.js, Python, PostgreSQL, and React.',
+    creator: '@yourusername',
   },
   robots: {
     index: true,
@@ -65,15 +47,12 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    google: 'your-google-verification-code', // Add your Google Search Console verification
-  },
 }
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#00f5ff',
+  maximumScale: 1,
 }
 
 export default function RootLayout({
@@ -81,64 +60,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Venna Venkata Siva Reddy",
-    "jobTitle": "Backend Developer & Cybersecurity Specialist",
-    "description": "Experienced Backend Developer and Cybersecurity Specialist specializing in Node.js, Python, PostgreSQL, and network security solutions.",
-    "url": "https://my-resume-o2do89dyl-sivavennas-projects.vercel.app",
-    "image": "https://my-resume-o2do89dyl-sivavennas-projects.vercel.app/profile-photo.png",
-    "email": "vsivareddy.venna@gmail.com",
-    "telephone": "+91-93989-61541",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Bengaluru",
-      "addressRegion": "Karnataka",
-      "addressCountry": "India"
-    },
-    "sameAs": [
-      "https://linkedin.com/in/sivavenna",
-      "https://github.com/avis-enna"
-    ],
-    "knowsAbout": [
-      "Backend Development",
-      "Cybersecurity",
-      "Node.js",
-      "Python",
-      "PostgreSQL",
-      "React",
-      "Network Security",
-      "API Development",
-      "Database Design",
-      "Web Development"
-    ],
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Freelance Developer"
-    }
-  };
-
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData),
-          }}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
         />
       </head>
       <body className="overflow-x-hidden">
-        {/* <SecurityProvider> */}
-          {children}
-          {/* <PerformanceMonitor /> */}
-          {/* <SecurityMonitor /> */}
-        {/* </SecurityProvider> */}
+        {children}
       </body>
     </html>
   )
