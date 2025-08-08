@@ -55,6 +55,46 @@
       "publishedAt": "2025-08-07T20:10:15.744Z",
       "id": "1754597415751",
       "updatedAt": "2025-08-07T20:10:15.752Z"
+    },
+    {
+      "title": "Building a Zero-Cost Admin Console with Next.js",
+      "slug": "building-a-zero-cost-admin-console-with-next-js",
+      "excerpt": "Learn how to build a complete admin console for your portfolio website using Next.js, MongoDB Atlas, and Vercel - all for free!",
+      "content": "# Building a Zero-Cost Admin Console\n\nIn this comprehensive guide, we'll build a complete admin console for portfolio management using modern web technologies.\n\n## What We'll Build\n\n- **Authentication System** with JWT and role-based access\n- **Admin Dashboard** for content management\n- **Blog System** with WYSIWYG editor\n- **User Management** with different permission levels\n- **Database Integration** with MongoDB Atlas (free tier)\n- **Deployment** on Vercel (free tier)\n\n## Tech Stack\n\n- **Frontend**: Next.js 15 with TypeScript\n- **Backend**: Next.js API Routes\n- **Database**: MongoDB Atlas (free tier)\n- **Authentication**: JWT with HTTP-only cookies\n- **Styling**: Tailwind CSS\n- **Deployment**: Vercel\n\n## Key Features\n\n### 🔐 Authentication & Authorization\n- Secure JWT-based authentication\n- Role-based access control (Admin vs User)\n- HTTP-only cookies for security\n\n### 📊 Admin Dashboard\n- Clean, modern interface\n- Real-time statistics\n- Content management for all portfolio sections\n\n### 📝 Blog System\n- Markdown support\n- Draft/Published status\n- Tag management\n- View and like tracking\n\n### 👥 User Management\n- User registration and login\n- Limited permissions for contributors\n- Activity logging\n\n## Getting Started\n\n```bash\n# Clone the repository\ngit clone https://github.com/your-username/portfolio-admin\n\n# Install dependencies\nnpm install\n\n# Set up environment variables\ncp .env.example .env.local\n\n# Run development server\nnpm run dev\n```\n\n## Conclusion\n\nThis admin console provides a complete solution for managing your portfolio website with zero hosting costs. The combination of Next.js, MongoDB Atlas, and Vercel gives you enterprise-level features on the free tier.\n\nHappy coding! 🚀",
+      "author": "Venna Venkata Siva Reddy",
+      "status": "published",
+      "tags": [
+        "nextjs",
+        "admin",
+        "portfolio",
+        "mongodb",
+        "vercel",
+        "zero-cost",
+        "tutorial"
+      ],
+      "readingTime": 2,
+      "publishedAt": "2025-08-08T16:11:33.860Z",
+      "id": "1754669493861",
+      "updatedAt": "2025-08-08T16:11:33.861Z"
+    },
+    {
+      "title": "MongoDB Atlas Integration Test",
+      "slug": "mongodb-atlas-integration-test",
+      "excerpt": "Testing the MongoDB Atlas connection to ensure data persistence is working correctly with the admin console.",
+      "content": "# MongoDB Atlas Integration Test\n\nThis is a test blog post to verify that our MongoDB Atlas connection is working correctly.\n\n## What We're Testing\n\n- **Database Connection**: Verifying connection to MongoDB Atlas\n- **Data Persistence**: Ensuring blog posts are saved to the cloud database\n- **CRUD Operations**: Testing Create, Read, Update, Delete functionality\n- **Real-time Updates**: Confirming data appears immediately\n\n## MongoDB Atlas Benefits\n\n- **Free Tier**: 512MB storage, perfect for development\n- **Global Clusters**: Fast access from anywhere\n- **Automatic Backups**: Built-in data protection\n- **Scalability**: Easy to upgrade as needed\n\n## Test Results\n\nIf you can see this blog post, it means:\n\n✅ MongoDB Atlas connection is working\n✅ Data is being saved to the cloud\n✅ Admin console is fully functional\n✅ Zero-cost deployment is successful\n\nThis confirms our portfolio admin system is production-ready!",
+      "author": "Venna Venkata Siva Reddy",
+      "status": "published",
+      "tags": [
+        "mongodb",
+        "atlas",
+        "database",
+        "testing",
+        "integration"
+      ],
+      "readingTime": 1,
+      "publishedAt": "2025-08-08T17:23:57.660Z",
+      "id": "1754673837660",
+      "updatedAt": "2025-08-08T17:23:57.660Z"
     }
   ],
   "categories": [
