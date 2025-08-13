@@ -65,7 +65,7 @@ export default async function WorkingExperience() {
             </div>
           ) : (
             <div className="space-y-6">
-              {experiences.map((experience) => (
+              {experiences.map((experience: any) => (
                 <div key={experience._id} className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
                   <div className="flex justify-between items-start mb-4">
                     <div>
@@ -95,7 +95,7 @@ export default async function WorkingExperience() {
                       <h4 className="font-medium text-gray-900 mb-2">Description:</h4>
                       {Array.isArray(experience.description) ? (
                         <ul className="list-disc list-inside space-y-1">
-                          {experience.description.map((desc, idx) => (
+                          {experience.description.map((desc: any, idx: number) => (
                             <li key={idx} className="text-gray-700 text-sm">{desc}</li>
                           ))}
                         </ul>
@@ -110,7 +110,7 @@ export default async function WorkingExperience() {
                     <div className="mb-4">
                       <h4 className="font-medium text-gray-900 mb-2">Responsibilities:</h4>
                       <ul className="list-disc list-inside space-y-1">
-                        {experience.responsibilities.map((resp, idx) => (
+                        {experience.responsibilities.map((resp: any, idx: number) => (
                           <li key={idx} className="text-gray-700 text-sm">{resp}</li>
                         ))}
                       </ul>
@@ -122,7 +122,7 @@ export default async function WorkingExperience() {
                     <div className="mb-4">
                       <h4 className="font-medium text-gray-900 mb-2">Achievements:</h4>
                       <ul className="list-disc list-inside space-y-1">
-                        {experience.achievements.map((ach, idx) => (
+                        {experience.achievements.map((ach: any, idx: number) => (
                           <li key={idx} className="text-gray-700 text-sm">{ach}</li>
                         ))}
                       </ul>
@@ -134,7 +134,7 @@ export default async function WorkingExperience() {
                     <div className="mb-4">
                       <h4 className="font-medium text-gray-900 mb-2">Technologies:</h4>
                       <div className="flex flex-wrap gap-2">
-                        {experience.technologies.map((tech, idx) => (
+                        {experience.technologies.map((tech: any, idx: number) => (
                           <span key={idx} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">
                             {tech}
                           </span>

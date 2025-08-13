@@ -82,7 +82,7 @@ export default async function AdminExperience() {
             </div>
           ) : (
             <div className="space-y-6">
-              {experiences.map((experience) => (
+              {experiences.map((experience: any) => (
                 <div key={experience._id} className="bg-amber-950/10 border border-amber-800/30 rounded-lg p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div>
@@ -120,7 +120,7 @@ export default async function AdminExperience() {
                       <h4 className="font-medium text-amber-200 mb-2">Description:</h4>
                       {Array.isArray(experience.description) ? (
                         <ul className="list-disc list-inside space-y-1 text-amber-300/80">
-                          {experience.description.map((desc, idx) => (
+                          {experience.description.map((desc: any, idx: number) => (
                             <li key={idx} className="text-sm">{desc}</li>
                           ))}
                         </ul>
@@ -135,7 +135,7 @@ export default async function AdminExperience() {
                     <div className="mb-4">
                       <h4 className="font-medium text-amber-200 mb-2">Responsibilities:</h4>
                       <ul className="list-disc list-inside space-y-1 text-amber-300/80">
-                        {experience.responsibilities.map((resp, idx) => (
+                        {experience.responsibilities.map((resp: any, idx: number) => (
                           <li key={idx} className="text-sm">{resp}</li>
                         ))}
                       </ul>
@@ -147,7 +147,7 @@ export default async function AdminExperience() {
                     <div className="mb-4">
                       <h4 className="font-medium text-amber-200 mb-2">Achievements:</h4>
                       <ul className="list-disc list-inside space-y-1 text-amber-300/80">
-                        {experience.achievements.map((ach, idx) => (
+                        {experience.achievements.map((ach: any, idx: number) => (
                           <li key={idx} className="text-sm">{ach}</li>
                         ))}
                       </ul>

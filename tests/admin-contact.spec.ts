@@ -8,9 +8,9 @@ test.describe('Admin Contact Management', () => {
     // Verify we're on the login page
     await expect(page.locator('h1')).toContainText('Portfolio Admin');
 
-    // Login with admin credentials
+    // Login with secure admin credentials
     await page.fill('input[name="email"]', 'admin@admin.com');
-    await page.fill('input[name="password"]', 'admin@admin.com');
+    await page.fill('input[name="password"]', '$iva@V3nna21');
     await page.click('button[type="submit"]');
 
     // Wait for redirect to admin dashboard

@@ -1,55 +1,157 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
+import connectDB from '@/app/lib/mongodb';
+import User from '@/app/models/User';
 import { getSignSecret } from '@/app/lib/admin-auth';
 
+// Rate limiting storage (in production, use Redis)
+const loginAttempts = new Map<string, { count: number; lastAttempt: number }>();
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
+
+function isRateLimited(ip: string): boolean {
+  const attempts = loginAttempts.get(ip);
+  if (!attempts) return false;
+
+  if (Date.now() - attempts.lastAttempt > LOCKOUT_TIME) {
+    loginAttempts.delete(ip);
+    return false;
+  }
+
+  return attempts.count >= MAX_ATTEMPTS;
+}
+
+function recordLoginAttempt(ip: string, success: boolean) {
+  if (success) {
+    loginAttempts.delete(ip);
+    return;
+  }
+
+  const attempts = loginAttempts.get(ip) || { count: 0, lastAttempt: 0 };
+  attempts.count++;
+  attempts.lastAttempt = Date.now();
+  loginAttempts.set(ip, attempts);
+}
+
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+
   try {
+    // Rate limiting check
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { error: 'Too many login attempts. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
     const { email, username, password } = await request.json();
+    const userIdentifier = (email || username || '').toString().trim().toLowerCase();
 
-    const adminUser = process.env.ADMIN_USERNAME || 'admin@admin.com';
-    const adminPass = process.env.ADMIN_PASSWORD || 'admin@admin.com';
-
-    const userId = (email || username || '').toString().trim();
-
-    if (!userId || !password) {
-      return NextResponse.json({ error: 'Email/Username and password are required' }, { status: 400 });
+    // Input validation
+    if (!userIdentifier || !password) {
+      recordLoginAttempt(ip, false);
+      return NextResponse.json(
+        { error: 'Email/Username and password are required' },
+        { status: 400 }
+      );
     }
 
-    // Debug logging (remove in production)
-    console.log('Login attempt:', { userId, adminUser, passwordLength: password.length, adminPassLength: adminPass.length });
-
-    if (userId !== adminUser || password !== adminPass) {
-      console.log('Credential mismatch:', {
-        userMatch: userId === adminUser,
-        passMatch: password === adminPass,
-        userId,
-        adminUser,
-        password: password.substring(0, 3) + '...',
-        adminPass: adminPass.substring(0, 3) + '...'
-      });
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    if (password.length < 8) {
+      recordLoginAttempt(ip, false);
+      return NextResponse.json(
+        { error: 'Invalid credentials' },
+        { status: 401 }
+      );
     }
 
+    // Connect to database
+    await connectDB();
+
+    // Find user by email
+    const user = await User.findOne({
+      email: userIdentifier,
+      role: 'admin'
+    });
+
+    if (!user) {
+      recordLoginAttempt(ip, false);
+      return NextResponse.json(
+        { error: 'Invalid credentials' },
+        { status: 401 }
+      );
+    }
+
+    // Check if account is locked
+    if (user.isLocked) {
+      recordLoginAttempt(ip, false);
+      return NextResponse.json(
+        { error: 'Account is temporarily locked. Please try again later.' },
+        { status: 423 }
+      );
+    }
+
+    // Verify password
+    const isValidPassword = await user.comparePassword(password);
+    if (!isValidPassword) {
+      // Increment failed login attempts
+      user.loginAttempts++;
+      if (user.loginAttempts >= 5) {
+        user.lockUntil = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
+      }
+      await user.save();
+
+      recordLoginAttempt(ip, false);
+      return NextResponse.json(
+        { error: 'Invalid credentials' },
+        { status: 401 }
+      );
+    }
+
+    // Successful login - reset attempts and update last login
+    user.loginAttempts = 0;
+    user.lockUntil = undefined;
+    user.lastLogin = new Date();
+    await user.save();
+
+    recordLoginAttempt(ip, true);
+
+    // Get JWT secret
     let secret: string;
     try {
       secret = getSignSecret();
     } catch (error) {
       console.error('Failed to get signing secret:', error);
-      return NextResponse.json({ error: 'Server misconfiguration: missing AUTH secret' }, { status: 500 });
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      );
     }
 
+    // Generate JWT token
     const token = jwt.sign(
       {
-        sub: 'admin',
-        username: adminUser,
-        role: 'admin',
-        email: adminUser,
+        sub: user._id.toString(),
+        userId: user._id.toString(),
+        username: user.name,
+        role: user.role,
+        email: user.email,
+        iat: Math.floor(Date.now() / 1000)
       },
       secret,
       { expiresIn: '7d' }
     );
 
-    const response = NextResponse.json({ message: 'Login successful', user: { username: adminUser, role: 'admin' } });
+    const response = NextResponse.json({
+      message: 'Login successful',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        lastLogin: user.lastLogin
+      }
+    });
     response.cookies.set('admin_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
