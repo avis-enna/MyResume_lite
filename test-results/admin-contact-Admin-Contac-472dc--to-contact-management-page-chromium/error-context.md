@@ -1,0 +1,61 @@
+# Page snapshot
+
+```yaml
+- heading "Edit Contact Section" [level=1]
+- link "Back to Dashboard":
+  - /url: /admin/dashboard
+- button "Save Changes"
+- heading "Contact Information" [level=2]
+- text: Email
+- textbox: vsivareddy.venna@gmail.com
+- text: Phone
+- textbox: +91 93989 61541
+- text: Location
+- textbox: Bengaluru, India
+- heading "Social Links" [level=2]
+- text: Name
+- textbox: LinkedIn
+- text: URL
+- textbox: https://linkedin.com/in/sivavenna
+- text: Icon
+- combobox:
+  - option "LinkedIn" [selected]
+  - option "GitHub"
+  - option "Email"
+  - option "Twitter"
+  - option "Instagram"
+- text: Name
+- textbox: GitHub
+- text: URL
+- textbox: https://github.com/avis-enna
+- text: Icon
+- combobox:
+  - option "LinkedIn"
+  - option "GitHub" [selected]
+  - option "Email"
+  - option "Twitter"
+  - option "Instagram"
+- text: Name
+- textbox: Email
+- text: URL
+- textbox: mailto:sivareddy.venna@gmail.com
+- text: Icon
+- combobox:
+  - option "LinkedIn"
+  - option "GitHub"
+  - option "Email" [selected]
+  - option "Twitter"
+  - option "Instagram"
+- heading "Content" [level=2]
+- text: Section Title
+- textbox: contact
+- text: Subtitle
+- textbox: Let's work together
+- text: Description
+- textbox: I'm always interested in hearing about new opportunities and exciting projects. Whether you have a question or just want to say hi, I'll try my best to get back to you!
+- text: Order of Service Title
+- textbox: order of service
+- text: Order of Service Description
+- textbox: Available for freelance projects, full-time opportunities, and consulting work. Let's discuss how we can work together to bring your ideas to life.
+- alert
+```

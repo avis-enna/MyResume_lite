@@ -23,8 +23,8 @@ test.describe('Admin Contact Management', () => {
     await page.goto('/admin/contact');
     
     // Verify page loads correctly
-    await expect(page.locator('h1')).toContainText('Contact Management');
-    await expect(page.locator('form')).toBeVisible();
+    await expect(page.locator('h1')).toContainText('Edit Contact Section');
+    await expect(page.locator('input[placeholder="Enter your email"]')).toBeVisible();
   });
 
   test('should load existing contact data', async ({ page }) => {

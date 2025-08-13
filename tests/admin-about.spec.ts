@@ -23,8 +23,8 @@ test.describe('Admin About Management', () => {
     await page.goto('/admin/about');
     
     // Verify page loads correctly
-    await expect(page.locator('h1')).toContainText('About Management');
-    await expect(page.locator('form')).toBeVisible();
+    await expect(page.locator('h1')).toContainText('EDIT ABOUT');
+    await expect(page.locator('input[placeholder="Enter your full name"]')).toBeVisible();
   });
 
   test('should load existing about data', async ({ page }) => {
