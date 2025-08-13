@@ -8,7 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "analyze": "ANALYZE=true npm run build"
+    "analyze": "ANALYZE=true npm run build",
+    "seed": "node scripts/seed-data.js",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -18,11 +23,13 @@
     "@types/node-fetch": "^2.6.12",
     "bcryptjs": "^3.0.2",
     "critters": "^0.0.23",
+    "dotenv": "^17.2.1",
     "framer-motion": "^11.11.17",
     "jose": "^6.0.12",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.468.0",
     "mongodb": "^6.18.0",
+    "mongoose": "^8.17.1",
     "next": "^15.1.0",
     "node-fetch": "^3.3.2",
     "react": "^18.3.1",
@@ -31,6 +38,7 @@
     "sharp": "^0.33.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.54.2",
     "@types/node": "^22.10.2",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

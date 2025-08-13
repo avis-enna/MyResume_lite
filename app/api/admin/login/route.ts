@@ -1,50 +1,63 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import jwt from 'jsonwebtoken';
 
-// Simple admin credentials (in production, use proper authentication)
-const ADMIN_CREDENTIALS = {
-  username: 'admin',
-  password: 'portfolio2024'
-};
+function getSignSecret(): string {
+  return (
+    process.env.AUTH_SECRET ||
+    process.env.JWT_SECRET ||
+    process.env.ADMIN_SECRET_KEY ||
+    (process.env.NODE_ENV !== 'production' ? 'dev-temp-secret-please-set-AUTH_SECRET' : '')
+  );
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const { username, password } = await request.json();
+    const { email, username, password } = await request.json();
 
-    // Validate credentials
-    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-      // Create a simple session token
-      const sessionToken = Buffer.from(`${username}:${Date.now()}`).toString('base64');
-      
-      // Set cookie
-      const cookieStore = await cookies();
-      cookieStore.set('admin-session', sessionToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: '/'
-      });
+    const adminUser = process.env.ADMIN_USERNAME || 'admin@admin.com';
+    const adminPass = process.env.ADMIN_PASSWORD || 'admin@admin.com';
 
-      return NextResponse.json({ 
-        success: true, 
-        message: 'Login successful' 
-      });
-    } else {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Invalid credentials' 
-      }, { status: 401 });
+    const userId = (email || username || '').toString().trim();
+
+    if (!userId || !password) {
+      return NextResponse.json({ error: 'Email/Username and password are required' }, { status: 400 });
     }
-  } catch (error) {
-    console.error('Login error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Server error' 
-    }, { status: 500 });
-  }
-}
 
-export async function GET() {
-  return NextResponse.json({ message: 'Admin login endpoint' });
+    if (userId !== adminUser || password !== adminPass) {
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
+
+    const secret = getSignSecret();
+    if (!secret) {
+      return NextResponse.json({ error: 'Server misconfiguration: missing AUTH secret' }, { status: 500 });
+    }
+
+    const token = jwt.sign(
+      {
+        sub: 'admin',
+        username: adminUser,
+        role: 'admin',
+        email: adminUser,
+      },
+      secret,
+      { expiresIn: '7d' }
+    );
+
+    const response = NextResponse.json({ message: 'Login successful', user: { username: adminUser, role: 'admin' } });
+    response.cookies.set('admin_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60,
+    });
+
+    // Clear legacy cookie if present
+    response.cookies.set('auth-token', '', { httpOnly: true, path: '/', maxAge: 0 });
+
+    return response;
+  } catch (error) {
+    console.error('Admin login error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }

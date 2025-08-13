@@ -1,19 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSkillsData, updateSkillsData } from '../../../lib/skills-data';
-import { checkAdminAuthSimple } from '../../../lib/admin-auth';
+import { requireAuth } from '../../../lib/admin-auth';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
-    const isAuthenticated = await checkAdminAuthSimple();
-    if (!isAuthenticated) {
-      console.error('Skills GET: Authentication failed');
+    await requireAuth();
+    const skillsData = await getSkillsData();
+    return NextResponse.json(skillsData);
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const skillsData = await getSkillsData();
-    console.log('Skills GET: Data fetched successfully');
-    return NextResponse.json(skillsData);
-  } catch (error) {
     console.error('Error fetching skills data:', error);
     return NextResponse.json(
       { error: 'Failed to fetch skills data' },
@@ -24,28 +21,21 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    console.log('Skills PUT: Starting update request');
-    const isAuthenticated = await checkAdminAuthSimple();
-    if (!isAuthenticated) {
-      console.error('Skills PUT: Authentication failed');
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
+    await requireAuth();
     const updates = await request.json();
-    console.log('Skills PUT: Received updates:', Object.keys(updates));
-
     const updatedData = await updateSkillsData(updates);
-    console.log('Skills PUT: Data updated successfully');
-
     return NextResponse.json({
       success: true,
       message: 'Skills data updated successfully',
       data: updatedData
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     console.error('Error updating skills data:', error);
     return NextResponse.json(
-      { error: 'Failed to update skills data', details: error.message },
+      { error: 'Failed to update skills data', details: (error as any)?.message },
       { status: 500 }
     );
   }

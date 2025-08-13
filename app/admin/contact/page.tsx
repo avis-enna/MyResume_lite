@@ -45,7 +45,7 @@ export default function AdminContact() {
 
   const checkAuthAndLoadData = async () => {
     try {
-      const response = await fetch('/api/admin/verify');
+      const response = await fetch('/api/admin/session-check');
       const data = await response.json();
       
       if (data.authenticated) {

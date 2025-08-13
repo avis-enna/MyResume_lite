@@ -1,135 +1,163 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function AdminDashboard() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
-      console.log('NEW DASHBOARD: Starting MongoDB auth check...');
-      const response = await fetch('/api/admin/verify');
-      const data = await response.json();
-
-      console.log('NEW DASHBOARD: Auth response status:', response.status);
-      console.log('NEW DASHBOARD: Auth data received:', data);
-
-      if (data.authenticated) {
-        console.log('NEW DASHBOARD: MongoDB auth successful!');
-        setIsAuthenticated(true);
-        setUser(data.user || { username: 'admin' });
+      const response = await fetch('/api/admin/session-check');
+      const data = await response.json().catch(() => ({}));
+      if (response.ok && data?.authenticated) {
+        setUser(data.user ?? null);
       } else {
-        console.log('NEW DASHBOARD: MongoDB auth failed, redirecting...');
         router.push('/admin');
       }
-    } catch (error) {
-      console.error('NEW DASHBOARD: Auth check failed:', error);
+    } catch (_err) {
       router.push('/admin');
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const handleLogout = async () => {
     try {
-      console.log('NEW DASHBOARD: Logging out...');
       await fetch('/api/admin/logout', { method: 'POST' });
       router.push('/admin');
     } catch (error) {
-      console.error('NEW DASHBOARD: Logout failed:', error);
+      console.error('Logout error:', error);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading dashboard...</div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Checking authentication...</div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white/10 backdrop-blur-lg border-b border-white/20">
+      <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-2xl font-light text-white">🎉 MongoDB Admin Dashboard</h1>
-              <p className="text-gray-300">Welcome back, {user?.name || user?.username || 'Admin'} - MongoDB Atlas Connected!</p>
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
             </div>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500/20 text-red-200 px-4 py-2 rounded-lg hover:bg-red-500/30 transition-all duration-200"
-            >
-              Logout
-            </button>
+            <div className="flex items-center space-x-4">
+              <Link href="/" className="text-blue-600 hover:text-blue-700">
+                View Site
+              </Link>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Success Message */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8 bg-green-500/20 border border-green-500/30 rounded-lg p-6">
-          <div className="flex items-center space-x-3">
-            <div className="text-2xl">🎉</div>
-            <div>
-              <h3 className="text-lg font-medium text-green-200">MongoDB Authentication Successful!</h3>
-              <p className="text-green-300">Your admin console is now using MongoDB Atlas for authentication and data storage.</p>
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-6 sm:px-0">
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back!</h2>
+            <p className="text-gray-600">Manage your portfolio content from here.</p>
+          </div>
+
+          {/* Dashboard Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {/* Experience Management */}
+            <Link href="/admin/experience" className="card hover:shadow-lg transition-shadow">
+              <div className="flex items-center mb-4">
+                <div className="bg-blue-100 p-3 rounded-lg mr-4">
+                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Experience</h3>
+                  <p className="text-gray-600 text-sm">Manage work experience</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Project Management */}
+            <Link href="/admin/projects" className="card hover:shadow-lg transition-shadow">
+              <div className="flex items-center mb-4">
+                <div className="bg-green-100 p-3 rounded-lg mr-4">
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Projects</h3>
+                  <p className="text-gray-600 text-sm">Manage portfolio projects</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Blog Management */}
+            <Link href="/admin/blog" className="card hover:shadow-lg transition-shadow">
+              <div className="flex items-center mb-4">
+                <div className="bg-purple-100 p-3 rounded-lg mr-4">
+                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Blog Posts</h3>
+                  <p className="text-gray-600 text-sm">Create and manage blog content</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Contact Messages */}
+            <Link href="/admin/contacts" className="card hover:shadow-lg transition-shadow">
+              <div className="flex items-center mb-4">
+                <div className="bg-red-100 p-3 rounded-lg mr-4">
+                  <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Messages</h3>
+                  <p className="text-gray-600 text-sm">View contact form submissions</p>
+                </div>
+              </div>
+            </Link>
+
+          </div>
+
+          {/* Quick Actions */}
+          <div className="mt-12">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/admin/experience/new" className="btn-primary">
+                Add Experience
+              </Link>
+              <Link href="/admin/projects/new" className="btn-primary">
+                Add Project
+              </Link>
+              <Link href="/admin/blog/new" className="btn-primary">
+                Write Blog Post
+              </Link>
             </div>
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white/10 backdrop-blur-lg rounded-lg p-6 border border-white/20">
-            <h3 className="text-lg font-medium text-white mb-4">📝 Blog Management</h3>
-            <p className="text-gray-300 mb-4">Create and manage blog posts</p>
-            <a
-              href="/admin/blog"
-              className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-all duration-200 inline-block"
-            >
-              Manage Blogs
-            </a>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-lg rounded-lg p-6 border border-white/20">
-            <h3 className="text-lg font-medium text-white mb-4">⚡ Skills Management</h3>
-            <p className="text-gray-300 mb-4">Update your technical skills</p>
-            <a
-              href="/admin/skills"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all duration-200 inline-block"
-            >
-              Manage Skills
-            </a>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-lg rounded-lg p-6 border border-white/20">
-            <h3 className="text-lg font-medium text-white mb-4">🏠 View Portfolio</h3>
-            <p className="text-gray-300 mb-4">See your live portfolio</p>
-            <a
-              href="/"
-              target="_blank"
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-all duration-200 inline-block"
-            >
-              View Site
-            </a>
           </div>
         </div>
       </main>

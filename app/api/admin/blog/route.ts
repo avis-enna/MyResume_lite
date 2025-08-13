@@ -1,151 +1,85 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { 
-  getBlogData, 
-  addBlogPost, 
-  updateBlogPost, 
-  deleteBlogPost,
-  generateSlug,
-  calculateReadingTime
-} from '../../../lib/blog-data';
-import { checkAdminAuthSimple } from '../../../lib/admin-auth';
+import connectDB from '@/app/lib/mongodb';
+import BlogPost from '@/app/models/BlogPost';
+import { requireAuth } from '@/app/lib/admin-auth';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
-    const isAuthenticated = await checkAdminAuthSimple();
-    if (!isAuthenticated) {
-      console.error('Blog GET: Authentication failed');
+    await requireAuth();
+    await connectDB();
+    const posts = await BlogPost.find().sort({ createdAt: -1 });
+    return NextResponse.json(posts);
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const blogData = getBlogData();
-    console.log('Blog GET: Data fetched successfully');
-    return NextResponse.json(blogData);
-  } catch (error) {
-    console.error('Error fetching blog data:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch blog data' },
-      { status: 500 }
-    );
+    console.error('Error fetching blog posts:', error);
+    return NextResponse.json({ error: 'Failed to fetch blog posts' }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Blog POST: Starting create request');
-    const isAuthenticated = await checkAdminAuthSimple();
-    if (!isAuthenticated) {
-      console.error('Blog POST: Authentication failed');
+    await requireAuth();
+    await connectDB();
+    const data = await request.json();
+
+    const post = await BlogPost.create({
+      title: data.title,
+      slug: data.slug || (data.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''),
+      excerpt: data.excerpt || '',
+      content: data.content || '',
+      tags: Array.isArray(data.tags) ? data.tags : [],
+      published: !!data.published,
+      publishedAt: data.published ? new Date() : undefined,
+      imageUrl: data.imageUrl || undefined,
+      readTime: typeof data.readTime === 'number' ? data.readTime : Math.ceil(((data.content || '').split(/\s+/).length || 0) / 200),
+      views: typeof data.views === 'number' ? data.views : 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    return NextResponse.json(post, { status: 201 });
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const postData = await request.json();
-    console.log('Blog POST: Received post data:', postData.title);
-
-    // Generate slug if not provided
-    if (!postData.slug) {
-      postData.slug = generateSlug(postData.title);
-    }
-
-    // Calculate reading time
-    postData.readingTime = calculateReadingTime(postData.content);
-
-    // Set timestamps
-    postData.publishedAt = postData.publishedAt || new Date().toISOString();
-
-    const newPost = addBlogPost(postData);
-    console.log('Blog POST: Post created successfully');
-
-    return NextResponse.json({
-      success: true,
-      message: 'Blog post created successfully',
-      post: newPost
-    });
-  } catch (error) {
     console.error('Error creating blog post:', error);
-    return NextResponse.json(
-      { error: 'Failed to create blog post', details: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create blog post' }, { status: 500 });
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
-    console.log('Blog PUT: Starting update request');
-    const isAuthenticated = await checkAdminAuthSimple();
-    if (!isAuthenticated) {
-      console.error('Blog PUT: Authentication failed');
+    await requireAuth();
+    await connectDB();
+    const data = await request.json();
+    const { id, ...updates } = data as { id: string; [key: string]: unknown };
+
+    if (typeof updates.title === 'string' && !updates['slug']) {
+      updates['slug'] = updates.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    }
+
+    if (typeof updates['content'] === 'string') {
+      const words = (updates['content'] as string).split(/\s+/).length;
+      updates['readTime'] = Math.ceil(words / 200);
+    }
+
+    if (typeof updates['published'] === 'boolean') {
+      updates['publishedAt'] = updates['published'] ? new Date() : undefined;
+    }
+
+    const post = await BlogPost.findByIdAndUpdate(id, { ...updates, updatedAt: new Date() }, { new: true });
+    if (!post) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+    }
+
+    return NextResponse.json(post);
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const { id, ...updates } = await request.json();
-    console.log('Blog PUT: Updating post:', id);
-
-    // Update reading time if content changed
-    if (updates.content) {
-      updates.readingTime = calculateReadingTime(updates.content);
-    }
-
-    // Update slug if title changed
-    if (updates.title && !updates.slug) {
-      updates.slug = generateSlug(updates.title);
-    }
-
-    const updatedPost = updateBlogPost(id, updates);
-    
-    if (!updatedPost) {
-      return NextResponse.json(
-        { error: 'Post not found' },
-        { status: 404 }
-      );
-    }
-
-    console.log('Blog PUT: Post updated successfully');
-    return NextResponse.json({
-      success: true,
-      message: 'Blog post updated successfully',
-      post: updatedPost
-    });
-  } catch (error) {
     console.error('Error updating blog post:', error);
-    return NextResponse.json(
-      { error: 'Failed to update blog post', details: error.message },
-      { status: 500 }
-    );
-  }
-}
-
-export async function DELETE(request: NextRequest) {
-  try {
-    console.log('Blog DELETE: Starting delete request');
-    const isAuthenticated = await checkAdminAuthSimple();
-    if (!isAuthenticated) {
-      console.error('Blog DELETE: Authentication failed');
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const { id } = await request.json();
-    console.log('Blog DELETE: Deleting post:', id);
-
-    const deleted = deleteBlogPost(id);
-    
-    if (!deleted) {
-      return NextResponse.json(
-        { error: 'Post not found' },
-        { status: 404 }
-      );
-    }
-
-    console.log('Blog DELETE: Post deleted successfully');
-    return NextResponse.json({
-      success: true,
-      message: 'Blog post deleted successfully'
-    });
-  } catch (error) {
-    console.error('Error deleting blog post:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete blog post', details: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to update blog post' }, { status: 500 });
   }
 }

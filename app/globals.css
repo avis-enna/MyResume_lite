@@ -1,223 +1,37 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    background-color: #000000;
   }
-  
+
   body {
-    @apply bg-dark-bg text-white font-sans antialiased;
-    background-image: 
-      radial-gradient(circle at 20% 50%, rgba(0, 245, 255, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 40% 80%, rgba(244, 113, 181, 0.05) 0%, transparent 50%);
+    background-color: #000000;
+  }
+
+  /* Smooth scrolling with offset for fixed nav */
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4rem;
   }
 }
 
 @layer components {
-  .cyber-card {
-    @apply bg-card-bg/50 backdrop-blur-md border border-border-glow rounded-lg p-6 transition-all duration-300 hover:border-cyber-blue/50 hover:shadow-lg;
-  }
-  
-  .cyber-button {
-    @apply bg-gradient-cyber text-dark-bg font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg;
-  }
-  
-  .cyber-text {
-    @apply bg-gradient-cyber bg-clip-text text-transparent;
-  }
-  
-  .section-padding {
-    @apply py-20 px-4 md:px-8 lg:px-16;
-  }
-  
-  .container-max {
-    @apply max-w-7xl mx-auto;
-  }
-
-  /* Mobile-specific touch targets */
-  .touch-target {
-    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
-  }
-
-  /* Mobile-optimized text sizes */
-  .mobile-text-sm {
-    @apply text-xs sm:text-sm;
-  }
-
-  .mobile-text-base {
-    @apply text-sm sm:text-base;
-  }
-
-  .mobile-text-lg {
-    @apply text-base sm:text-lg;
-  }
-
-  .mobile-text-xl {
-    @apply text-lg sm:text-xl;
-  }
-
-  /* Mobile-optimized spacing */
-  .mobile-padding {
-    @apply p-3 sm:p-4 md:p-6;
-  }
-
-  .mobile-margin {
-    @apply m-3 sm:m-4 md:m-6;
-  }
-
-  /* Mobile-optimized grids */
-  .mobile-grid-1-2 {
-    @apply grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4;
-  }
-
-  .mobile-grid-1-2-3 {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6;
+  .dot-pattern {
+    background-image: radial-gradient(circle, #333 1px, transparent 1px);
+    background-size: 30px 30px;
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #00f5ff, #8b5cf6);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #8b5cf6, #f471b5);
-}
-
-/* Terminal scrollbar */
-.terminal-scrollbar::-webkit-scrollbar {
-  width: 12px;
-}
-
-.terminal-scrollbar::-webkit-scrollbar-track {
-  background: rgba(34, 197, 94, 0.1);
-  border-radius: 6px;
-}
-
-.terminal-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(34, 197, 94, 0.5);
-  border-radius: 6px;
-  border: 2px solid rgba(34, 197, 94, 0.1);
-}
-
-.terminal-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(34, 197, 94, 0.7);
-}
-
-/* Ensure scrollbar is always visible */
-.terminal-scrollbar {
-  overflow-y: scroll !important;
-}
-
-/* Force scrollbar to always be visible and ensure scrolling works */
-.force-scrollbar {
-  overflow-y: scroll !important;
-  scroll-behavior: smooth !important;
-}
-
-.force-scrollbar::-webkit-scrollbar {
-  width: 12px !important;
-  display: block !important;
-}
-
-.force-scrollbar::-webkit-scrollbar-track {
-  background: rgba(34, 197, 94, 0.1) !important;
-  border-radius: 6px !important;
-}
-
-.force-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(34, 197, 94, 0.5) !important;
-  border-radius: 6px !important;
-  border: 2px solid rgba(34, 197, 94, 0.1) !important;
-}
-
-.force-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(34, 197, 94, 0.7) !important;
-}
-
-/* Terminal output container with isolated scrolling */
-.terminal-output-container {
-  overscroll-behavior: contain;
-  touch-action: pan-y;
-  /* Prevent text selection when scrolling */
-  -webkit-user-select: text;
-  user-select: text;
-  /* Ensure the container can receive scroll events */
-  position: relative;
-  /* Ensure proper layer stacking */
-  z-index: 1;
-}
-
-/* Dot Matrix Background Patterns */
-.dots-pattern-large {
-  background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
-  background-size: 20px 20px;
-  background-position: 0 0, 10px 10px;
-}
-
-.dots-pattern-small {
-  background-image: radial-gradient(circle, currentColor 0.5px, transparent 0.5px);
-  background-size: 40px 40px;
-  background-position: 20px 20px;
-}
-
-/* Animation Delays */
-.animation-delay-1000 {
-  animation-delay: 1000ms;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2000ms;
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .dark .dots-pattern-large {
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+@layer components {
+  .btn-primary {
+    @apply bg-gray-800 text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors font-light tracking-[0.1em] uppercase text-sm;
   }
-  
-  .dark .dots-pattern-small {
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0.5px, transparent 0.5px);
+
+  .btn-secondary {
+    @apply border border-gray-700 text-gray-400 px-6 py-3 rounded-lg hover:border-gray-600 hover:text-gray-300 transition-colors font-light tracking-[0.1em] uppercase text-sm;
   }
 }
-
-/* Dot Matrix Profile Animation */
-@keyframes dotPulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(0.95);
-  }
-}
-
-.dot-matrix-animate {
-  animation: dotPulse 3s infinite;
-}
-
-/* Stagger animation for dot matrix */
-.dot-matrix-animate:nth-child(1) { animation-delay: 0s; }
-.dot-matrix-animate:nth-child(2) { animation-delay: 0.02s; }
-.dot-matrix-animate:nth-child(3) { animation-delay: 0.04s; }
-.dot-matrix-animate:nth-child(4) { animation-delay: 0.06s; }
-.dot-matrix-animate:nth-child(5) { animation-delay: 0.08s; }
-.dot-matrix-animate:nth-child(6) { animation-delay: 0.1s; }
-.dot-matrix-animate:nth-child(7) { animation-delay: 0.12s; }
-.dot-matrix-animate:nth-child(8) { animation-delay: 0.14s; }
-.dot-matrix-animate:nth-child(9) { animation-delay: 0.16s; }
-.dot-matrix-animate:nth-child(10) { animation-delay: 0.18s; }

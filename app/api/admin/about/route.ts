@@ -1,58 +1,56 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAboutData, updateAboutData, updateAboutSection } from '../../../lib/about-data';
-import { checkAdminAuthSimple } from '../../../lib/admin-auth';
+import fs from 'fs';
+import path from 'path';
+import { requireAuth } from '../../../lib/admin-auth';
 
-export async function GET(request: NextRequest) {
-  try {
-    const isAuthenticated = await checkAdminAuthSimple();
-    if (!isAuthenticated) {
-      console.error('About GET: Authentication failed');
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const aboutData = getAboutData();
-    console.log('About GET: Data fetched successfully');
-    return NextResponse.json(aboutData);
-  } catch (error) {
-    console.error('Error fetching about data:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch about data' },
-      { status: 500 }
-    );
-  }
-}
+const dataPath = path.join(process.cwd(), 'app/data/about.json');
 
 export async function PUT(request: NextRequest) {
   try {
-    console.log('About PUT: Starting update request');
-    const isAuthenticated = await checkAdminAuthSimple();
-    if (!isAuthenticated) {
-      console.error('About PUT: Authentication failed');
+    await requireAuth();
+    const data = await request.json();
+
+    let currentData: any = {};
+    try {
+      const fileContent = fs.readFileSync(dataPath, 'utf8');
+      currentData = JSON.parse(fileContent);
+    } catch {
+      // ignore missing file
+    }
+
+    const updatedData = {
+      ...currentData,
+      personal: {
+        ...currentData.personal,
+        name: data.name ?? currentData.personal?.name ?? '',
+        title: data.title ?? currentData.personal?.title ?? '',
+        profileImage: data.profileImage ?? currentData.personal?.profileImage ?? '/profile-photo.png',
+        socialLinks: {
+          ...currentData.personal?.socialLinks,
+          linkedin: data.linkedin ?? currentData.personal?.socialLinks?.linkedin ?? '',
+          github: data.github ?? currentData.personal?.socialLinks?.github ?? '',
+            email: data.email ?? currentData.personal?.socialLinks?.email ?? ''
+        }
+      },
+      bio: {
+        ...currentData.bio,
+        paragraph1: data.bio1 ?? currentData.bio?.paragraph1 ?? '',
+        paragraph2: data.bio2 ?? currentData.bio?.paragraph2 ?? ''
+      },
+      skillsGrid: data.skillsGrid ?? currentData.skillsGrid ?? [],
+      experienceSummary: data.experienceSummary ?? currentData.experienceSummary ?? {},
+      lastUpdated: new Date().toISOString()
+    };
+
+    fs.mkdirSync(path.dirname(dataPath), { recursive: true });
+    fs.writeFileSync(dataPath, JSON.stringify(updatedData, null, 2));
+
+    return NextResponse.json({ success: true, data: updatedData });
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const body = await request.json();
-    const { section, data } = body;
-    console.log('About PUT: Received updates for section:', section || 'all');
-
-    if (section) {
-      // Update specific section
-      updateAboutSection(section, data);
-    } else {
-      // Update entire about data
-      updateAboutData(body);
-    }
-
-    console.log('About PUT: Data updated successfully');
-    return NextResponse.json({
-      success: true,
-      message: section ? `${section} section updated successfully` : 'About data updated successfully'
-    });
-  } catch (error) {
     console.error('Error updating about data:', error);
-    return NextResponse.json(
-      { error: 'Failed to update about data', details: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to update data' }, { status: 500 });
   }
 }

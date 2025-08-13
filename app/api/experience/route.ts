@@ -1,15 +1,21 @@
 import { NextResponse } from 'next/server';
-import { getExperienceData } from '../../lib/experience-data';
+import connectDB from '@/app/lib/mongodb';
+import Experience from '@/app/models/Experience';
 
 export async function GET() {
   try {
-    const experienceData = await getExperienceData();
-    return NextResponse.json(experienceData);
+    await connectDB();
+    const experiences = await Experience.find().sort({ order: 1, createdAt: -1 });
+    
+    return NextResponse.json({
+      success: true,
+      data: experiences
+    });
   } catch (error) {
-    console.error('Error fetching experience data:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch experience data' },
-      { status: 500 }
-    );
+    console.error('Experience API Error:', error);
+    return NextResponse.json({
+      success: false,
+      error: 'Failed to fetch experiences'
+    }, { status: 500 });
   }
 }
