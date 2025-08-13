@@ -1,0 +1,85 @@
+{
+  "skillCategories": [
+    {
+      "id": "cloud-devops",
+      "title": "Cloud & DevOps",
+      "skills": [
+        "Kubernetes",
+        "Docker",
+        "Helm",
+        "FluxCD",
+        "CI/CD",
+        "AWS",
+        "GCP"
+      ]
+    },
+    {
+      "id": "programming",
+      "title": "Programming Languages",
+      "skills": [
+        "Java",
+        "Python",
+        "JavaScript",
+        "SQL",
+        "Shell Scripting",
+        "COBOL"
+      ]
+    },
+    {
+      "id": "backend",
+      "title": "Backend",
+      "skills": [
+        "Spring Boot",
+        "REST APIs",
+        "SOAP Web Services",
+        "Microservices"
+      ]
+    },
+    {
+      "id": "frontend",
+      "title": "Frontend",
+      "skills": [
+        "React",
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ]
+    },
+    {
+      "id": "databases",
+      "title": "Databases",
+      "skills": [
+        "SQL",
+        "MongoDB",
+        "IBM DB2",
+        "VSAM"
+      ]
+    },
+    {
+      "id": "mainframe",
+      "title": "Mainframe",
+      "skills": [
+        "JCL",
+        "COBOL"
+      ]
+    },
+    {
+      "id": "networking",
+      "title": "Networking",
+      "skills": [
+        "TCP/IP",
+        "HTTP",
+        "Network Device Configuration & Troubleshooting"
+      ]
+    }
+  ],
+  "certifications": [
+    "Cisco Certified DevNet Associate (DEVASC)",
+    "Cisco Certified Network Associate (CCNA)",
+    "Cisco Certified Cybersecurity Associate (CCCA)"
+  ],
+  "technicalExpertise": {
+    "title": "Technical Expertise",
+    "description": "A results-driven Software Engineer with hands-on experience in migrating legacy systems to modern, cloud-native environments. Proven expertise in the full software development lifecycle, from backend development with Java/Spring Boot to frontend implementation with React. Specialized in Kubernetes, Docker, and GitOps workflows using Helm and FluxCD."
+  }
+}

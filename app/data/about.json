@@ -1,0 +1,48 @@
+{
+  "personalInfo": {
+    "name": "Venna Venkata Siva Reddy",
+    "title": "Software Engineer",
+    "location": "Bengaluru, India",
+    "email": "vsivareddy.venna@gmail.com",
+    "phone": "+91 93989 61541",
+    "summary": "A results-driven Software Engineer with hands-on experience in migrating legacy systems to modern, cloud-native environments. Proven expertise in the full software development lifecycle, from backend development with Java/Spring Boot to frontend implementation with React. Specialized in Kubernetes, Docker, and GitOps workflows using Helm and FluxCD."
+  },
+  "skillsGrid": [
+    {
+      "id": "network-security",
+      "title": "Network & Security",
+      "description": "CCNA, CCCA certified with expertise in TCP/IP, routing, switching",
+      "icon": "shield"
+    },
+    {
+      "id": "full-stack",
+      "title": "Full Stack Development",
+      "description": "Java Spring Boot, React, REST APIs, database design",
+      "icon": "star"
+    },
+    {
+      "id": "system-admin",
+      "title": "System Administration",
+      "description": "Linux, Windows Server, automation scripting",
+      "icon": "desktop"
+    },
+    {
+      "id": "devops-cloud",
+      "title": "DevOps & Cloud",
+      "description": "Docker, CI/CD, monitoring, infrastructure automation",
+      "icon": "check"
+    }
+  ],
+  "achievements": [
+    "Led migration of IoT Control Center services to Kubernetes architecture",
+    "Implemented GitOps workflow with FluxCD for automated deployments",
+    "Developed resilient Java Spring Boot microservices",
+    "Achieved CCNA, CCCA, and DEVASC certifications"
+  ],
+  "interests": [
+    "Cloud Native Technologies",
+    "DevOps & Automation",
+    "Network Security",
+    "Open Source Contributions"
+  ]
+}
