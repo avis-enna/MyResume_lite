@@ -103,6 +103,11 @@ export async function requireAuth() {
   }
 }
 
+export function getSignSecret(): string | null {
+  const secrets = getSecrets();
+  return secrets.length > 0 ? secrets[0] : null;
+}
+
 export const AdminAuth = {
   COOKIE_NAME,
   LEGACY_USER_COOKIE,
@@ -110,4 +115,5 @@ export const AdminAuth = {
   getSessionUser,
   isAuthenticated,
   requireAuth,
+  getSignSecret,
 };

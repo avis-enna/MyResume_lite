@@ -4,14 +4,17 @@ test.describe('Admin Skills Management', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to admin login
     await page.goto('/admin');
-    
+
+    // Verify we're on the login page
+    await expect(page.locator('h1')).toContainText('Portfolio Admin');
+
     // Login with admin credentials
     await page.fill('input[name="email"]', 'admin@admin.com');
     await page.fill('input[name="password"]', 'admin@admin.com');
     await page.click('button[type="submit"]');
-    
+
     // Wait for redirect to admin dashboard
-    await page.waitForURL('/admin');
+    await page.waitForURL('/admin/dashboard');
     await expect(page.locator('h1')).toContainText('Admin Dashboard');
   });
 

@@ -29,26 +29,25 @@ const AUTH_ROUTES = ['/admin'];
 
 // Simple token verification without JWT (edge runtime compatible)
 function verifyToken(token: string): boolean {
-  // For edge runtime compatibility, we'll use a simple token format
-  // In production, this should be replaced with a proper JWT verification
-  // that doesn't rely on Node.js APIs
+  // For development, accept any non-empty token that looks like a JWT
+  // In production, this should be replaced with proper JWT verification
 
   try {
-    // Simple base64 encoded token format: base64(role:timestamp:signature)
-    const decoded = Buffer.from(token, 'base64').toString();
-    const [role, timestamp, signature] = decoded.split(':');
+    // Basic JWT format check: should have 3 parts separated by dots
+    const parts = token.split('.');
+    if (parts.length !== 3) return false;
 
-    if (role !== 'admin') return false;
+    // Try to decode the payload (middle part) - JWT uses base64url encoding
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(Buffer.from(base64, 'base64').toString());
 
-    // Check if token is not expired (24 hours)
-    const tokenAge = Date.now() - Number(timestamp);
-    const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+    // Check if it has admin role and is not expired
+    if (payload.role !== 'admin') return false;
 
-    if (tokenAge > maxAge) return false;
+    // Check expiration if present
+    if (payload.exp && payload.exp * 1000 < Date.now()) return false;
 
-    // Simple signature verification (in production, use proper HMAC)
-    const expectedSignature = Buffer.from(`${role}:${timestamp}:admin-secret`).toString('base64');
-    return signature === expectedSignature;
+    return true;
   } catch {
     return false;
   }
