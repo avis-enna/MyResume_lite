@@ -103,9 +103,12 @@ export async function requireAuth() {
   }
 }
 
-export function getSignSecret(): string | null {
+export function getSignSecret(): string {
   const secrets = getSecrets();
-  return secrets.length > 0 ? secrets[0] : null;
+  if (secrets.length === 0) {
+    throw new Error('No signing secret available');
+  }
+  return secrets[0];
 }
 
 export const AdminAuth = {

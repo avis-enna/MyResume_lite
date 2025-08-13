@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
-
-function getSignSecret(): string {
-  return (
-    process.env.AUTH_SECRET ||
-    process.env.JWT_SECRET ||
-    process.env.ADMIN_SECRET_KEY ||
-    (process.env.NODE_ENV !== 'production' ? 'dev-temp-secret-please-set-AUTH_SECRET' : '')
-  );
-}
+import { getSignSecret } from '@/app/lib/admin-auth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,12 +15,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email/Username and password are required' }, { status: 400 });
     }
 
+    // Debug logging (remove in production)
+    console.log('Login attempt:', { userId, adminUser, passwordLength: password.length, adminPassLength: adminPass.length });
+
     if (userId !== adminUser || password !== adminPass) {
+      console.log('Credential mismatch:', {
+        userMatch: userId === adminUser,
+        passMatch: password === adminPass,
+        userId,
+        adminUser,
+        password: password.substring(0, 3) + '...',
+        adminPass: adminPass.substring(0, 3) + '...'
+      });
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const secret = getSignSecret();
-    if (!secret) {
+    let secret: string;
+    try {
+      secret = getSignSecret();
+    } catch (error) {
+      console.error('Failed to get signing secret:', error);
       return NextResponse.json({ error: 'Server misconfiguration: missing AUTH secret' }, { status: 500 });
     }
 
