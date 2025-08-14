@@ -44,5 +44,21 @@
     "DevOps & Automation",
     "Network Security",
     "Open Source Contributions"
-  ]
+  ],
+  "personal": {
+    "name": "John Doe Updated",
+    "title": "Senior Full Stack Developer",
+    "profileImage": "",
+    "socialLinks": {
+      "linkedin": "",
+      "github": "",
+      "email": ""
+    }
+  },
+  "bio": {
+    "paragraph1": "Test bio 1",
+    "paragraph2": "Test bio 2"
+  },
+  "experienceSummary": {},
+  "lastUpdated": "2025-08-14T07:20:54.214Z"
 }

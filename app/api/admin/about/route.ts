@@ -5,6 +5,43 @@ import { requireAuth } from '../../../lib/admin-auth';
 
 const dataPath = path.join(process.cwd(), 'app/data/about.json');
 
+export async function GET() {
+  try {
+    await requireAuth();
+
+    let data: any = {
+      personal: {
+        name: '',
+        title: '',
+        profileImage: '/profile-photo.png',
+        socialLinks: {
+          linkedin: '',
+          github: '',
+          email: ''
+        }
+      },
+      bio: {
+        paragraph1: '',
+        paragraph2: ''
+      }
+    };
+
+    try {
+      const fileContent = fs.readFileSync(dataPath, 'utf8');
+      data = JSON.parse(fileContent);
+    } catch {
+      // Return default data if file doesn't exist
+    }
+
+    return NextResponse.json(data);
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    return NextResponse.json({ error: 'Failed to load data' }, { status: 500 });
+  }
+}
+
 export async function PUT(request: NextRequest) {
   try {
     await requireAuth();

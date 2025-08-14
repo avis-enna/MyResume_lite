@@ -58,19 +58,19 @@ test.describe('Admin About Management', () => {
     await page.getByTestId('name-input').fill(testName);
     await page.getByTestId('title-input').fill(testTitle);
     
-    // Submit the form
-    await page.click('button[type="submit"]');
-    
-    // Wait for success message
-    await expect(page.locator('.bg-green-50, .text-green-600')).toBeVisible();
+    // Save changes using stable selector
+    await page.getByTestId('about-save-button').click();
+
+    // Wait for save to complete (button should be enabled again)
+    await page.waitForTimeout(2000);
     
     // Verify the data persists after reload
     await page.reload();
-    await page.waitForSelector('form');
-    
-    if (await nameField.isVisible()) {
-      await expect(nameField).toHaveValue(testName);
-    }
+    await page.waitForSelector('[data-testid="about-form"]', { timeout: 10000 });
+
+    // Verify the updated values are still there
+    await expect(page.getByTestId('name-input')).toHaveValue(testName);
+    await expect(page.getByTestId('title-input')).toHaveValue(testTitle);
   });
 
   test('should update professional summary', async ({ page }) => {

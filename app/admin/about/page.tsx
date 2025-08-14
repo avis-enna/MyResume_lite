@@ -46,7 +46,7 @@ export default function AdminAbout() {
 
   const loadData = async () => {
     try {
-      const response = await fetch('/api/about');
+      const response = await fetch('/api/admin/about');
       if (response.ok) {
         const aboutData = await response.json();
         setData(aboutData);
@@ -116,6 +116,7 @@ export default function AdminAbout() {
               </div>
               <button
                 type="button"
+                data-testid="about-save-button"
                 onClick={handleSave}
                 disabled={saving}
                 className="px-6 py-2 bg-white text-black font-light tracking-[0.1em] uppercase text-sm hover:bg-gray-200 transition-colors disabled:opacity-50"
@@ -132,6 +133,7 @@ export default function AdminAbout() {
               {loading && <div data-testid="about-form-loading">Loading...</div>}
               {!loading && (
                 <form data-testid="about-form">
+                  <div data-testid="about-form-ready" className="hidden">Ready</div>
                   <div className="space-y-6">
                     <div>
                       <label className="block text-xs font-light tracking-[0.15em] uppercase text-gray-400 mb-2">

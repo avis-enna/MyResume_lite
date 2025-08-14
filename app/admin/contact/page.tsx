@@ -167,6 +167,7 @@ export default function AdminContact() {
                 Back to Dashboard
               </Link>
               <button
+                data-testid="contact-save-button"
                 onClick={handleSave}
                 disabled={saving}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
@@ -176,7 +177,8 @@ export default function AdminContact() {
             </div>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-8" data-testid="contact-form-container">
+            <div data-testid="contact-form-ready" className="hidden">Ready</div>
             {/* Contact Information */}
             <div>
               <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
@@ -186,9 +188,12 @@ export default function AdminContact() {
                     <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
                     <input
                       type="email"
+                      name="email"
+                      data-testid="contact-email-input"
                       value={contactData.contactInfo.email}
                       onChange={(e) => updateContactInfo('email', e.target.value)}
                       className="w-full px-3 py-2 bg-slate-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter your email"
                     />
                   </div>
                   <div>
