@@ -177,7 +177,7 @@ export default function AdminContact() {
             </div>
           </div>
 
-          <div className="space-y-8" data-testid="contact-form-container">
+          <form className="space-y-8" data-testid="contact-form-container" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
             <div data-testid="contact-form-ready" className="hidden">Ready</div>
             {/* Contact Information */}
             <div>
@@ -200,18 +200,24 @@ export default function AdminContact() {
                     <label className="block text-sm font-medium text-gray-300 mb-1">Phone</label>
                     <input
                       type="tel"
+                      name="phone"
+                      data-testid="contact-phone-input"
                       value={contactData.contactInfo.phone}
                       onChange={(e) => updateContactInfo('phone', e.target.value)}
                       className="w-full px-3 py-2 bg-slate-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter your phone"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-1">Location</label>
                     <input
                       type="text"
+                      name="location"
+                      data-testid="contact-location-input"
                       value={contactData.contactInfo.location}
                       onChange={(e) => updateContactInfo('location', e.target.value)}
                       className="w-full px-3 py-2 bg-slate-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter your location"
                     />
                   </div>
                 </div>
@@ -314,7 +320,19 @@ export default function AdminContact() {
                 </div>
               </div>
             </div>
-          </div>
+
+            {/* Form Submit Button */}
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                data-testid="contact-submit-button"
+                disabled={saving}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              >
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

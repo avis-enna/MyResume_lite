@@ -1,18 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { requireAuth } from '../../../lib/admin-auth';
+import connectDB from '../../../lib/mongodb';
+import mongoose from 'mongoose';
 
-const dataPath = path.join(process.cwd(), 'app/data/about.json');
+// About model schema
+const aboutSchema = new mongoose.Schema({
+  name: String,
+  title: String,
+  bio: {
+    paragraph1: String,
+    paragraph2: String
+  },
+  experience: {
+    years: Number,
+    description: String
+  },
+  skills: [String],
+  achievements: [String],
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
 
 export async function GET() {
   try {
     await requireAuth();
+    await connectDB();
 
-    let data: any = {
+    const About = mongoose.models.About || mongoose.model('About', aboutSchema);
+
+    // Get the first (and should be only) about document
+    const aboutDoc = await About.findOne();
+
+    if (!aboutDoc) {
+      // Return empty structure if no data exists
+      return NextResponse.json({
+        personal: {
+          name: '',
+          title: '',
+          profileImage: '/profile-photo.png',
+          socialLinks: {
+            linkedin: '',
+            github: '',
+            email: ''
+          }
+        },
+        bio: {
+          paragraph1: '',
+          paragraph2: ''
+        }
+      });
+    }
+
+    // Transform the data to match the expected format
+    const responseData = {
       personal: {
-        name: '',
-        title: '',
+        name: aboutDoc.name || '',
+        title: aboutDoc.title || '',
         profileImage: '/profile-photo.png',
         socialLinks: {
           linkedin: '',
@@ -21,19 +64,12 @@ export async function GET() {
         }
       },
       bio: {
-        paragraph1: '',
-        paragraph2: ''
+        paragraph1: aboutDoc.bio?.paragraph1 || '',
+        paragraph2: aboutDoc.bio?.paragraph2 || ''
       }
     };
 
-    try {
-      const fileContent = fs.readFileSync(dataPath, 'utf8');
-      data = JSON.parse(fileContent);
-    } catch {
-      // Return default data if file doesn't exist
-    }
-
-    return NextResponse.json(data);
+    return NextResponse.json(responseData);
   } catch (error: unknown) {
     if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -45,44 +81,53 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     await requireAuth();
+    await connectDB();
+
     const data = await request.json();
+    const About = mongoose.models.About || mongoose.model('About', aboutSchema);
 
-    let currentData: any = {};
-    try {
-      const fileContent = fs.readFileSync(dataPath, 'utf8');
-      currentData = JSON.parse(fileContent);
-    } catch {
-      // ignore missing file
-    }
+    // Transform the incoming data to match our schema
+    const updateData = {
+      name: data.name || '',
+      title: data.title || '',
+      bio: {
+        paragraph1: data.bio1 || '',
+        paragraph2: data.bio2 || ''
+      },
+      updatedAt: new Date()
+    };
 
-    const updatedData = {
-      ...currentData,
+    // Update or create the about document
+    const aboutDoc = await About.findOneAndUpdate(
+      {}, // Find any document (should be only one)
+      updateData,
+      {
+        new: true,
+        upsert: true, // Create if doesn't exist
+        runValidators: true
+      }
+    );
+
+    // Return data in the format expected by the frontend
+    const responseData = {
       personal: {
-        ...currentData.personal,
-        name: data.name ?? currentData.personal?.name ?? '',
-        title: data.title ?? currentData.personal?.title ?? '',
-        profileImage: data.profileImage ?? currentData.personal?.profileImage ?? '/profile-photo.png',
+        name: aboutDoc.name || '',
+        title: aboutDoc.title || '',
+        profileImage: '/profile-photo.png',
         socialLinks: {
-          ...currentData.personal?.socialLinks,
-          linkedin: data.linkedin ?? currentData.personal?.socialLinks?.linkedin ?? '',
-          github: data.github ?? currentData.personal?.socialLinks?.github ?? '',
-            email: data.email ?? currentData.personal?.socialLinks?.email ?? ''
+          linkedin: data.linkedin || '',
+          github: data.github || '',
+          email: data.email || ''
         }
       },
       bio: {
-        ...currentData.bio,
-        paragraph1: data.bio1 ?? currentData.bio?.paragraph1 ?? '',
-        paragraph2: data.bio2 ?? currentData.bio?.paragraph2 ?? ''
+        paragraph1: aboutDoc.bio?.paragraph1 || '',
+        paragraph2: aboutDoc.bio?.paragraph2 || ''
       },
-      skillsGrid: data.skillsGrid ?? currentData.skillsGrid ?? [],
-      experienceSummary: data.experienceSummary ?? currentData.experienceSummary ?? {},
-      lastUpdated: new Date().toISOString()
+      lastUpdated: aboutDoc.updatedAt
     };
 
-    fs.mkdirSync(path.dirname(dataPath), { recursive: true });
-    fs.writeFileSync(dataPath, JSON.stringify(updatedData, null, 2));
-
-    return NextResponse.json({ success: true, data: updatedData });
+    return NextResponse.json({ success: true, data: responseData });
   } catch (error: unknown) {
     if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

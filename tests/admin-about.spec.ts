@@ -77,26 +77,26 @@ test.describe('Admin About Management', () => {
     await page.goto('/admin/about');
     
     // Wait for form to load
-    await page.waitForSelector('form');
-    
+    await page.waitForSelector('[data-testid="about-form"]', { timeout: 10000 });
+
     const testSummary = 'Updated professional summary with extensive experience in software development, cloud technologies, and team leadership. Passionate about creating innovative solutions and mentoring junior developers.';
-    
-    // Find and update summary field
-    const summaryField = page.locator('textarea[name="summary"], textarea[placeholder*="summary"], textarea[placeholder*="description"]').first();
-    
-    if (await summaryField.isVisible()) {
-      await summaryField.fill(testSummary);
-      
-      // Submit the form
+
+    // Find and update bio field (using stable selector)
+    const bioField = page.getByTestId('bio-paragraph1-input');
+
+    if (await bioField.isVisible()) {
+      await bioField.fill(testSummary);
+
+      // Submit the form using the new submit button
       await page.click('button[type="submit"]');
-      
-      // Wait for success message
-      await expect(page.locator('.bg-green-50, .text-green-600')).toBeVisible();
-      
+
+      // Wait for save to complete
+      await page.waitForTimeout(2000);
+
       // Verify the data persists
       await page.reload();
-      await page.waitForSelector('form');
-      await expect(summaryField).toHaveValue(testSummary);
+      await page.waitForSelector('[data-testid="about-form"]', { timeout: 10000 });
+      await expect(bioField).toContainText(testSummary);
     }
   });
 

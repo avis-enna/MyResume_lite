@@ -132,7 +132,7 @@ export default function AdminAbout() {
             <div className="bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg p-8" data-testid="about-form-container">
               {loading && <div data-testid="about-form-loading">Loading...</div>}
               {!loading && (
-                <form data-testid="about-form">
+                <form data-testid="about-form" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
                   <div data-testid="about-form-ready" className="hidden">Ready</div>
                   <div className="space-y-6">
                     <div>
@@ -264,6 +264,18 @@ export default function AdminAbout() {
                   />
                 </div>
               </div>
+
+                {/* Form Submit Button */}
+                <div className="mt-8 flex justify-end">
+                  <button
+                    type="submit"
+                    data-testid="about-submit-button"
+                    disabled={saving}
+                    className="px-6 py-2 bg-white text-black font-light tracking-[0.1em] uppercase text-sm hover:bg-gray-200 transition-colors disabled:opacity-50"
+                  >
+                    {saving ? 'Saving...' : 'Save Changes'}
+                  </button>
+                </div>
                 </form>
               )}
             </div>
