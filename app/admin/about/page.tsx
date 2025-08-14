@@ -81,6 +81,8 @@ export default function AdminAbout() {
         setMessage({ type: 'success', text: 'Data saved successfully!' });
         // Clear message after 3 seconds
         setTimeout(() => setMessage(null), 3000);
+        // Reload data to reflect changes
+        await loadData();
       } else {
         setMessage({ type: 'error', text: 'Failed to save data' });
       }

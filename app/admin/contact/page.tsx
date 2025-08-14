@@ -89,15 +89,15 @@ export default function AdminContact() {
       });
 
       if (response.ok) {
-        setMessage({ type: 'success', text: 'Contact data updated successfully!' });
+        setMessage({ type: 'success', text: 'Contact information updated successfully' });
         // Clear message after 3 seconds
         setTimeout(() => setMessage(null), 3000);
       } else {
-        setMessage({ type: 'error', text: 'Failed to update contact data' });
+        setMessage({ type: 'error', text: 'Failed to update contact information' });
       }
     } catch (error) {
       console.error('Error saving contact data:', error);
-      setMessage({ type: 'error', text: 'Error saving contact data' });
+      setMessage({ type: 'error', text: 'Failed to update contact information' });
     } finally {
       setSaving(false);
     }
@@ -206,6 +206,7 @@ export default function AdminContact() {
                       onChange={(e) => updateContactInfo('email', e.target.value)}
                       className="w-full px-3 py-2 bg-slate-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter your email"
+                      required
                     />
                   </div>
                   <div>
@@ -218,6 +219,7 @@ export default function AdminContact() {
                       onChange={(e) => updateContactInfo('phone', e.target.value)}
                       className="w-full px-3 py-2 bg-slate-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter your phone"
+                      required
                     />
                   </div>
                   <div>

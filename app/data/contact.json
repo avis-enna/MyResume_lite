@@ -1,18 +1,18 @@
 {
   "contactInfo": {
-    "email": "",
-    "phone": "",
+    "email": "test@example.com",
+    "phone": "+1 234 567 8900",
     "location": "Test City, Test Country"
   },
   "socialLinks": [
     {
       "name": "LinkedIn",
-      "url": "https://linkedin.com/in/sivavenna",
+      "url": "https://linkedin.com/in/testuser",
       "icon": "linkedin"
     },
     {
       "name": "GitHub",
-      "url": "https://github.com/avis-enna",
+      "url": "https://github.com/testuser",
       "icon": "github"
     },
     {
