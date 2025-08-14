@@ -28,19 +28,23 @@ export default function AdminSkills() {
   const [newCertification, setNewCertification] = useState('');
   const router = useRouter();
 
-  const checkAuth = useCallback(async () => {
+  const checkAuthAndLoadData = async () => {
     try {
       const response = await fetch('/api/admin/session-check');
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || !data?.authenticated) {
+      const data = await response.json();
+
+      if (data.authenticated) {
+        await loadSkillsData();
+      } else {
         router.push('/admin');
       }
-    } catch {
+    } catch (error) {
+      console.error('Auth check failed:', error);
       router.push('/admin');
     }
-  }, [router]);
+  };
 
-  const loadSkillsData = useCallback(async () => {
+  const loadSkillsData = async () => {
     try {
       const response = await fetch('/api/admin/skills');
       if (response.ok) {
@@ -55,12 +59,11 @@ export default function AdminSkills() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    checkAuth();
-    loadSkillsData();
-  }, [checkAuth, loadSkillsData]);
+    checkAuthAndLoadData();
+  }, []);
 
   const saveSkillsData = async (updatedData: SkillsData) => {
     setSaving(true);
@@ -183,7 +186,7 @@ export default function AdminSkills() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" data-testid="skills-page">
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Skills Management</h1>
@@ -193,12 +196,12 @@ export default function AdminSkills() {
         {message && (
           <div className={`mb-6 p-4 rounded-md ${
             message.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
-          }`}>
+          }`} data-testid={message.type === 'success' ? 'success-alert' : 'error-alert'}>
             {message.text}
           </div>
         )}
 
-        <div className="space-y-8">
+        <div className="space-y-8" data-testid="skills-container">
           {/* Technical Expertise Section */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Technical Expertise</h2>
@@ -225,7 +228,7 @@ export default function AdminSkills() {
           </div>
 
           {/* Skill Categories Section */}
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow p-6" data-testid="skill-categories-section">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Skill Categories</h2>
             <div className="grid gap-6 md:grid-cols-2">
               {skillsData.skillCategories.map((category) => (
@@ -287,7 +290,7 @@ export default function AdminSkills() {
           </div>
 
           {/* Certifications Section */}
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow p-6" data-testid="certifications-section">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Certifications</h2>
             <div className="space-y-3">
               {skillsData.certifications.map((cert, index) => (

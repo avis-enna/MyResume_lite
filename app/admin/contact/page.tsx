@@ -37,6 +37,7 @@ export default function AdminContact() {
   const [loading, setLoading] = useState(true);
   const [contactData, setContactData] = useState<ContactData | null>(null);
   const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -88,13 +89,15 @@ export default function AdminContact() {
       });
 
       if (response.ok) {
-        alert('Contact data updated successfully!');
+        setMessage({ type: 'success', text: 'Contact data updated successfully!' });
+        // Clear message after 3 seconds
+        setTimeout(() => setMessage(null), 3000);
       } else {
-        alert('Failed to update contact data');
+        setMessage({ type: 'error', text: 'Failed to update contact data' });
       }
     } catch (error) {
       console.error('Error saving contact data:', error);
-      alert('Error saving contact data');
+      setMessage({ type: 'error', text: 'Error saving contact data' });
     } finally {
       setSaving(false);
     }
@@ -176,6 +179,15 @@ export default function AdminContact() {
               </button>
             </div>
           </div>
+
+          {/* Success/Error Messages */}
+          {message && (
+            <div className={`mx-auto max-w-4xl px-6 py-4 ${
+              message.type === 'success' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
+            }`} data-testid={message.type === 'success' ? 'success-alert' : 'error-alert'}>
+              {message.text}
+            </div>
+          )}
 
           <form className="space-y-8" data-testid="contact-form-container" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
             <div data-testid="contact-form-ready" className="hidden">Ready</div>

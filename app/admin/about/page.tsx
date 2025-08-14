@@ -39,6 +39,7 @@ export default function AdminAbout() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
     loadData();
@@ -77,12 +78,14 @@ export default function AdminAbout() {
       });
 
       if (response.ok) {
-        alert('Data saved successfully!');
+        setMessage({ type: 'success', text: 'Data saved successfully!' });
+        // Clear message after 3 seconds
+        setTimeout(() => setMessage(null), 3000);
       } else {
-        alert('Failed to save data');
+        setMessage({ type: 'error', text: 'Failed to save data' });
       }
     } catch (error) {
-      alert('Failed to save data');
+      setMessage({ type: 'error', text: 'Failed to save data' });
     } finally {
       setSaving(false);
     }
@@ -126,6 +129,15 @@ export default function AdminAbout() {
             </div>
           </div>
         </header>
+
+        {/* Success/Error Messages */}
+        {message && (
+          <div className={`mx-auto max-w-2xl px-6 py-4 ${
+            message.type === 'success' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
+          }`} data-testid={message.type === 'success' ? 'success-alert' : 'error-alert'}>
+            {message.text}
+          </div>
+        )}
 
         <main className="container mx-auto px-6 py-12">
           <div className="max-w-2xl mx-auto">
