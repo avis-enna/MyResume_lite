@@ -7,12 +7,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/app/lib/mongodb';
 import User from '@/app/models/User';
 
-const isTestEnvironment = process.env.NODE_ENV === 'test' || 
+const isTestEnvironment = process.env.NODE_ENV === 'test' ||
                          process.env.PLAYWRIGHT_TEST === '1' ||
-                         process.env.CI === 'true';
+                         process.env.CI === 'true' ||
+                         process.env.NODE_ENV === 'development'; // Allow in development for setup
 
 export async function POST(request: NextRequest) {
-  // Only allow in test environment
+  // Only allow in test/development environment
   if (!isTestEnvironment) {
     return NextResponse.json(
       { error: 'This endpoint is only available in test environment' },
@@ -51,8 +52,10 @@ export async function POST(request: NextRequest) {
         }
       });
     } else {
-      // Update existing user password
+      // Update existing user password and clear lockout
       adminUser.password = TEST_ADMIN_CREDENTIALS.password;
+      adminUser.loginAttempts = 0;
+      adminUser.lockUntil = undefined;
       await adminUser.save();
       
       return NextResponse.json({
@@ -76,7 +79,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  // Only allow in test environment
+  // Only allow in test/development environment
   if (!isTestEnvironment) {
     return NextResponse.json(
       { error: 'This endpoint is only available in test environment' },

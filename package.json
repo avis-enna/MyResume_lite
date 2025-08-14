@@ -21,7 +21,9 @@
     "admin:create": "npm run init-admin create",
     "admin:list": "npm run init-admin list",
     "admin:remove": "npm run init-admin remove",
-    "admin:update-password": "npm run init-admin update-password"
+    "admin:update-password": "npm run init-admin update-password",
+    "test:comprehensive": "npx tsx scripts/comprehensive-test.ts",
+    "test:stress": "npm run test:comprehensive"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

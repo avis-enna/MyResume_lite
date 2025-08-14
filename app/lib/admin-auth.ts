@@ -56,34 +56,52 @@ export async function getSessionUser(): Promise<AdminTokenPayload | null> {
 
     // 1) Preferred: admin_token (JWT)
     const adminJwt = cookieStore.get(COOKIE_NAME)?.value;
+    console.log('[admin-auth] admin_token cookie:', adminJwt ? 'present' : 'missing');
     if (adminJwt) {
+      console.log('[admin-auth] admin_token length:', adminJwt.length);
       const decoded = verifyWithSecrets(adminJwt);
-      return normalizeUser(decoded);
+      console.log('[admin-auth] admin_token decoded:', decoded ? 'success' : 'failed');
+      if (decoded) {
+        const normalized = normalizeUser(decoded);
+        console.log('[admin-auth] normalized user:', normalized);
+        return normalized;
+      }
     }
 
     // 2) Legacy: auth-token (JWT used by older routes)
     const legacyJwt = cookieStore.get(LEGACY_USER_COOKIE)?.value;
+    console.log('[admin-auth] auth-token cookie:', legacyJwt ? 'present' : 'missing');
     if (legacyJwt) {
+      console.log('[admin-auth] auth-token length:', legacyJwt.length);
       const decoded = verifyWithSecrets(legacyJwt);
-      return normalizeUser(decoded);
+      console.log('[admin-auth] auth-token decoded:', decoded ? 'success' : 'failed');
+      if (decoded) {
+        const normalized = normalizeUser(decoded);
+        console.log('[admin-auth] normalized legacy user:', normalized);
+        return normalized;
+      }
     }
 
     // 3) Dev-only fallback: admin-session (base64 "username:timestamp")
     const devCookie = cookieStore.get(DEV_COOKIE)?.value;
+    console.log('[admin-auth] admin-session cookie:', devCookie ? 'present' : 'missing');
     if (devCookie && process.env.NODE_ENV !== 'production') {
       try {
         const decoded = Buffer.from(devCookie, 'base64').toString();
         const [username, ts] = decoded.split(':');
         const tokenAge = Date.now() - Number(ts);
         const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+        console.log('[admin-auth] dev cookie decoded:', { username, tokenAge, maxAge });
         if (username === 'admin' && tokenAge < maxAge) {
+          console.log('[admin-auth] using dev cookie fallback');
           return { username: 'admin', role: 'admin', sub: 'admin' };
         }
-      } catch {
-        // ignore
+      } catch (error) {
+        console.log('[admin-auth] dev cookie decode error:', error);
       }
     }
 
+    console.log('[admin-auth] no valid session found');
     return null;
   } catch (error) {
     console.error('[admin-auth] getSessionUser error:', error);

@@ -18,7 +18,7 @@ async function globalSetup() {
 
   // Try to setup admin user via API
   try {
-    const response = await fetch('http://localhost:3004/api/test/setup-admin', {
+    const response = await fetch('http://localhost:3001/api/test/setup-admin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
