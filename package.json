@@ -23,7 +23,10 @@
     "admin:remove": "npm run init-admin remove",
     "admin:update-password": "npm run init-admin update-password",
     "test:comprehensive": "npx tsx scripts/comprehensive-test.ts",
-    "test:stress": "npm run test:comprehensive"
+    "test:stress": "npm run test:comprehensive",
+    "seed:test-data": "npx tsx scripts/seed-test-data.ts",
+    "test:seed": "npm run seed:test-data seed",
+    "test:clear": "npm run seed:test-data clear"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

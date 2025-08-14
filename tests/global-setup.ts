@@ -3,6 +3,8 @@
  * Sets environment variables and ensures test environment is ready
  */
 
+// Removed direct seeding import - using API instead
+
 async function globalSetup() {
   // Set environment variables for test detection
   process.env.PLAYWRIGHT_TEST = '1';
@@ -33,6 +35,26 @@ async function globalSetup() {
     }
   } catch (error) {
     console.log('⚠️  Admin user setup via API failed, will be handled during tests');
+  }
+
+  // Seed deterministic test data via API
+  try {
+    console.log('🌱 Seeding test data via API...');
+    const response = await fetch('http://localhost:3001/api/test/seed-data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log('✅ Test data seeded successfully:', result.counts);
+    } else {
+      console.log('⚠️  Test data seeding failed via API');
+    }
+  } catch (error) {
+    console.log('⚠️  Test data seeding failed:', error);
   }
 
   return async () => {

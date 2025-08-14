@@ -128,24 +128,28 @@ export default function AdminAbout() {
 
         <main className="container mx-auto px-6 py-12">
           <div className="max-w-2xl mx-auto">
-            <div className="bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg p-8">
-
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-xs font-light tracking-[0.15em] uppercase text-gray-400 mb-2">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    value={data.personal.name}
-                    onChange={(e) => setData({
-                      ...data,
-                      personal: { ...data.personal, name: e.target.value }
-                    })}
-                    className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
-                    placeholder="Enter your full name"
-                  />
-                </div>
+            <div className="bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg p-8" data-testid="about-form-container">
+              {loading && <div data-testid="about-form-loading">Loading...</div>}
+              {!loading && (
+                <form data-testid="about-form">
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-xs font-light tracking-[0.15em] uppercase text-gray-400 mb-2">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        data-testid="name-input"
+                        value={data.personal.name}
+                        onChange={(e) => setData({
+                          ...data,
+                          personal: { ...data.personal, name: e.target.value }
+                        })}
+                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
+                        placeholder="Enter your full name"
+                      />
+                    </div>
 
                 <div>
                   <label className="block text-xs font-light tracking-[0.15em] uppercase text-gray-400 mb-2">
@@ -153,6 +157,8 @@ export default function AdminAbout() {
                   </label>
                   <input
                     type="text"
+                    name="title"
+                    data-testid="title-input"
                     value={data.personal.title}
                     onChange={(e) => setData({
                       ...data,
@@ -168,6 +174,8 @@ export default function AdminAbout() {
                     Bio - First Paragraph
                   </label>
                   <textarea
+                    name="bio-paragraph1"
+                    data-testid="bio-paragraph1-input"
                     value={data.bio.paragraph1}
                     onChange={(e) => setData({
                       ...data,
@@ -184,6 +192,8 @@ export default function AdminAbout() {
                     Bio - Second Paragraph
                   </label>
                   <textarea
+                    name="bio-paragraph2"
+                    data-testid="bio-paragraph2-input"
                     value={data.bio.paragraph2}
                     onChange={(e) => setData({
                       ...data,
@@ -252,7 +262,8 @@ export default function AdminAbout() {
                   />
                 </div>
               </div>
-
+                </form>
+              )}
             </div>
           </div>
         </main>

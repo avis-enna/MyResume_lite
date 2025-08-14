@@ -29,61 +29,34 @@ test.describe('Admin About Management', () => {
 
   test('should load existing about data', async ({ page }) => {
     await page.goto('/admin/about');
-    
-    // Wait for data to load
-    await page.waitForSelector('input[name="name"], input[placeholder*="name"]');
-    
-    // Verify form fields are populated with existing data
-    const nameField = page.locator('input[name="name"], input[placeholder*="name"]').first();
-    const titleField = page.locator('input[name="title"], input[placeholder*="title"]').first();
-    const summaryField = page.locator('textarea[name="summary"], textarea[placeholder*="summary"]').first();
-    
-    if (await nameField.isVisible()) {
-      await expect(nameField).not.toHaveValue('');
-    }
-    
-    if (await titleField.isVisible()) {
-      await expect(titleField).not.toHaveValue('');
-    }
-    
-    if (await summaryField.isVisible()) {
-      await expect(summaryField).not.toHaveValue('');
-    }
+
+    // Wait for form to load completely
+    await page.waitForSelector('[data-testid="about-form"]', { timeout: 10000 });
+
+    // Verify form fields are populated with seeded test data
+    const nameField = page.getByTestId('name-input');
+    const titleField = page.getByTestId('title-input');
+    const bio1Field = page.getByTestId('bio-paragraph1-input');
+
+    // Check that fields have the expected seeded data
+    await expect(nameField).toHaveValue('John Doe');
+    await expect(titleField).toHaveValue('Senior Software Engineer');
+    await expect(bio1Field).toContainText('Experienced software engineer');
   });
 
   test('should update personal information successfully', async ({ page }) => {
     await page.goto('/admin/about');
     
     // Wait for form to load
-    await page.waitForSelector('form');
-    
+    await page.waitForSelector('[data-testid="about-form"]', { timeout: 10000 });
+
     // Update personal information
     const testName = 'John Doe Updated';
-    const testTitle = 'Senior Software Engineer';
-    const testLocation = 'San Francisco, CA';
-    const testEmail = 'john.doe@example.com';
-    
-    // Fill in personal info fields if they exist
-    const nameField = page.locator('input[name="name"], input[placeholder*="name"]').first();
-    const titleField = page.locator('input[name="title"], input[placeholder*="title"]').first();
-    const locationField = page.locator('input[name="location"], input[placeholder*="location"]').first();
-    const emailField = page.locator('input[name="email"], input[placeholder*="email"]').first();
-    
-    if (await nameField.isVisible()) {
-      await nameField.fill(testName);
-    }
-    
-    if (await titleField.isVisible()) {
-      await titleField.fill(testTitle);
-    }
-    
-    if (await locationField.isVisible()) {
-      await locationField.fill(testLocation);
-    }
-    
-    if (await emailField.isVisible()) {
-      await emailField.fill(testEmail);
-    }
+    const testTitle = 'Senior Full Stack Developer';
+
+    // Fill in form fields using stable test IDs
+    await page.getByTestId('name-input').fill(testName);
+    await page.getByTestId('title-input').fill(testTitle);
     
     // Submit the form
     await page.click('button[type="submit"]');
