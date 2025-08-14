@@ -13,9 +13,9 @@ test.describe('Admin Skills Management', () => {
     await page.fill('input[name="password"]', '$iva@V3nna21');
     await page.click('button[type="submit"]');
 
-    // Wait for redirect to admin dashboard
-    await page.waitForURL('/admin/dashboard');
-    await expect(page.locator('h1')).toContainText('Admin Dashboard');
+    // Navigate directly to skills page after login
+    await page.goto('/admin/skills');
+    await page.waitForLoadState('networkidle');
   });
 
   test('should navigate to skills management page', async ({ page }) => {

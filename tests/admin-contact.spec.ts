@@ -24,7 +24,7 @@ test.describe('Admin Contact Management', () => {
     
     // Verify page loads correctly
     await expect(page.locator('h1')).toContainText('Edit Contact Section');
-    await expect(page.locator('input[placeholder="Enter your email"]')).toBeVisible();
+    await expect(page.getByTestId('contact-email-input')).toBeVisible();
   });
 
   test('should load existing contact data', async ({ page }) => {
@@ -210,7 +210,7 @@ test.describe('Admin Contact Management', () => {
     await page.goto('/admin/contact');
     
     // Verify we're still authenticated
-    await expect(page.locator('h1')).toContainText('Contact Management');
+    await expect(page.locator('h1')).toContainText('Edit Contact Section');
     
     // Navigate to another admin page
     await page.goto('/admin/dashboard');
@@ -218,6 +218,6 @@ test.describe('Admin Contact Management', () => {
     
     // Go back to contact page
     await page.goto('/admin/contact');
-    await expect(page.locator('h1')).toContainText('Contact Management');
+    await expect(page.locator('h1')).toContainText('Edit Contact Section');
   });
 });
