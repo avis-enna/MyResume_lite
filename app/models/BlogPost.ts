@@ -80,7 +80,7 @@ BlogPostSchema.pre('save', async function(this: IBlogPost, next) {
       // Compress content if it's larger than 1KB
       if (this.content.length > 1024) {
         this.compressedContent = await compressData(this.content);
-        this.content = undefined; // Remove uncompressed content to save space
+        this.content = ''; // Remove uncompressed content to save space
       }
     } catch (error) {
       console.error('Content compression failed:', error);
