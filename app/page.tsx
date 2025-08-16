@@ -203,7 +203,7 @@ export default async function Home() {
 
           <div className="space-y-16">
             {experiences.length > 0 ? (
-              experiences.map((experience, index) => (
+              experiences.map((experience: any, index: number) => (
                 <div key={experience._id} className={`border-l-4 ${index === 0 ? 'border-amber-600/30' : 'border-amber-600/20'} pl-12 relative`}>
                   <div className={`absolute -left-3 top-0 w-6 h-6 ${index === 0 ? 'bg-amber-600/50' : 'bg-amber-600/30'} rounded-full border-4 border-black`}></div>
                   <div className={`${index === 0 ? 'bg-amber-950/20 border-amber-800/30' : 'bg-amber-950/10 border-amber-800/20'} border p-8 rounded`}>
