@@ -53,3 +53,35 @@ export async function getContactData() {
     };
   }
 }
+
+export async function updateContactData(updates: any) {
+  try {
+    await connectDB();
+    const Contact = mongoose.models.Contact || mongoose.model('Contact', contactSchema);
+
+    // Update or create the contact document
+    const contactDoc = await Contact.findOneAndUpdate(
+      {}, // Find any document (should be only one)
+      {
+        ...updates,
+        updatedAt: new Date()
+      },
+      {
+        new: true, // Return the updated document
+        upsert: true // Create if doesn't exist
+      }
+    );
+
+    return {
+      email: contactDoc.email || 'vsivareddy.venna@gmail.com',
+      phone: contactDoc.phone || '+1-555-0123',
+      location: contactDoc.location || 'San Francisco, CA',
+      linkedin: contactDoc.linkedin || 'https://linkedin.com/in/sivavenna',
+      github: contactDoc.github || 'https://github.com/avis-enna',
+      website: contactDoc.website || 'https://portfolio.dev'
+    };
+  } catch (error) {
+    console.error('Error updating contact data:', error);
+    throw error;
+  }
+}

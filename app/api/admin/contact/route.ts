@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getContactData, updateContactData } from '../../../lib/contact-data';
+import { getContactData, updateContactData } from '../../../lib/contact-mongo';
 import { requireAuth } from '../../../lib/admin-auth';
 
 export async function GET(_request: NextRequest) {
