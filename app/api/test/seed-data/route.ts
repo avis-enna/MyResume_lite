@@ -6,11 +6,62 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/app/lib/mongodb';
 import mongoose from 'mongoose';
+import { updateSkillsData } from '@/app/lib/skills-mongo';
 
-const isTestEnvironment = process.env.NODE_ENV === 'test' || 
+const isTestEnvironment = process.env.NODE_ENV === 'test' ||
                          process.env.PLAYWRIGHT_TEST === '1' ||
                          process.env.CI === 'true' ||
                          process.env.NODE_ENV === 'development';
+
+// Default skills data for testing
+const defaultSkillsData = {
+  skillCategories: [
+    {
+      id: "cloud-devops",
+      title: "Cloud & DevOps",
+      skills: ["Kubernetes", "Docker", "Helm", "FluxCD", "CI/CD", "AWS", "GCP"]
+    },
+    {
+      id: "programming",
+      title: "Programming Languages",
+      skills: ["Java", "Python", "JavaScript", "SQL", "Shell Scripting", "COBOL"]
+    },
+    {
+      id: "backend",
+      title: "Backend",
+      skills: ["Spring Boot", "REST APIs", "SOAP Web Services", "Microservices"]
+    },
+    {
+      id: "frontend",
+      title: "Frontend",
+      skills: ["React", "JavaScript", "HTML", "CSS"]
+    },
+    {
+      id: "databases",
+      title: "Databases",
+      skills: ["SQL", "MongoDB", "IBM DB2", "VSAM"]
+    },
+    {
+      id: "mainframe",
+      title: "Mainframe",
+      skills: ["JCL", "COBOL"]
+    },
+    {
+      id: "networking",
+      title: "Networking",
+      skills: ["TCP/IP", "HTTP", "Network Device Configuration & Troubleshooting"]
+    }
+  ],
+  certifications: [
+    "Cisco Certified DevNet Associate (DEVASC)",
+    "Cisco Certified Network Associate (CCNA)",
+    "Cisco Certified Cybersecurity Associate (CCCA)"
+  ],
+  technicalExpertise: {
+    title: "Technical Expertise",
+    description: "Comprehensive technical skills and experience in modern software development practices."
+  }
+};
 
 // Test data
 const aboutTestData = {
@@ -54,7 +105,7 @@ const experienceTestData = [
   {
     title: 'Senior Software Engineer',
     company: 'Tech Corp Inc.',
-    duration: '2020 - Present',
+
     description: 'Lead full-stack development team and architect scalable web applications',
     responsibilities: [
       'Design and implement complex web applications',
@@ -68,8 +119,10 @@ const experienceTestData = [
     technologies: ['React', 'Node.js', 'MongoDB', 'AWS'],
     type: 'full-time',
     current: true,
-    startDate: new Date('2020-01-01'),
-    endDate: null
+    startDate: '2020-01',
+    endDate: '',
+    location: 'San Francisco, CA',
+    order: 1
   }
 ];
 
@@ -121,17 +174,17 @@ export async function POST(request: NextRequest) {
     }));
 
     const Experience = mongoose.models.Experience || mongoose.model('Experience', new mongoose.Schema({
-      title: String,
-      company: String,
-      duration: String,
-      description: String,
-      responsibilities: [String],
-      achievements: [String],
-      technologies: [String],
-      type: String,
-      current: Boolean,
-      startDate: Date,
-      endDate: Date,
+      title: { type: String, required: true },
+      company: { type: String, required: true },
+      startDate: { type: String, required: true },
+      endDate: { type: String },
+      current: { type: Boolean, default: false },
+      description: { type: String },
+      responsibilities: [{ type: String }],
+      achievements: [{ type: String }],
+      technologies: [{ type: String }],
+      location: { type: String },
+      order: { type: Number, default: 0 },
       createdAt: { type: Date, default: Date.now },
       updatedAt: { type: Date, default: Date.now }
     }));
@@ -151,6 +204,9 @@ export async function POST(request: NextRequest) {
 
     await Skill.insertMany(skillsTestData);
     await Experience.insertMany(experienceTestData);
+
+    // Reset skills data to clean state in MongoDB
+    await updateSkillsData(defaultSkillsData);
 
     // Get counts
     const counts = {
@@ -189,7 +245,8 @@ export async function DELETE(request: NextRequest) {
     // Clear test data
     await mongoose.connection.db.collection('abouts').deleteMany({});
     await mongoose.connection.db.collection('contacts').deleteMany({});
-    await mongoose.connection.db.collection('skills').deleteMany({});
+    await mongoose.connection.db.collection('skills').deleteMany({}); // Individual skills (legacy)
+    await mongoose.connection.db.collection('skillss').deleteMany({}); // Skills document (new)
     await mongoose.connection.db.collection('experiences').deleteMany({
       company: 'Tech Corp Inc.'
     });

@@ -27,6 +27,7 @@ export default function AdminSkills() {
   const [editingCategory, setEditingCategory] = useState<string | null>(null);
   const [newSkill, setNewSkill] = useState('');
   const [newCertification, setNewCertification] = useState('');
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
   const router = useRouter();
 
   const checkAuthAndLoadData = async () => {
@@ -66,14 +67,16 @@ export default function AdminSkills() {
   };
 
   useEffect(() => {
-    // Temporarily bypass auth for testing
-    if (process.env.NODE_ENV === 'test') {
-      setIsAuthenticated(true);
-      loadSkillsData();
-      setLoading(false);
-    } else {
-      checkAuthAndLoadData();
-    }
+    checkAuthAndLoadData();
+  }, []);
+
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+    };
   }, []);
 
   const saveSkillsData = async (updatedData: SkillsData) => {
@@ -86,7 +89,8 @@ export default function AdminSkills() {
       });
 
       if (response.ok) {
-        setSkillsData(updatedData);
+        const result = await response.json();
+        setSkillsData(result.data || updatedData);
         setMessage({ type: 'success', text: 'Skills updated successfully!' });
         setTimeout(() => setMessage(null), 3000);
       } else {
@@ -193,7 +197,7 @@ export default function AdminSkills() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" data-testid="skills-page">
+    <div className="min-h-screen bg-gray-50" data-testid="skills-root">
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Skills Management</h1>
@@ -210,7 +214,7 @@ export default function AdminSkills() {
 
         <div className="space-y-8" data-testid="skills-container">
           {/* Technical Expertise Section */}
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow p-6" data-testid="technical-expertise-section">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Technical Expertise</h2>
             <div className="space-y-4">
               <div>
@@ -220,6 +224,7 @@ export default function AdminSkills() {
                   value={skillsData.technicalExpertise.title}
                   onChange={(e) => updateTechnicalExpertise('title', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  data-testid="expertise-title-input"
                 />
               </div>
               <div>
@@ -229,6 +234,7 @@ export default function AdminSkills() {
                   onChange={(e) => updateTechnicalExpertise('description', e.target.value)}
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  data-testid="expertise-textarea"
                 />
               </div>
             </div>
@@ -246,9 +252,11 @@ export default function AdminSkills() {
                       <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
                         <span className="text-sm text-gray-700">{skill}</span>
                         <button
+                          type="button"
                           onClick={() => removeSkillFromCategory(category.id, index)}
                           className="text-red-600 hover:text-red-800 text-sm"
                           disabled={saving}
+                          data-testid={`remove-skill-btn-${category.id}-${index}`}
                         >
                           Remove
                         </button>
@@ -265,28 +273,35 @@ export default function AdminSkills() {
                         placeholder="Enter new skill"
                         className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         onKeyPress={(e) => e.key === 'Enter' && addSkillToCategory(category.id)}
+                        data-testid={`skill-input-${category.id}`}
                       />
                       <button
+                        type="button"
                         onClick={() => addSkillToCategory(category.id)}
                         disabled={saving || !newSkill.trim()}
                         className="px-3 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 disabled:opacity-50"
+                        data-testid={`add-skill-btn-${category.id}`}
                       >
                         Add
                       </button>
                       <button
+                        type="button"
                         onClick={() => {
                           setEditingCategory(null);
                           setNewSkill('');
                         }}
                         className="px-3 py-2 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400"
+                        data-testid={`cancel-skill-btn-${category.id}`}
                       >
                         Cancel
                       </button>
                     </div>
                   ) : (
                     <button
+                      type="button"
                       onClick={() => setEditingCategory(category.id)}
                       className="mt-3 text-blue-600 hover:text-blue-800 text-sm"
+                      data-testid={`add-skill-toggle-${category.id}`}
                     >
                       + Add Skill
                     </button>
@@ -304,9 +319,11 @@ export default function AdminSkills() {
                 <div key={index} className="flex items-center justify-between bg-gray-50 px-4 py-3 rounded">
                   <span className="text-gray-700">{cert}</span>
                   <button
+                    type="button"
                     onClick={() => removeCertification(index)}
                     className="text-red-600 hover:text-red-800"
                     disabled={saving}
+                    data-testid={`remove-certification-btn-${index}`}
                   >
                     Remove
                   </button>
@@ -322,11 +339,14 @@ export default function AdminSkills() {
                 placeholder="Enter new certification"
                 className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onKeyPress={(e) => e.key === 'Enter' && addCertification()}
+                data-testid="certification-input"
               />
               <button
+                type="button"
                 onClick={addCertification}
                 disabled={saving || !newCertification.trim()}
                 className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                data-testid="add-certification-btn"
               >
                 Add Certification
               </button>
@@ -336,8 +356,10 @@ export default function AdminSkills() {
 
         <div className="mt-8 flex justify-between">
           <button
+            type="button"
             onClick={() => router.push('/admin')}
             className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+            data-testid="back-to-dashboard-btn"
           >
             Back to Dashboard
           </button>

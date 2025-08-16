@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSkillsData, updateSkillsData } from '../../../lib/skills-data';
+import { getSkillsData, updateSkillsData } from '../../../lib/skills-mongo';
 import { requireAuth } from '../../../lib/admin-auth';
 
 export async function GET(_request: NextRequest) {

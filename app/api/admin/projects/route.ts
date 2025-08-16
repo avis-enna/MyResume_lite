@@ -32,9 +32,9 @@ export async function POST(request: NextRequest) {
       description: data.description,
       technologies: data.technologies || [],
       features: data.features || [],
-      githubUrl: data.githubUrl,
-      liveUrl: data.liveUrl,
-      imageUrl: data.imageUrl,
+      githubUrl: data.githubUrl?.trim() || undefined,
+      liveUrl: data.liveUrl?.trim() || undefined,
+      imageUrl: data.imageUrl?.trim() || undefined,
       featured: data.featured || false,
       publication: data.publication,
       order: data.order || 0,
@@ -58,7 +58,15 @@ export async function PUT(request: NextRequest) {
 
     await connectDB();
     const data = await request.json();
-    const { id, ...updateData } = data;
+    const { id, ...rawUpdateData } = data;
+
+    // Clean up empty strings for URL fields
+    const updateData = {
+      ...rawUpdateData,
+      githubUrl: rawUpdateData.githubUrl?.trim() || undefined,
+      liveUrl: rawUpdateData.liveUrl?.trim() || undefined,
+      imageUrl: rawUpdateData.imageUrl?.trim() || undefined,
+    };
 
     const project = await Project.findByIdAndUpdate(id, updateData, { new: true });
 

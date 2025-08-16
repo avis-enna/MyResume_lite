@@ -11,32 +11,22 @@ const testExperience = {
   technologies: ['React', 'Node.js', 'TypeScript']
 };
 
-const adminCredentials = {
-  email: process.env.ADMIN_USERNAME || 'admin@admin.com',
-  password: process.env.ADMIN_PASSWORD || 'admin@admin.com'
-};
-
 test.describe('Admin Experience Management', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to admin login
     await page.goto('/admin');
 
-    // If redirected already logged in, skip
-    const onDashboard = page.url().includes('/admin/dashboard');
-    if (!onDashboard) {
-      // Identify login form reliably
-      const emailInput = page.locator('input[name="email"]').first();
-      const passwordInput = page.locator('input[name="password"]').first();
-      const submitButton = page.locator('button[type="submit"]').first();
+    // Verify we're on the login page
+    await expect(page.locator('h1')).toContainText('Portfolio Admin');
 
-      if (await emailInput.count()) {
-        await emailInput.fill(adminCredentials.email);
-        await passwordInput.fill(adminCredentials.password);
-        await submitButton.click();
-        // wait for either dashboard or any admin page body
-        await page.waitForLoadState('networkidle');
-      }
-    }
+    // Login with secure admin credentials
+    await page.fill('input[name="email"]', 'admin@admin.com');
+    await page.fill('input[name="password"]', '$iva@V3nna21');
+    await page.click('button[type="submit"]');
+
+    // Wait for redirect to admin dashboard
+    await page.waitForURL('/admin/dashboard');
+    await expect(page.locator('h1')).toContainText('Admin Dashboard');
   });
 
   test('should load admin experience page successfully', async ({ page }) => {
