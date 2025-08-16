@@ -325,7 +325,7 @@ async function runComprehensiveTest(): Promise<TestResults> {
     await cleanupTestData();
     
   } catch (error) {
-    results.errors.push(error.message);
+    results.errors.push(error instanceof Error ? error.message : 'Unknown error');
     console.error('❌ Test suite error:', error);
   } finally {
     await mongoose.connection.close();
