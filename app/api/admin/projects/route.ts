@@ -95,6 +95,11 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
     }
 
+    // Validate ObjectId format
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
+
     await connectDB();
     const project = await Project.findByIdAndDelete(id);
 

@@ -45,12 +45,12 @@ export default function EditProjectPage() {
       const res = await fetch('/api/admin/session-check');
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data?.authenticated) {
-        router.push('/admin');
+        router.replace('/admin');
         return;
       }
       setAuthChecked(true);
     } catch {
-      router.push('/admin');
+      router.replace('/admin');
     }
   }, [router]);
 
@@ -124,8 +124,12 @@ export default function EditProjectPage() {
     }
   };
 
-  if (!authChecked || loading) {
-    return <div className="min-h-screen flex items-center justify-center text-gray-600">Loading...</div>;
+  if (!authChecked) {
+    return <div className="min-h-screen flex items-center justify-center text-gray-600">Checking authentication...</div>;
+  }
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center text-gray-600">Loading project...</div>;
   }
 
   return (
