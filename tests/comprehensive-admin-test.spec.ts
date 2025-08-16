@@ -285,13 +285,13 @@ test.describe('Comprehensive Admin Panel Test Suite', () => {
     await page.goto('/');
     await page.waitForSelector('h1');
     
-    // Check if about data is displayed (should show test data "JOHN DOE")
+    // Check if about data is displayed (should show updated data from About admin test)
     const nameElement = page.locator('h1').first();
     const nameText = await nameElement.textContent();
     console.log('Portfolio name:', nameText);
 
-    // During tests, it should show the test data name
-    await expect(nameElement).toContainText('JOHN DOE');
+    // During tests, it should show the updated name from the About admin test
+    await expect(nameElement).toContainText('TEST ADMIN USER');
     
     // Check projects page
     await page.goto('/projects');
