@@ -8,7 +8,9 @@
 async function globalSetup() {
   // Set environment variables for test detection
   process.env.PLAYWRIGHT_TEST = '1';
-  process.env.NODE_ENV = 'test';
+  if (!process.env.NODE_ENV) {
+    (process.env as any).NODE_ENV = 'test';
+  }
 
   console.log('🧪 Global test setup: Environment variables set');
   console.log('   - PLAYWRIGHT_TEST=1');
