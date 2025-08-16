@@ -21,9 +21,9 @@ export async function GET() {
     });
   } catch (error) {
     console.error('TEST: Error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: error.message,
+    return NextResponse.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
       message: 'Test API failed'
     }, { status: 500 });
   }
