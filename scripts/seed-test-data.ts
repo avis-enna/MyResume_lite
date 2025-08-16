@@ -206,6 +206,9 @@ async function clearTestData() {
     await connectDB();
 
     // Clear all test data
+    if (!mongoose.connection.db) {
+      throw new Error('Database connection not established');
+    }
     await mongoose.connection.db.collection('abouts').deleteMany({});
     await mongoose.connection.db.collection('contacts').deleteMany({});
     await mongoose.connection.db.collection('skills').deleteMany({});
