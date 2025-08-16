@@ -184,16 +184,20 @@ export default function AdminSkills() {
     );
   }
 
-  if (loading) {
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-600">Checking authentication...</div>
       </div>
     );
   }
 
-  if (!isAuthenticated || !skillsData) {
-    return null;
+  if (!skillsData) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading skills data...</div>
+      </div>
+    );
   }
 
   return (

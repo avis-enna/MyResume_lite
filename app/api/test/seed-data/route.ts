@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/app/lib/mongodb';
 import mongoose from 'mongoose';
 import { updateSkillsData } from '@/app/lib/skills-mongo';
+import Project from '@/app/models/Project';
 
 const isTestEnvironment = process.env.NODE_ENV === 'test' ||
                          process.env.PLAYWRIGHT_TEST === '1' ||
@@ -126,6 +127,41 @@ const experienceTestData = [
   }
 ];
 
+const projectTestData = [
+  {
+    title: "Test Portfolio Project",
+    description: "A comprehensive test project for demonstrating admin-portfolio integration with real-time updates.",
+    technologies: ["React", "Node.js", "MongoDB", "TypeScript"],
+    features: [
+      "Real-time data synchronization",
+      "Admin panel integration",
+      "Responsive design",
+      "Modern UI/UX"
+    ],
+    githubUrl: "https://github.com/test/portfolio-project",
+    liveUrl: "https://test-portfolio.example.com",
+    imageUrl: "",
+    featured: true,
+    order: 1
+  },
+  {
+    title: "API Testing Framework",
+    description: "A lightweight testing framework for REST API validation and monitoring.",
+    technologies: ["JavaScript", "Jest", "Express"],
+    features: [
+      "Automated API testing",
+      "Performance monitoring",
+      "Custom assertions",
+      "CI/CD integration"
+    ],
+    githubUrl: "https://github.com/test/api-framework",
+    liveUrl: "",
+    imageUrl: "",
+    featured: false,
+    order: 2
+  }
+];
+
 export async function POST(request: NextRequest) {
   if (!isTestEnvironment) {
     return NextResponse.json(
@@ -194,6 +230,7 @@ export async function POST(request: NextRequest) {
     await Contact.deleteMany({});
     await Skill.deleteMany({});
     await Experience.deleteMany({ company: 'Tech Corp Inc.' });
+    await Project.deleteMany({ title: { $regex: /Test|API Testing/ } });
 
     // Seed new data
     const about = new About(aboutTestData);
@@ -204,6 +241,7 @@ export async function POST(request: NextRequest) {
 
     await Skill.insertMany(skillsTestData);
     await Experience.insertMany(experienceTestData);
+    await Project.insertMany(projectTestData);
 
     // Reset skills data to clean state in MongoDB
     await updateSkillsData(defaultSkillsData);
@@ -213,7 +251,8 @@ export async function POST(request: NextRequest) {
       about: await About.countDocuments(),
       contact: await Contact.countDocuments(),
       skills: await Skill.countDocuments(),
-      experience: await Experience.countDocuments()
+      experience: await Experience.countDocuments(),
+      projects: await Project.countDocuments()
     };
 
     return NextResponse.json({
@@ -250,6 +289,9 @@ export async function DELETE(request: NextRequest) {
       await mongoose.connection.db.collection('skillss').deleteMany({}); // Skills document (new)
       await mongoose.connection.db.collection('experiences').deleteMany({
         company: 'Tech Corp Inc.'
+      });
+      await mongoose.connection.db.collection('projects').deleteMany({
+        title: { $regex: /Test|API Testing/ }
       });
     }
 
