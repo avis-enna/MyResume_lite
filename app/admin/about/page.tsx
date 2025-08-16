@@ -47,7 +47,14 @@ export default function AdminAbout() {
 
   const loadData = async () => {
     try {
-      const response = await fetch('/api/admin/about');
+      // Add cache-busting headers to prevent stale data
+      const response = await fetch('/api/admin/about', {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
       if (response.ok) {
         const aboutData = await response.json();
         setData(aboutData);

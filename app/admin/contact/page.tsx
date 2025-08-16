@@ -54,7 +54,14 @@ export default function AdminContact() {
 
   const loadContactData = async () => {
     try {
-      const response = await fetch('/api/admin/contact');
+      // Add cache-busting headers to prevent stale data
+      const response = await fetch('/api/admin/contact', {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
       if (response.ok) {
         const data = await response.json();
         setContactData(data);
@@ -78,6 +85,8 @@ export default function AdminContact() {
       if (response.ok) {
         setMessage({ type: 'success', text: 'Contact information updated successfully' });
         setTimeout(() => setMessage(null), 3000);
+        // Reload data to reflect changes and clear any cache
+        await loadContactData();
       } else {
         setMessage({ type: 'error', text: 'Failed to update contact information' });
       }

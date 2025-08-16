@@ -48,6 +48,12 @@ export async function GET() {
           paragraph1: '',
           paragraph2: ''
         }
+      }, {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
       });
     }
 
@@ -69,7 +75,13 @@ export async function GET() {
       }
     };
 
-    return NextResponse.json(responseData);
+    return NextResponse.json(responseData, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    });
   } catch (error: unknown) {
     if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

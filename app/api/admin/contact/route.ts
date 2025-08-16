@@ -6,7 +6,13 @@ export async function GET(_request: NextRequest) {
   try {
     await requireAuth();
     const contactData = await getContactData();
-    return NextResponse.json(contactData);
+    return NextResponse.json(contactData, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    });
   } catch (error: unknown) {
     if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
