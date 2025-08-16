@@ -159,7 +159,7 @@ export default async function AdminExperience() {
                     <div className="mb-4">
                       <h4 className="font-medium text-amber-200 mb-2">Technologies:</h4>
                       <div className="flex flex-wrap gap-2">
-                        {experience.technologies.map((tech, idx) => (
+                        {experience.technologies.map((tech: string, idx: number) => (
                           <span key={idx} className="bg-amber-900/30 border border-amber-700/50 text-amber-200 px-3 py-1 rounded text-sm">
                             {tech}
                           </span>
