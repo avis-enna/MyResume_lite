@@ -240,7 +240,7 @@ export default async function Home() {
                           Key Responsibilities
                         </h5>
                         <ul className="space-y-3">
-                          {experience.responsibilities.map((responsibility, respIndex) => (
+                          {experience.responsibilities.map((responsibility: string, respIndex: number) => (
                             <li key={respIndex} className="flex items-start">
                               <span className={`${index === 0 ? 'text-amber-600/70' : 'text-amber-600/50'} mr-3 mt-2`}>•</span>
                               <span className={`${index === 0 ? 'text-amber-200/70' : 'text-amber-200/60'} font-light italic`}>
@@ -276,7 +276,7 @@ export default async function Home() {
                           Technologies
                         </h5>
                         <div className="flex flex-wrap gap-2">
-                          {experience.technologies.map((tech, techIndex) => (
+                          {experience.technologies.map((tech: string, techIndex: number) => (
                             <span key={techIndex} className={`${index === 0 ? 'bg-amber-900/20 border-amber-700/40 text-amber-200/80' : 'bg-amber-900/10 border-amber-700/30 text-amber-200/60'} border px-3 py-1 rounded text-sm font-light`}>
                               {tech}
                             </span>
