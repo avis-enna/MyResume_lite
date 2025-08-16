@@ -258,7 +258,7 @@ export default async function Home() {
                           Key Achievements
                         </h5>
                         <ul className="space-y-3">
-                          {experience.achievements.map((achievement, achIndex) => (
+                          {experience.achievements.map((achievement: string, achIndex: number) => (
                             <li key={achIndex} className="flex items-start">
                               <span className={`${index === 0 ? 'text-amber-600/70' : 'text-amber-600/50'} mr-3 mt-2`}>○</span>
                               <span className={`${index === 0 ? 'text-amber-200/70' : 'text-amber-200/60'} font-light italic`}>
