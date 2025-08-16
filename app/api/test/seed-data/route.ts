@@ -243,13 +243,15 @@ export async function DELETE(request: NextRequest) {
     await connectDB();
 
     // Clear test data
-    await mongoose.connection.db.collection('abouts').deleteMany({});
-    await mongoose.connection.db.collection('contacts').deleteMany({});
-    await mongoose.connection.db.collection('skills').deleteMany({}); // Individual skills (legacy)
-    await mongoose.connection.db.collection('skillss').deleteMany({}); // Skills document (new)
-    await mongoose.connection.db.collection('experiences').deleteMany({
-      company: 'Tech Corp Inc.'
-    });
+    if (mongoose.connection.db) {
+      await mongoose.connection.db.collection('abouts').deleteMany({});
+      await mongoose.connection.db.collection('contacts').deleteMany({});
+      await mongoose.connection.db.collection('skills').deleteMany({}); // Individual skills (legacy)
+      await mongoose.connection.db.collection('skillss').deleteMany({}); // Skills document (new)
+      await mongoose.connection.db.collection('experiences').deleteMany({
+        company: 'Tech Corp Inc.'
+      });
+    }
 
     return NextResponse.json({
       success: true,
