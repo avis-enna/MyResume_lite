@@ -127,6 +127,9 @@ async function monitorStorageUsage(): Promise<any> {
     await connectDB();
     
     // Get database stats
+    if (!mongoose.connection.db) {
+      throw new Error('Database connection not established');
+    }
     const admin = mongoose.connection.db.admin();
     const dbStats = await mongoose.connection.db.stats();
     
