@@ -22,8 +22,10 @@ async function setupTestEnvironment() {
   try {
     console.log('🧪 Setting up test environment...');
 
-    // Set test environment variables
-    process.env.NODE_ENV = 'test';
+    // Set test environment variables (if not already set)
+    if (!process.env.NODE_ENV) {
+      (process.env as any).NODE_ENV = 'test';
+    }
     process.env.PLAYWRIGHT_TEST = '1';
 
     console.log('✅ Test environment variables set');
