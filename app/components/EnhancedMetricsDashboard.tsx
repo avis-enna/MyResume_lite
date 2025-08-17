@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import '../../styles/themes.css';
+import '../styles/themes.css';
 
 interface MetricItem {
   _id: string;
@@ -150,15 +150,71 @@ export default function EnhancedMetricsDashboard() {
   }
 
   return (
-    <div className="admin-card p-6 rounded-lg">
-      <div className="flex justify-between items-center mb-4">
-        <h4 className="text-lg font-semibold admin-title">Recent Activity</h4>
-        {pagination && (
-          <span className="text-sm admin-loading">
-            {pagination.total} total operations
-          </span>
-        )}
-      </div>
+    <div className="space-y-6">
+      {/* Summary Cards */}
+      {pagination && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="metrics-card rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <div className="metrics-icon w-8 h-8 rounded-full flex items-center justify-center mr-4">
+                <span className="text-sm font-bold">📊</span>
+              </div>
+              <div>
+                <p className="metrics-label text-sm font-medium">Total Operations</p>
+                <p className="metrics-value text-2xl font-bold">{pagination.total}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="metrics-card rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <div className="metrics-icon w-8 h-8 rounded-full flex items-center justify-center mr-4">
+                <span className="text-sm font-bold">📄</span>
+              </div>
+              <div>
+                <p className="metrics-label text-sm font-medium">Current Page</p>
+                <p className="metrics-value text-2xl font-bold">{pagination.page}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="metrics-card rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <div className="metrics-icon w-8 h-8 rounded-full flex items-center justify-center mr-4">
+                <span className="text-sm font-bold">📋</span>
+              </div>
+              <div>
+                <p className="metrics-label text-sm font-medium">Showing</p>
+                <p className="metrics-value text-2xl font-bold">{metrics.length}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="metrics-card rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <div className="metrics-icon w-8 h-8 rounded-full flex items-center justify-center mr-4">
+                <span className="text-sm font-bold">🗂️</span>
+              </div>
+              <div>
+                <p className="metrics-label text-sm font-medium">Data Retention</p>
+                <p className="metrics-value text-lg font-bold">7 Days</p>
+                <p className="text-xs admin-loading">Auto-cleanup</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Activity Log */}
+      <div className="admin-card p-6 rounded-lg">
+        <div className="flex justify-between items-center mb-4">
+          <h4 className="text-lg font-semibold admin-title">Recent Activity Log</h4>
+          {pagination && (
+            <span className="text-sm admin-loading">
+              Page {pagination.page} of {pagination.pages}
+            </span>
+          )}
+        </div>
 
       {metrics.length === 0 ? (
         <p className="admin-loading text-center py-8">No recent activity found</p>
@@ -205,6 +261,7 @@ export default function EnhancedMetricsDashboard() {
         <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-600">
           <div className="flex items-center space-x-2">
             <button
+              type="button"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={!pagination.hasPrev || loading}
               className="admin-btn-secondary px-3 py-1 rounded text-sm disabled:opacity-50"
@@ -215,6 +272,7 @@ export default function EnhancedMetricsDashboard() {
               Page {pagination.page} of {pagination.pages}
             </span>
             <button
+              type="button"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={!pagination.hasNext || loading}
               className="admin-btn-secondary px-3 py-1 rounded text-sm disabled:opacity-50"
@@ -234,6 +292,7 @@ export default function EnhancedMetricsDashboard() {
           <span className="ml-2 admin-loading text-sm">Loading...</span>
         </div>
       )}
+      </div>
     </div>
   );
 }

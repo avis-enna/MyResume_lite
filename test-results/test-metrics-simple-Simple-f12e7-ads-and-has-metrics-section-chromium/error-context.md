@@ -1,0 +1,78 @@
+# Page snapshot
+
+```yaml
+- alert
+- banner:
+  - heading "Admin Dashboard" [level=1]
+  - button "🌙 Dark"
+  - link "View Site":
+    - /url: /
+  - button "Logout"
+- main:
+  - heading "Welcome back!" [level=2]
+  - paragraph: Manage your portfolio content from here.
+  - heading "Activity Metrics (Last 7 Days)" [level=3]
+  - text: 📊
+  - paragraph: Total Operations
+  - paragraph: "2"
+  - text: 🎯
+  - paragraph: Most Active
+  - paragraph: auth
+  - paragraph: 2 operations
+  - text: ⚡
+  - paragraph: Top Operation
+  - paragraph: CREATE
+  - paragraph: 2 times
+  - text: 🗂️
+  - paragraph: Data Retention
+  - paragraph: 7 Days
+  - paragraph: Auto-cleanup
+  - heading "Recent Activity" [level=4]
+  - text: 2 total operations 🟢 CREATE - auth
+  - paragraph: Admin login successful
+  - text: 8/17/2025, 2:47:36 PM ▶ 🟢 CREATE - auth
+  - paragraph: Admin login successful
+  - text: 8/17/2025, 1:28:53 PM ▶
+  - link "About Manage personal information":
+    - /url: /admin/about
+    - img
+    - heading "About" [level=3]
+    - paragraph: Manage personal information
+  - link "Contact Manage contact information":
+    - /url: /admin/contact
+    - img
+    - heading "Contact" [level=3]
+    - paragraph: Manage contact information
+  - link "Skills Manage skills and expertise":
+    - /url: /admin/skills
+    - img
+    - heading "Skills" [level=3]
+    - paragraph: Manage skills and expertise
+  - link "Experience Manage work experience":
+    - /url: /admin/experience
+    - img
+    - heading "Experience" [level=3]
+    - paragraph: Manage work experience
+  - link "Projects Manage portfolio projects":
+    - /url: /admin/projects
+    - img
+    - heading "Projects" [level=3]
+    - paragraph: Manage portfolio projects
+  - link "Blog Posts Create and manage blog content":
+    - /url: /admin/blog
+    - img
+    - heading "Blog Posts" [level=3]
+    - paragraph: Create and manage blog content
+  - link "Messages View contact form submissions":
+    - /url: /admin/contacts
+    - img
+    - heading "Messages" [level=3]
+    - paragraph: View contact form submissions
+  - heading "Quick Actions" [level=3]
+  - link "Add Experience":
+    - /url: /admin/experience/new
+  - link "Add Project":
+    - /url: /admin/projects/new
+  - link "Write Blog Post":
+    - /url: /admin/blog/new
+```

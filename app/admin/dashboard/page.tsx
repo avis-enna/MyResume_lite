@@ -6,35 +6,17 @@ import Link from 'next/link';
 import { ThemeToggle } from '../../components/ThemeProvider';
 import EnhancedMetricsDashboard from '../../components/EnhancedMetricsDashboard';
 
-interface MetricsSummary {
-  totalOperations: number;
-  operationStats: Array<{ _id: string; count: number }>;
-  sectionStats: Array<{ _id: string; count: number }>;
-  dailyStats: Array<{ _id: { year: number; month: number; day: number }; count: number }>;
-  recentActivity: Array<{
-    operation: string;
-    section: string;
-    details: string;
-    timestamp: string;
-    recordId?: string;
-  }>;
-  period: string;
-}
+// MetricsSummary interface removed - now handled by EnhancedMetricsDashboard
 
 export default function AdminDashboard() {
-  const [user, setUser] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
-  const [metrics, setMetrics] = useState<MetricsSummary | null>(null);
-  const [metricsLoading, setMetricsLoading] = useState(true);
   const router = useRouter();
 
   const checkAuth = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/session-check');
       const data = await response.json().catch(() => ({}));
-      if (response.ok && data?.authenticated) {
-        setUser(data.user ?? null);
-      } else {
+      if (!response.ok || !data?.authenticated) {
         router.push('/admin');
       }
     } catch (_err) {
@@ -44,35 +26,13 @@ export default function AdminDashboard() {
     }
   }, [router]);
 
-  const loadMetrics = useCallback(async () => {
-    try {
-      setMetricsLoading(true);
-      console.log('Loading metrics...');
-      const response = await fetch('/api/admin/metrics?type=summary&days=7');
-      console.log('Metrics response status:', response.status);
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Metrics data:', data);
-        setMetrics(data);
-      } else {
-        console.error('Failed to load metrics:', response.status, response.statusText);
-      }
-    } catch (error) {
-      console.error('Failed to load metrics:', error);
-    } finally {
-      setMetricsLoading(false);
-    }
-  }, []);
+  // loadMetrics function removed - now handled by EnhancedMetricsDashboard
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  useEffect(() => {
-    if (!loading) {
-      loadMetrics();
-    }
-  }, [loading, loadMetrics]);
+  // useEffect for loadMetrics removed - now handled by EnhancedMetricsDashboard
 
   const handleLogout = async () => {
     try {
@@ -128,96 +88,8 @@ export default function AdminDashboard() {
           {/* Enhanced Metrics Section */}
           <div className="mb-8">
             <h3 className="text-lg font-semibold admin-title mb-4">Activity Metrics (Last 7 Days)</h3>
-            {metricsLoading ? (
-              <div className="admin-card rounded-lg shadow p-6">
-                <div className="animate-pulse">
-                  <div className="h-4 admin-loading rounded w-1/4 mb-4"></div>
-                  <div className="space-y-3">
-                    <div className="h-3 admin-loading rounded"></div>
-                    <div className="h-3 admin-loading rounded w-5/6"></div>
-                  </div>
-                </div>
-              </div>
-            ) : metrics ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                {/* Total Operations */}
-                <div className="metrics-card rounded-lg shadow p-6">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="metrics-icon w-8 h-8 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-bold">📊</span>
-                      </div>
-                    </div>
-                    <div className="ml-4">
-                      <p className="metrics-label text-sm font-medium">Total Operations</p>
-                      <p className="metrics-value text-2xl font-bold">{metrics.totalOperations}</p>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Most Active Section */}
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                        <span className="text-white text-sm font-bold">🎯</span>
-                      </div>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Most Active</p>
-                      <p className="text-lg font-bold text-gray-900 capitalize">
-                        {metrics.sectionStats[0]?._id || 'N/A'}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {metrics.sectionStats[0]?.count || 0} operations
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Most Common Operation */}
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                        <span className="text-white text-sm font-bold">⚡</span>
-                      </div>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Top Operation</p>
-                      <p className="text-lg font-bold text-gray-900">
-                        {metrics.operationStats[0]?._id || 'N/A'}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {metrics.operationStats[0]?.count || 0} times
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Data Retention */}
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-                        <span className="text-white text-sm font-bold">🗂️</span>
-                      </div>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Data Retention</p>
-                      <p className="text-lg font-bold text-gray-900">7 Days</p>
-                      <p className="text-sm text-gray-500">Auto-cleanup</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="admin-card rounded-lg shadow p-6">
-                <p className="admin-loading">No metrics data available</p>
-              </div>
-            )}
-
-            {/* Enhanced Recent Activity with Pagination */}
+            {/* Enhanced Metrics Dashboard with Pagination */}
             <EnhancedMetricsDashboard />
           </div>
 
@@ -240,31 +112,31 @@ export default function AdminDashboard() {
             </Link>
 
             {/* Contact Management */}
-            <Link href="/admin/contact" className="card hover:shadow-lg transition-shadow">
+            <Link href="/admin/contact" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
-                <div className="bg-teal-100 p-3 rounded-lg mr-4">
-                  <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="metrics-icon p-3 rounded-lg mr-4">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Contact</h3>
-                  <p className="text-gray-600 text-sm">Manage contact information</p>
+                  <h3 className="text-lg font-semibold admin-title">Contact</h3>
+                  <p className="admin-loading text-sm">Manage contact information</p>
                 </div>
               </div>
             </Link>
 
             {/* Skills Management */}
-            <Link href="/admin/skills" className="card hover:shadow-lg transition-shadow">
+            <Link href="/admin/skills" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
-                <div className="bg-orange-100 p-3 rounded-lg mr-4">
-                  <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="metrics-icon p-3 rounded-lg mr-4">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Skills</h3>
-                  <p className="text-gray-600 text-sm">Manage skills and expertise</p>
+                  <h3 className="text-lg font-semibold admin-title">Skills</h3>
+                  <p className="admin-loading text-sm">Manage skills and expertise</p>
                 </div>
               </div>
             </Link>
