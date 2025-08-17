@@ -5,9 +5,11 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 2 : undefined,
+  workers: process.env.CI ? 2 : 1, // Force single worker for now to avoid auth conflicts
   globalSetup: require.resolve('./tests/bench/global-setup.ts'),
+  maxFailures: 0, // Don't stop on failures, run all tests
   reporter: [
+    ['list'], // Shows real-time progress
     ['html', { outputFolder: 'playwright-report-bench', open: 'never' }],
     ['./tests/reporters/bench-reporter.ts']
   ],

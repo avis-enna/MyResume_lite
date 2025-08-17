@@ -1,0 +1,18 @@
+npm warn Unknown user config "always-auth" (//engci-maven.cisco.com/artifactory/api/npm/magnetic-npm/:always-auth). This will stop working in the next major version of npm.
+
+> portfolio-website@0.2.0 test:bench
+> npx playwright test -c playwright.bench.config.ts --reporter=json
+
+npm warn Unknown user config "always-auth" (//engci-maven.cisco.com/artifactory/api/npm/magnetic-npm/:always-auth). This will stop working in the next major version of npm.
+🔧 Bench Global Setup: Starting authentication setup...
+🔧 Setting up admin user via API...
+✅ Admin user setup: Test admin user already exists, password updated
+✅ Authentication successful - on admin page
+✅ Bench Global Setup: Authentication state saved successfully
+📁 Auth file saved to: /Users/ssivared/MyResume_lite-1/playwright/.auth/bench-admin.json
+🍪 Admin token cookie found and saved
+   Domain: localhost
+   Path: /
+   Secure: false
+   HttpOnly: true
+   Expires: 2025-08-24T21:55:43.921Z

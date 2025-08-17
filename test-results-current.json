@@ -1,0 +1,7 @@
+npm warn Unknown user config "always-auth" (//engci-maven.cisco.com/artifactory/api/npm/magnetic-npm/:always-auth). This will stop working in the next major version of npm.
+
+> portfolio-website@0.2.0 test:bench
+> npx playwright test -c playwright.bench.config.ts --reporter=json
+
+npm warn Unknown user config "always-auth" (//engci-maven.cisco.com/artifactory/api/npm/magnetic-npm/:always-auth). This will stop working in the next major version of npm.
+npm error A complete log of this run can be found in: /Users/ssivared/.npm/_logs/2025-08-17T22_21_57_235Z-debug-0.log

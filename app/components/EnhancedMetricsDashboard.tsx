@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import '../styles/themes.css';
+import { MonochromeIcon } from './icons';
 
 interface MetricItem {
   _id: string;
@@ -85,10 +86,10 @@ export default function EnhancedMetricsDashboard() {
 
   const getOperationIcon = (operation: string) => {
     switch (operation) {
-      case 'CREATE': return '🟢';
-      case 'UPDATE': return '🔵';
-      case 'DELETE': return '🔴';
-      default: return '⚪';
+      case 'CREATE': return <MonochromeIcon name="plus" size={16} className="text-green-500" />;
+      case 'UPDATE': return <MonochromeIcon name="edit" size={16} className="text-blue-500" />;
+      case 'DELETE': return <MonochromeIcon name="trash" size={16} className="text-red-500" />;
+      default: return <MonochromeIcon name="info" size={16} className="text-gray-500" />;
     }
   };
 
@@ -227,7 +228,7 @@ export default function EnhancedMetricsDashboard() {
                 onClick={() => toggleExpanded(item._id)}
               >
                 <div className="flex items-center space-x-3">
-                  <span className="text-lg">{getOperationIcon(item.operation)}</span>
+                  <div className="flex-shrink-0">{getOperationIcon(item.operation)}</div>
                   <div>
                     <span className={`activity-operation ${getOperationColor(item.operation)}`}>
                       {item.operation}

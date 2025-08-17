@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ThemeToggle } from '../../components/ThemeProvider';
 import EnhancedMetricsDashboard from '../../components/EnhancedMetricsDashboard';
+import { MonochromeIcon } from '../../components/icons';
 
 // MetricsSummary interface removed - now handled by EnhancedMetricsDashboard
 
@@ -62,15 +63,17 @@ export default function AdminDashboard() {
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Link href="/" className="admin-nav-link">
-                View Site
+              <Link href="/" className="admin-nav-link flex items-center space-x-2">
+                <MonochromeIcon name="eye" size={16} />
+                <span>View Site</span>
               </Link>
               <button
                 type="button"
                 onClick={handleLogout}
-                className="admin-nav-link"
+                className="admin-nav-link flex items-center space-x-2"
               >
-                Logout
+                <MonochromeIcon name="logout" size={16} />
+                <span>Logout</span>
               </button>
             </div>
           </div>
@@ -100,9 +103,7 @@ export default function AdminDashboard() {
             <Link href="/admin/about" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
                 <div className="metrics-icon p-3 rounded-lg mr-4">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                  <MonochromeIcon name="user" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold admin-title">About</h3>
@@ -115,9 +116,7 @@ export default function AdminDashboard() {
             <Link href="/admin/contact" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
                 <div className="metrics-icon p-3 rounded-lg mr-4">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
+                  <MonochromeIcon name="phone" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold admin-title">Contact</h3>
@@ -130,9 +129,7 @@ export default function AdminDashboard() {
             <Link href="/admin/skills" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
                 <div className="metrics-icon p-3 rounded-lg mr-4">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
+                  <MonochromeIcon name="lightbulb" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold admin-title">Skills</h3>
@@ -142,61 +139,53 @@ export default function AdminDashboard() {
             </Link>
 
             {/* Experience Management */}
-            <Link href="/admin/experience" className="card hover:shadow-lg transition-shadow">
+            <Link href="/admin/experience" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
-                <div className="bg-blue-100 p-3 rounded-lg mr-4">
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8" />
-                  </svg>
+                <div className="metrics-icon p-3 rounded-lg mr-4">
+                  <MonochromeIcon name="briefcase" size={24} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Experience</h3>
-                  <p className="text-gray-600 text-sm">Manage work experience</p>
+                  <h3 className="text-lg font-semibold admin-title">Experience</h3>
+                  <p className="admin-loading text-sm">Manage work experience</p>
                 </div>
               </div>
             </Link>
 
             {/* Project Management */}
-            <Link href="/admin/projects" className="card hover:shadow-lg transition-shadow">
+            <Link href="/admin/projects" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
-                <div className="bg-green-100 p-3 rounded-lg mr-4">
-                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
+                <div className="metrics-icon p-3 rounded-lg mr-4">
+                  <MonochromeIcon name="folder" size={24} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Projects</h3>
-                  <p className="text-gray-600 text-sm">Manage portfolio projects</p>
+                  <h3 className="text-lg font-semibold admin-title">Projects</h3>
+                  <p className="admin-loading text-sm">Manage portfolio projects</p>
                 </div>
               </div>
             </Link>
 
             {/* Blog Management */}
-            <Link href="/admin/blog" className="card hover:shadow-lg transition-shadow">
+            <Link href="/admin/blog" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
-                <div className="bg-purple-100 p-3 rounded-lg mr-4">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
+                <div className="metrics-icon p-3 rounded-lg mr-4">
+                  <MonochromeIcon name="edit" size={24} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Blog Posts</h3>
-                  <p className="text-gray-600 text-sm">Create and manage blog content</p>
+                  <h3 className="text-lg font-semibold admin-title">Blog Posts</h3>
+                  <p className="admin-loading text-sm">Create and manage blog content</p>
                 </div>
               </div>
             </Link>
 
             {/* Contact Messages */}
-            <Link href="/admin/contacts" className="card hover:shadow-lg transition-shadow">
+            <Link href="/admin/contacts" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
-                <div className="bg-red-100 p-3 rounded-lg mr-4">
-                  <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
+                <div className="metrics-icon p-3 rounded-lg mr-4">
+                  <MonochromeIcon name="message" size={24} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Messages</h3>
-                  <p className="text-gray-600 text-sm">View contact form submissions</p>
+                  <h3 className="text-lg font-semibold admin-title">Messages</h3>
+                  <p className="admin-loading text-sm">View contact form submissions</p>
                 </div>
               </div>
             </Link>
@@ -205,16 +194,19 @@ export default function AdminDashboard() {
 
           {/* Quick Actions */}
           <div className="mt-12">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <h3 className="text-lg font-semibold admin-title mb-4">Quick Actions</h3>
             <div className="flex flex-wrap gap-4">
-              <Link href="/admin/experience/new" className="btn-primary">
-                Add Experience
+              <Link href="/admin/experience/new" className="btn-primary flex items-center space-x-2">
+                <MonochromeIcon name="plus" size={16} />
+                <span>Add Experience</span>
               </Link>
-              <Link href="/admin/projects/new" className="btn-primary">
-                Add Project
+              <Link href="/admin/projects/new" className="btn-primary flex items-center space-x-2">
+                <MonochromeIcon name="plus" size={16} />
+                <span>Add Project</span>
               </Link>
-              <Link href="/admin/blog/new" className="btn-primary">
-                Write Blog Post
+              <Link href="/admin/blog/new" className="btn-primary flex items-center space-x-2">
+                <MonochromeIcon name="plus" size={16} />
+                <span>Write Blog Post</span>
               </Link>
             </div>
           </div>

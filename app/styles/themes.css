@@ -1,5 +1,33 @@
 /* Old Money Theme System */
 
+/* Monochrome Icon System */
+.monochrome-icon {
+  transition: all 0.2s ease-in-out;
+  stroke: currentColor;
+  fill: none;
+}
+
+.monochrome-icon:hover {
+  transform: scale(1.05);
+}
+
+/* Icon color variants */
+.monochrome-icon.text-green-500 {
+  color: var(--success-text);
+}
+
+.monochrome-icon.text-blue-500 {
+  color: var(--accent-gold);
+}
+
+.monochrome-icon.text-red-500 {
+  color: var(--error-text);
+}
+
+.monochrome-icon.text-gray-500 {
+  color: var(--text-muted);
+}
+
 :root {
   /* Light Theme (Old Money) */
   --bg-primary: #000000;           /* Complete black background */
@@ -204,6 +232,19 @@ body {
 
 .metrics-icon {
   background-color: var(--accent-gold) !important;
+  color: var(--bg-primary) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.metrics-icon:hover {
+  background-color: var(--accent-cream) !important;
+  transform: scale(1.05);
+}
+
+.metrics-icon .monochrome-icon {
   color: var(--bg-primary) !important;
 }
 
