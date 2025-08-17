@@ -132,11 +132,11 @@ test.describe('Admin-Portfolio Integration', () => {
     // Navigate to public portfolio
     await page.goto('/');
     
-    // Verify skills section reflects changes
-    await expect(page.locator('text=Integration Testing')).toBeVisible();
+    // Verify skills section reflects changes (use more specific selectors)
+    await expect(page.locator('span.text-amber-200\\/80:has-text("Integration Testing")')).toBeVisible();
     await expect(page.locator('text=Certified Integration Specialist')).toBeVisible();
-    await expect(page.locator('text=Integration Technical Expertise')).toBeVisible();
-    await expect(page.locator('text=Comprehensive integration testing and automation expertise')).toBeVisible();
+    await expect(page.locator('h2:has-text("Integration Technical Expertise")')).toBeVisible();
+    await expect(page.locator('p:has-text("Comprehensive integration testing and automation expertise")')).toBeVisible();
   });
 
   test('should reflect experience changes on portfolio', async ({ page }) => {

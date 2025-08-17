@@ -1,0 +1,127 @@
+# Page snapshot
+
+```yaml
+- alert
+- banner:
+  - link "← Back to Dashboard":
+    - /url: /admin/dashboard
+  - heading "Manage Projects" [level=1]
+  - link "Add Project":
+    - /url: /admin/projects/new
+- main:
+  - heading "测试项目 🚀 émojis & spéciàl chars" [level=3]
+  - paragraph: "Testing unicode: 你好世界 🌍 café naïve résumé"
+  - heading "Technologies:" [level=4]
+  - text: React.js Node.js C++ +1 more
+  - link "Edit":
+    - /url: /admin/projects/68a1b8b52435f5f160561e77/edit
+  - button "Delete"
+  - heading "测试项目 🚀 émojis & spéciàl chars" [level=3]
+  - paragraph: "Testing unicode: 你好世界 🌍 café naïve résumé"
+  - heading "Technologies:" [level=4]
+  - text: React.js Node.js C++ +1 more
+  - link "Edit":
+    - /url: /admin/projects/68a1b7a82435f5f160561a80/edit
+  - button "Delete"
+  - text: Featured
+  - heading "Test Portfolio Project" [level=3]
+  - paragraph: A comprehensive test project for demonstrating admin-portfolio integration with real-time updates.
+  - heading "Technologies:" [level=4]
+  - text: React Node.js MongoDB +1 more
+  - link "Open Test Portfolio Project on GitHub":
+    - /url: https://github.com/test/portfolio-project
+    - img
+  - link "Open live site for Test Portfolio Project":
+    - /url: https://test-portfolio.example.com
+    - img
+  - link "Edit":
+    - /url: /admin/projects/68a1d4f52435f5f16056214f/edit
+  - button "Delete"
+  - text: Featured
+  - heading "Open Source Library" [level=3]
+  - paragraph: An open-source JavaScript library for data visualization. Available on GitHub but no live demo.
+  - heading "Technologies:" [level=4]
+  - text: JavaScript D3.js Canvas API
+  - link "Open Open Source Library on GitHub":
+    - /url: https://github.com/test-user/data-viz-library
+    - img
+  - link "Edit":
+    - /url: /admin/projects/68a076962d2079ea40f54794/edit
+  - button "Delete"
+  - text: Featured
+  - heading "IoT-Based Continuous Abiotic Factor Monitoring" [level=3]
+  - paragraph: A full-stack, real-world application for monitoring environmental factors using IoT sensors. Built from the ground up applying computer science knowledge of data structures and algorithms.
+  - heading "Technologies:" [level=4]
+  - text: Java Spring Boot React +2 more
+  - link "Open IoT-Based Continuous Abiotic Factor Monitoring on GitHub":
+    - /url: https://github.com/avis-enna/iot-monitoring
+    - img
+  - link "Edit":
+    - /url: /admin/projects/68a0727c2d2079ea40f54617/edit
+  - button "Delete"
+  - heading "API Testing Framework" [level=3]
+  - paragraph: A lightweight testing framework for REST API validation and monitoring.
+  - heading "Technologies:" [level=4]
+  - text: JavaScript Jest Express
+  - link "Open API Testing Framework on GitHub":
+    - /url: https://github.com/test/api-framework
+    - img
+  - link "Edit":
+    - /url: /admin/projects/68a1d4f52435f5f160562150/edit
+  - button "Delete"
+  - heading "Proprietary Web Application" [level=3]
+  - paragraph: A proprietary web application with live demo but private source code.
+  - heading "Technologies:" [level=4]
+  - text: Vue.js Python Django +1 more
+  - link "Open live site for Proprietary Web Application":
+    - /url: https://proprietary-app-demo.com
+    - img
+  - link "Edit":
+    - /url: /admin/projects/68a076922d2079ea40f54791/edit
+  - button "Delete"
+  - text: Featured
+  - heading "Open Source Library" [level=3]
+  - paragraph: An open-source JavaScript library for data visualization. Available on GitHub but no live demo.
+  - heading "Technologies:" [level=4]
+  - text: JavaScript D3.js Canvas API
+  - link "Open Open Source Library on GitHub":
+    - /url: https://github.com/test-user/data-viz-library
+    - img
+  - link "Edit":
+    - /url: /admin/projects/68a076812d2079ea40f54779/edit
+  - button "Delete"
+  - text: Featured
+  - heading "AI Chatbot Microservice" [level=3]
+  - paragraph: Production-ready AI chatbot microservice with Ollama integration, featuring real-time WebSocket communication, embeddable widget, session management, and comprehensive API.
+  - heading "Technologies:" [level=4]
+  - text: Node.js TypeScript Express.js +5 more
+  - link "Open AI Chatbot Microservice on GitHub":
+    - /url: https://github.com/avis-enna/ai-chatbot-microservice
+    - img
+  - link "Open live site for AI Chatbot Microservice":
+    - /url: https://reader-santa-accessories-scout.trycloudflare.com
+    - img
+  - link "Edit":
+    - /url: /admin/projects/68a0727c2d2079ea40f54618/edit
+  - button "Delete"
+  - heading "Proprietary Web Application" [level=3]
+  - paragraph: A proprietary web application with live demo but private source code.
+  - heading "Technologies:" [level=4]
+  - text: Vue.js Python Django +1 more
+  - link "Open live site for Proprietary Web Application":
+    - /url: https://proprietary-app-demo.com
+    - img
+  - link "Edit":
+    - /url: /admin/projects/68a076862d2079ea40f54780/edit
+  - button "Delete"
+  - heading "Network Automation Toolkit" [level=3]
+  - paragraph: Enterprise-grade network automation solution for device discovery, configuration backup, and bulk deployment with rollback capabilities.
+  - heading "Technologies:" [level=4]
+  - text: Python Flask SNMP +3 more
+  - link "Open Network Automation Toolkit on GitHub":
+    - /url: https://github.com/avis-enna/network-automation
+    - img
+  - link "Edit":
+    - /url: /admin/projects/68a0727c2d2079ea40f54619/edit
+  - button "Delete"
+```
