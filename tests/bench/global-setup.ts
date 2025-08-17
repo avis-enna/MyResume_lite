@@ -10,8 +10,11 @@ async function globalSetup(config: FullConfig) {
   const page = await context.newPage();
 
   try {
+    // Get base URL from config
+    const baseURL = config.projects[0]?.use?.baseURL || 'http://localhost:3001';
+
     // Navigate to login page
-    await page.goto('/admin');
+    await page.goto(`${baseURL}/admin`);
     
     // Perform login
     await page.fill('input[name="email"]', 'admin@admin.com');
@@ -19,7 +22,7 @@ async function globalSetup(config: FullConfig) {
     await page.click('button[type="submit"]');
     
     // Wait for successful login (redirect to dashboard)
-    await page.waitForURL('/admin/dashboard', { timeout: 10000 });
+    await page.waitForURL(`${baseURL}/admin/dashboard`, { timeout: 10000 });
     
     // Verify we're authenticated
     await page.waitForSelector('h1:has-text("Admin Dashboard")', { timeout: 5000 });
@@ -42,16 +45,18 @@ async function globalSetup(config: FullConfig) {
     
     // Verify cookies are present
     const cookies = storageState.cookies;
-    const adminSession = cookies.find(c => c.name === 'admin-session');
-    
-    if (adminSession) {
-      console.log('🍪 Admin session cookie found and saved');
-      console.log(`   Domain: ${adminSession.domain}`);
-      console.log(`   Path: ${adminSession.path}`);
-      console.log(`   Secure: ${adminSession.secure}`);
-      console.log(`   HttpOnly: ${adminSession.httpOnly}`);
+    const adminToken = cookies.find(c => c.name === 'admin_token');
+
+    if (adminToken) {
+      console.log('🍪 Admin token cookie found and saved');
+      console.log(`   Domain: ${adminToken.domain}`);
+      console.log(`   Path: ${adminToken.path}`);
+      console.log(`   Secure: ${adminToken.secure}`);
+      console.log(`   HttpOnly: ${adminToken.httpOnly}`);
+      console.log(`   Expires: ${new Date(adminToken.expires * 1000).toISOString()}`);
     } else {
-      console.warn('⚠️  Warning: No admin-session cookie found');
+      console.warn('⚠️  Warning: No admin_token cookie found');
+      console.log('Available cookies:', cookies.map(c => c.name));
     }
     
   } catch (error) {

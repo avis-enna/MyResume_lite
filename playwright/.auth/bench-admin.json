@@ -1,0 +1,25 @@
+{
+  "cookies": [
+    {
+      "name": "admin_token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODlkZDRkMWNmMzYzMDFkNzZkMWU1YWIiLCJ1c2VySWQiOiI2ODlkZDRkMWNmMzYzMDFkNzZkMWU1YWIiLCJ1c2VybmFtZSI6IlRlc3QgQWRtaW5pc3RyYXRvciIsInJvbGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiaWF0IjoxNzU1NDQwODI5LCJleHAiOjE3NTYwNDU2Mjl9.kfLewUnQ7FekMUXqndkWWsPp8eK_kl87VaRfiHdmKn8",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1756045629.514638,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Strict"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:3001",
+      "localStorage": [
+        {
+          "name": "admin-theme",
+          "value": "light"
+        }
+      ]
+    }
+  ]
+}
