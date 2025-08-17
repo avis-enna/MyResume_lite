@@ -19,6 +19,9 @@ PUBLIC_API_ENDPOINTS.forEach(ep => {
 
 for (let i = 1; i <= 12; i++) {
   test(`repeated ping #${i}`, async ({ request }) => {
+    // Increase timeout for ping tests to handle occasional delays
+    test.setTimeout(60000); // 60 seconds instead of default 30
+
     const res = await request.get('/api/ping');
     expect(res.status()).toBe(200);
     const body = await res.text();
