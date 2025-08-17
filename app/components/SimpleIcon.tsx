@@ -1,11 +1,12 @@
 'use client';
 
 interface SimpleIconProps {
-  type: 'user' | 'phone' | 'lightbulb' | 'briefcase' | 'folder' | 'edit';
+  type: 'user' | 'phone' | 'lightbulb' | 'briefcase' | 'folder' | 'edit' | 'message' | 'plus' | 'eye' | 'logout' | 'menu' | 'trash' | 'info';
   size?: number;
+  className?: string;
 }
 
-export default function SimpleIcon({ type, size = 24 }: SimpleIconProps) {
+export default function SimpleIcon({ type, size = 24, className = '' }: SimpleIconProps) {
   const getPath = () => {
     switch (type) {
       case 'user':
@@ -20,6 +21,20 @@ export default function SimpleIcon({ type, size = 24 }: SimpleIconProps) {
         return "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10";
       case 'edit':
         return "M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z";
+      case 'message':
+        return "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z";
+      case 'plus':
+        return "M12 4v16m8-8H4";
+      case 'eye':
+        return "M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z";
+      case 'logout':
+        return "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1";
+      case 'menu':
+        return "M4 6h16M4 12h16M4 18h16";
+      case 'trash':
+        return "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16";
+      case 'info':
+        return "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z";
       default:
         return "M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z";
     }
@@ -35,7 +50,7 @@ export default function SimpleIcon({ type, size = 24 }: SimpleIconProps) {
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="simple-icon"
+      className={`simple-icon ${className}`}
     >
       <path strokeLinecap="round" strokeLinejoin="round" d={getPath()} />
     </svg>

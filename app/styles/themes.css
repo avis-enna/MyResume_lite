@@ -28,6 +28,34 @@
   color: var(--text-muted);
 }
 
+/* Simple Icon System */
+.simple-icon {
+  transition: all 0.2s ease-in-out;
+  stroke: currentColor;
+  fill: none;
+}
+
+.simple-icon:hover {
+  transform: scale(1.05);
+}
+
+/* Simple icon color variants */
+.simple-icon.text-green-500 {
+  color: var(--success-text);
+}
+
+.simple-icon.text-blue-500 {
+  color: var(--accent-gold);
+}
+
+.simple-icon.text-red-500 {
+  color: var(--error-text);
+}
+
+.simple-icon.text-gray-500 {
+  color: var(--text-muted);
+}
+
 :root {
   /* Light Theme (Old Money) */
   --bg-primary: #000000;           /* Complete black background */
@@ -244,7 +272,8 @@ body {
   transform: scale(1.05);
 }
 
-.metrics-icon .monochrome-icon {
+.metrics-icon .monochrome-icon,
+.metrics-icon .simple-icon {
   color: var(--bg-primary) !important;
 }
 

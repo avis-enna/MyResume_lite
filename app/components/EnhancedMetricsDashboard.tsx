@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import '../styles/themes.css';
-import MonochromeIcon from './icons/MonochromeIcon';
+import SimpleIcon from './SimpleIcon';
 
 interface MetricItem {
   _id: string;
@@ -86,10 +86,10 @@ export default function EnhancedMetricsDashboard() {
 
   const getOperationIcon = (operation: string) => {
     switch (operation) {
-      case 'CREATE': return <MonochromeIcon name="plus" size={16} className="text-green-500" />;
-      case 'UPDATE': return <MonochromeIcon name="edit" size={16} className="text-blue-500" />;
-      case 'DELETE': return <MonochromeIcon name="trash" size={16} className="text-red-500" />;
-      default: return <MonochromeIcon name="info" size={16} className="text-gray-500" />;
+      case 'CREATE': return <SimpleIcon type="plus" size={16} className="text-green-500" />;
+      case 'UPDATE': return <SimpleIcon type="edit" size={16} className="text-blue-500" />;
+      case 'DELETE': return <SimpleIcon type="trash" size={16} className="text-red-500" />;
+      default: return <SimpleIcon type="info" size={16} className="text-gray-500" />;
     }
   };
 

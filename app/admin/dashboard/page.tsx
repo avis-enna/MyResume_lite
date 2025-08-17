@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ThemeToggle } from '../../components/ThemeProvider';
 import EnhancedMetricsDashboard from '../../components/EnhancedMetricsDashboard';
-import MonochromeIcon from '../../components/icons/MonochromeIcon';
 import SimpleIcon from '../../components/SimpleIcon';
 
 // MetricsSummary interface removed - now handled by EnhancedMetricsDashboard
@@ -65,7 +64,7 @@ export default function AdminDashboard() {
             <div className="flex items-center space-x-4">
               <ThemeToggle />
               <Link href="/" className="admin-nav-link flex items-center space-x-2">
-                <MonochromeIcon name="eye" size={16} />
+                <SimpleIcon type="eye" size={16} />
                 <span>View Site</span>
               </Link>
               <button
@@ -73,7 +72,7 @@ export default function AdminDashboard() {
                 onClick={handleLogout}
                 className="admin-nav-link flex items-center space-x-2"
               >
-                <MonochromeIcon name="logout" size={16} />
+                <SimpleIcon type="logout" size={16} />
                 <span>Logout</span>
               </button>
             </div>
@@ -143,7 +142,7 @@ export default function AdminDashboard() {
             <Link href="/admin/experience" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
                 <div className="metrics-icon p-3 rounded-lg mr-4">
-                  <MonochromeIcon name="briefcase" size={24} />
+                  <SimpleIcon type="briefcase" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold admin-title">Experience</h3>
@@ -156,7 +155,7 @@ export default function AdminDashboard() {
             <Link href="/admin/projects" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
                 <div className="metrics-icon p-3 rounded-lg mr-4">
-                  <MonochromeIcon name="folder" size={24} />
+                  <SimpleIcon type="folder" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold admin-title">Projects</h3>
@@ -169,7 +168,7 @@ export default function AdminDashboard() {
             <Link href="/admin/blog" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
                 <div className="metrics-icon p-3 rounded-lg mr-4">
-                  <MonochromeIcon name="edit" size={24} />
+                  <SimpleIcon type="edit" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold admin-title">Blog Posts</h3>
@@ -182,7 +181,7 @@ export default function AdminDashboard() {
             <Link href="/admin/contacts" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
                 <div className="metrics-icon p-3 rounded-lg mr-4">
-                  <MonochromeIcon name="message" size={24} />
+                  <SimpleIcon type="message" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold admin-title">Messages</h3>
@@ -198,15 +197,15 @@ export default function AdminDashboard() {
             <h3 className="text-lg font-semibold admin-title mb-4">Quick Actions</h3>
             <div className="flex flex-wrap gap-4">
               <Link href="/admin/experience/new" className="btn-primary flex items-center space-x-2">
-                <MonochromeIcon name="plus" size={16} />
+                <SimpleIcon type="plus" size={16} />
                 <span>Add Experience</span>
               </Link>
               <Link href="/admin/projects/new" className="btn-primary flex items-center space-x-2">
-                <MonochromeIcon name="plus" size={16} />
+                <SimpleIcon type="plus" size={16} />
                 <span>Add Project</span>
               </Link>
               <Link href="/admin/blog/new" className="btn-primary flex items-center space-x-2">
-                <MonochromeIcon name="plus" size={16} />
+                <SimpleIcon type="plus" size={16} />
                 <span>Write Blog Post</span>
               </Link>
             </div>

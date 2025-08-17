@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import MonochromeIcon from './icons/MonochromeIcon';
+import SimpleIcon from './SimpleIcon';
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -46,7 +46,7 @@ const Navigation = () => {
               className="text-gray-600 hover:text-gray-900"
               aria-label="Open mobile menu"
             >
-              <MonochromeIcon name="menu" size={24} />
+              <SimpleIcon type="menu" size={24} />
             </button>
           </div>
         </div>
