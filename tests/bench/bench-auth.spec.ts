@@ -52,11 +52,20 @@ test.describe('Authentication & Session', () => {
     // Already authenticated, try to logout
     await page.goto(`${baseURL}/admin/dashboard`);
     await page.waitForLoadState('networkidle');
-    await page.click('button:has-text("Logout")').catch(()=>{});
-    await page.waitForTimeout(300);
-    await page.goto(`${baseURL}/admin/dashboard`);
-    await page.waitForLoadState('networkidle');
-    // Should be redirected to login page
+
+    // Click logout and wait for the redirect
+    await page.click('button:has-text("Logout")');
+
+    // Wait for the logout to complete and redirect to login page
+    await page.waitForURL(/\/admin\/?$/, { timeout: 10000 });
+
+    // Verify we're on the login page by checking for login form elements
+    await expect(page.locator('input[name="email"]')).toBeVisible({ timeout: 5000 });
     expect(page.url()).toMatch(/\/admin\/?$/);
+
+    // Additional verification: check that session is actually cleared via API
+    const sessionResponse = await page.request.get('/api/admin/session-check');
+    const sessionData = await sessionResponse.json().catch(() => ({ authenticated: false }));
+    expect(sessionData.authenticated).toBe(false);
   });
 });

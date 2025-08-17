@@ -54,21 +54,21 @@ authTest.describe('Projects CRUD & Validation', () => {
     });
   });
 
-  authTest('bulk project fetch via API', async ({ request }) => {
-    const res = await request.get('/api/admin/projects');
+  authTest('bulk project fetch via API', async ({ authenticatedPage: page }) => {
+    const res = await page.request.get('/api/admin/projects');
     expect(res.status()).toBeLessThan(400);
     const data = await res.json();
     expect(Array.isArray(data)).toBeTruthy();
   });
 
   Array.from({ length: 20 }).forEach((_, i) => {
-    authTest(`update project order operation #${i + 1}`, async ({ request }) => {
-      const list = await request.get('/api/admin/projects');
+    authTest(`update project order operation #${i + 1}`, async ({ authenticatedPage: page }) => {
+      const list = await page.request.get('/api/admin/projects');
       if (list.ok()) {
         const arr = await list.json();
         if (arr.length) {
           const target = arr[i % arr.length];
-          const update = await request.put('/api/admin/projects', { data: { id: target._id, order: (target.order || 0) + 1 } });
+          const update = await page.request.put('/api/admin/projects', { data: { id: target._id, order: (target.order || 0) + 1 } });
           expect(update.status()).toBeLessThan(500);
         }
       }
