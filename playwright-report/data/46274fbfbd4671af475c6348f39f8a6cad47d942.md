@@ -9,11 +9,11 @@
 - main:
   - heading "Contact Information" [level=2]
   - text: Email
-  - textbox "Enter your email"
+  - textbox "Enter your email": vsivareddy.venna@gmail.com
   - text: Phone
-  - textbox "Enter your phone number"
+  - textbox "Enter your phone number": +1-555-0123
   - text: Location
-  - textbox "Enter your location": San Francisco, CA
+  - textbox "Enter your location": Test City, Test Country
   - text: LinkedIn URL
   - textbox "https://linkedin.com/in/yourprofile": https://linkedin.com/in/johndoe
   - text: GitHub URL

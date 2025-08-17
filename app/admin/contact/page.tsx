@@ -165,6 +165,7 @@ export default function AdminContact() {
                 onChange={(e) => updateField('email', e.target.value)}
                 className="admin-input w-full px-3 py-2 rounded-md"
                 placeholder="Enter your email"
+                required
               />
             </div>
 
@@ -177,6 +178,7 @@ export default function AdminContact() {
                 onChange={(e) => updateField('phone', e.target.value)}
                 className="admin-input w-full px-3 py-2 rounded-md"
                 placeholder="Enter your phone number"
+                required
               />
             </div>
 
