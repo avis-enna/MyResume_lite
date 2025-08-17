@@ -211,7 +211,7 @@ export default function EnhancedMetricsDashboard() {
           <h4 className="text-lg font-semibold admin-title">Recent Activity Log</h4>
           {pagination && (
             <span className="text-sm admin-loading">
-              Page {pagination.page} of {pagination.pages}
+              {pagination.total} total operations
             </span>
           )}
         </div>

@@ -10,7 +10,7 @@
   - button "Save Changes"
 - main:
   - text: Full Name
-  - textbox "Enter your full name": Test User 1755422270662
+  - textbox "Enter your full name": Enhanced Test 1755423027620
   - text: Professional Title
   - textbox "e.g. Software Engineer · Cisco Systems": Senior Software Engineer
   - text: Bio - First Paragraph

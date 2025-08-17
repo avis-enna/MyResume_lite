@@ -45,7 +45,7 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="admin-layout min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="admin-loading">Loading...</div>
       </div>
     );
@@ -87,7 +87,7 @@ export default function AdminDashboard() {
 
           {/* Enhanced Metrics Section */}
           <div className="mb-8">
-            <h3 className="text-lg font-semibold admin-title mb-4">Activity Metrics (Last 7 Days)</h3>
+            <h3 className="text-lg font-semibold admin-title mb-4">Activity Metrics</h3>
 
             {/* Enhanced Metrics Dashboard with Pagination */}
             <EnhancedMetricsDashboard />

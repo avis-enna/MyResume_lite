@@ -1,0 +1,86 @@
+# Page snapshot
+
+```yaml
+- alert
+- banner:
+  - heading "Admin Dashboard" [level=1]
+  - button "🌙 Dark"
+  - link "View Site":
+    - /url: /
+  - button "Logout"
+- main:
+  - heading "Welcome back!" [level=2]
+  - paragraph: Manage your portfolio content from here.
+  - heading "Activity Metrics (Last 7 Days)" [level=3]
+  - text: 📊
+  - paragraph: Total Operations
+  - paragraph: "6"
+  - text: 📄
+  - paragraph: Current Page
+  - paragraph: "1"
+  - text: 📋
+  - paragraph: Showing
+  - paragraph: "5"
+  - text: 🗂️
+  - paragraph: Data Retention
+  - paragraph: 7 Days
+  - paragraph: Auto-cleanup
+  - heading "Recent Activity Log" [level=4]
+  - text: Page 1 of 2 🟢 CREATE - auth
+  - paragraph: Admin login successful
+  - text: 8/17/2025, 3:00:19 PM ▶ 🔵 UPDATE - about
+  - paragraph: About information updated
+  - text: 8/17/2025, 2:47:50 PM ▶ 🟢 CREATE - auth
+  - paragraph: Admin login successful
+  - text: 8/17/2025, 2:47:49 PM ▶ 🟢 CREATE - auth
+  - paragraph: Admin login successful
+  - text: 8/17/2025, 2:47:47 PM ▶ 🟢 CREATE - auth
+  - paragraph: Admin login successful
+  - text: 8/17/2025, 2:47:36 PM ▶
+  - button "← Previous" [disabled]
+  - text: Page 1 of 2
+  - button "Next →"
+  - text: Showing 5 of 6 operations
+  - link "About Manage personal information":
+    - /url: /admin/about
+    - img
+    - heading "About" [level=3]
+    - paragraph: Manage personal information
+  - link "Contact Manage contact information":
+    - /url: /admin/contact
+    - img
+    - heading "Contact" [level=3]
+    - paragraph: Manage contact information
+  - link "Skills Manage skills and expertise":
+    - /url: /admin/skills
+    - img
+    - heading "Skills" [level=3]
+    - paragraph: Manage skills and expertise
+  - link "Experience Manage work experience":
+    - /url: /admin/experience
+    - img
+    - heading "Experience" [level=3]
+    - paragraph: Manage work experience
+  - link "Projects Manage portfolio projects":
+    - /url: /admin/projects
+    - img
+    - heading "Projects" [level=3]
+    - paragraph: Manage portfolio projects
+  - link "Blog Posts Create and manage blog content":
+    - /url: /admin/blog
+    - img
+    - heading "Blog Posts" [level=3]
+    - paragraph: Create and manage blog content
+  - link "Messages View contact form submissions":
+    - /url: /admin/contacts
+    - img
+    - heading "Messages" [level=3]
+    - paragraph: View contact form submissions
+  - heading "Quick Actions" [level=3]
+  - link "Add Experience":
+    - /url: /admin/experience/new
+  - link "Add Project":
+    - /url: /admin/projects/new
+  - link "Write Blog Post":
+    - /url: /admin/blog/new
+```
