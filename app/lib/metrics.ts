@@ -39,9 +39,8 @@ export async function trackMetric({
 
     // Extract IP and User Agent from request if available
     if (request) {
-      metricData.ipAddress = request.ip || 
-        request.headers.get('x-forwarded-for') || 
-        request.headers.get('x-real-ip') || 
+      metricData.ipAddress = request.headers.get('x-forwarded-for') ||
+        request.headers.get('x-real-ip') ||
         'unknown';
       metricData.userAgent = request.headers.get('user-agent') || 'unknown';
     }
