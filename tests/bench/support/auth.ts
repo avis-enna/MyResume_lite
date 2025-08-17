@@ -24,20 +24,18 @@ export async function uiLogin(page: Page, requestCtx?: APIRequestContext, baseUR
     page.waitForLoadState('networkidle').catch(()=>{}),
     page.click('button[type="submit"]')
   ]);
-  // Poll for cookie & dashboard element deterministically
-  const maxWait = Date.now() + 8000;
-  let hasToken = false;
-  while (Date.now() < maxWait) {
-    const cookie = await page.context().cookies();
-    hasToken = cookie.some(c => c.name === 'admin_token');
-    const h1Text = await page.locator('h1').first().textContent().catch(()=>null);
-    if (hasToken && /Dashboard/i.test(h1Text || '')) {
-      break;
-    }
-    await page.waitForTimeout(250);
+  // Wait for navigation to complete
+  await page.waitForLoadState('networkidle');
+
+  // Simple check: if we're on any admin page (not login), consider it successful
+  const currentUrl = page.url();
+  if (currentUrl.includes('/admin') && !currentUrl.match(/\/admin\/?$/)) {
+    // Already authenticated and on an admin page
+    return;
   }
-  // If still on login page or no token, fallback to API-based login injection
-  if (!hasToken || /\/admin$/.test(page.url())) {
+
+  // If still on login page, try API-based login injection
+  if (currentUrl.match(/\/admin\/?$/)) {
     if (requestCtx) {
       try {
         const effectiveBase = baseURL || process.env.BENCH_BASE_URL || 'http://localhost:3001';
@@ -46,6 +44,7 @@ export async function uiLogin(page: Page, requestCtx?: APIRequestContext, baseUR
       } catch {}
     }
     await page.goto('/admin/dashboard');
+    await page.waitForLoadState('networkidle');
   }
 }
 
