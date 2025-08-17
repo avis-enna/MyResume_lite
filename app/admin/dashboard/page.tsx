@@ -45,10 +45,15 @@ export default function AdminDashboard() {
   const loadMetrics = useCallback(async () => {
     try {
       setMetricsLoading(true);
+      console.log('Loading metrics...');
       const response = await fetch('/api/admin/metrics?type=summary&days=7');
+      console.log('Metrics response status:', response.status);
       if (response.ok) {
         const data = await response.json();
+        console.log('Metrics data:', data);
         setMetrics(data);
+      } else {
+        console.error('Failed to load metrics:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Failed to load metrics:', error);
@@ -62,10 +67,10 @@ export default function AdminDashboard() {
   }, [checkAuth]);
 
   useEffect(() => {
-    if (!loading && user) {
+    if (!loading) {
       loadMetrics();
     }
-  }, [loading, user, loadMetrics]);
+  }, [loading, loadMetrics]);
 
   const handleLogout = async () => {
     try {

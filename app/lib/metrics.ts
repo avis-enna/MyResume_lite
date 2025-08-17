@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import Metric, { IMetric } from '../models/Metrics';
-import { connectDB } from './mongodb';
+import connectDB from './mongodb';
 
 type OperationType = 'CREATE' | 'READ' | 'UPDATE' | 'DELETE';
 type SectionType = 'about' | 'contact' | 'skills' | 'experience' | 'projects' | 'blog' | 'contacts' | 'auth';
