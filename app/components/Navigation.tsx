@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MonochromeIcon } from './icons';
+import MonochromeIcon from './icons/MonochromeIcon';
 
 const Navigation = () => {
   const pathname = usePathname();

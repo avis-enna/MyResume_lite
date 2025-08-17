@@ -2,10 +2,10 @@
   "cookies": [
     {
       "name": "admin_token",
-      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGEyMDBiYWQ1OGY0ZDliZjZjNzY2Y2QiLCJ1c2VySWQiOiI2OGEyMDBiYWQ1OGY0ZDliZjZjNzY2Y2QiLCJ1c2VybmFtZSI6IlRlc3QgQWRtaW5pc3RyYXRvciIsInJvbGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiaWF0IjoxNzU1NDcxNTAyLCJleHAiOjE3NTYwNzYzMDJ9.5x1F736RWWz9g0Yq9xjr0jfINBBXywPDD9kC-6XMQQY",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODlkZDRkMWNmMzYzMDFkNzZkMWU1YWIiLCJ1c2VySWQiOiI2ODlkZDRkMWNmMzYzMDFkNzZkMWU1YWIiLCJ1c2VybmFtZSI6IlRlc3QgQWRtaW5pc3RyYXRvciIsInJvbGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiaWF0IjoxNzU1NDcyODg3LCJleHAiOjE3NTYwNzc2ODd9.AHY8TWx3Ao9x3V0xT_vFjmXDkDIb2Xk3lcnz8_YUe-c",
       "domain": "localhost",
       "path": "/",
-      "expires": 1756076302.528952,
+      "expires": 1756077687.72943,
       "httpOnly": true,
       "secure": false,
       "sameSite": "Strict"

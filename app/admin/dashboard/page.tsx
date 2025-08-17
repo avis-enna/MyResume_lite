@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ThemeToggle } from '../../components/ThemeProvider';
 import EnhancedMetricsDashboard from '../../components/EnhancedMetricsDashboard';
-import { MonochromeIcon } from '../../components/icons';
+import MonochromeIcon from '../../components/icons/MonochromeIcon';
+import SimpleIcon from '../../components/SimpleIcon';
 
 // MetricsSummary interface removed - now handled by EnhancedMetricsDashboard
 
@@ -103,7 +104,7 @@ export default function AdminDashboard() {
             <Link href="/admin/about" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
                 <div className="metrics-icon p-3 rounded-lg mr-4">
-                  <MonochromeIcon name="user" size={24} />
+                  <SimpleIcon type="user" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold admin-title">About</h3>
@@ -116,7 +117,7 @@ export default function AdminDashboard() {
             <Link href="/admin/contact" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
                 <div className="metrics-icon p-3 rounded-lg mr-4">
-                  <MonochromeIcon name="phone" size={24} />
+                  <SimpleIcon type="phone" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold admin-title">Contact</h3>
@@ -129,7 +130,7 @@ export default function AdminDashboard() {
             <Link href="/admin/skills" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
                 <div className="metrics-icon p-3 rounded-lg mr-4">
-                  <MonochromeIcon name="lightbulb" size={24} />
+                  <SimpleIcon type="lightbulb" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold admin-title">Skills</h3>

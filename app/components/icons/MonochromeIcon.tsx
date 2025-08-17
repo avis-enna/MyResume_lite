@@ -174,17 +174,18 @@ const iconPaths: Record<IconName, string | JSX.Element> = {
   ),
 };
 
-export default function MonochromeIcon({ 
-  name, 
-  size = 24, 
-  className = '', 
-  strokeWidth = 2 
+export default function MonochromeIcon({
+  name,
+  size = 24,
+  className = '',
+  strokeWidth = 2
 }: MonochromeIconProps) {
+  console.log(`Rendering MonochromeIcon: ${name}`);
   const iconContent = iconPaths[name];
-  
+
   if (!iconContent) {
     console.warn(`Icon "${name}" not found`);
-    return null;
+    return <span>❌</span>;
   }
 
   return (

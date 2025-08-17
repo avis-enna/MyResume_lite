@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import '../styles/themes.css';
-import { MonochromeIcon } from './icons';
+import MonochromeIcon from './icons/MonochromeIcon';
 
 interface MetricItem {
   _id: string;
