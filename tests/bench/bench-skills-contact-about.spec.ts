@@ -58,9 +58,16 @@ authTest.describe('Skills / Contact / About Stress', () => {
     authTest(`update professional summary variant #${i + 1}`, async ({ authenticatedPage: page }) => {
       await page.goto('/admin/about');
       await page.waitForLoadState('networkidle');
-      await page.fill('[data-testid="summary-textarea"]', s);
-      await page.click('button:has-text("Save Changes")').catch(()=>{});
-      await page.waitForTimeout(80);
+
+      // Wait for the about form to load
+      await page.waitForSelector('[data-testid="about-form"]', { timeout: 10000 });
+
+      // Fill the bio paragraph field with the correct selector
+      await page.fill('[data-testid="bio-paragraph1-input"]', s);
+
+      // Submit the form
+      await page.click('button:has-text("Save Changes")');
+      await page.waitForTimeout(500);
     });
   });
 });
