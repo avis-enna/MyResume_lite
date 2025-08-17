@@ -143,8 +143,8 @@ export default function AdminContact() {
         {message && (
           <div className={`mb-6 p-4 rounded-md ${
             message.type === 'success'
-              ? 'admin-alert-success'
-              : 'admin-alert-error'
+              ? 'admin-alert-success bg-green-50'
+              : 'admin-alert-error bg-red-50'
           }`}>
             {message.text}
           </div>
@@ -160,6 +160,7 @@ export default function AdminContact() {
               <input
                 type="email"
                 name="email"
+                data-testid="contact-email-input"
                 value={contactData.email}
                 onChange={(e) => updateField('email', e.target.value)}
                 className="admin-input w-full px-3 py-2 rounded-md"
@@ -231,7 +232,7 @@ export default function AdminContact() {
           {/* Save Button */}
           <div className="mt-8 flex justify-end">
             <button
-              type="button"
+              type="submit"
               onClick={handleSave}
               disabled={saving}
               className="admin-btn-primary px-6 py-2 rounded-md disabled:opacity-50"
