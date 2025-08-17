@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import connectDB from '@/app/lib/mongodb';
 import User from '@/app/models/User';
 import { getSignSecret } from '@/app/lib/admin-auth';
+import { MetricsTracker } from '@/app/lib/metrics';
 
 // Rate limiting storage (in production, use Redis)
 const loginAttempts = new Map<string, { count: number; lastAttempt: number }>();
@@ -181,6 +182,9 @@ export async function POST(request: NextRequest) {
 
     // Clear legacy cookie if present
     response.cookies.set('auth-token', '', { httpOnly: true, path: '/', maxAge: 0 });
+
+    // Track metrics
+    await MetricsTracker.adminLogin(request);
 
     return response;
   } catch (error) {

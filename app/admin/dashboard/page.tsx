@@ -4,9 +4,26 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+interface MetricsSummary {
+  totalOperations: number;
+  operationStats: Array<{ _id: string; count: number }>;
+  sectionStats: Array<{ _id: string; count: number }>;
+  dailyStats: Array<{ _id: { year: number; month: number; day: number }; count: number }>;
+  recentActivity: Array<{
+    operation: string;
+    section: string;
+    details: string;
+    timestamp: string;
+    recordId?: string;
+  }>;
+  period: string;
+}
+
 export default function AdminDashboard() {
   const [user, setUser] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
+  const [metrics, setMetrics] = useState<MetricsSummary | null>(null);
+  const [metricsLoading, setMetricsLoading] = useState(true);
   const router = useRouter();
 
   const checkAuth = useCallback(async () => {
@@ -25,9 +42,30 @@ export default function AdminDashboard() {
     }
   }, [router]);
 
+  const loadMetrics = useCallback(async () => {
+    try {
+      setMetricsLoading(true);
+      const response = await fetch('/api/admin/metrics?type=summary&days=7');
+      if (response.ok) {
+        const data = await response.json();
+        setMetrics(data);
+      }
+    } catch (error) {
+      console.error('Failed to load metrics:', error);
+    } finally {
+      setMetricsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  useEffect(() => {
+    if (!loading && user) {
+      loadMetrics();
+    }
+  }, [loading, user, loadMetrics]);
 
   const handleLogout = async () => {
     try {
@@ -77,6 +115,131 @@ export default function AdminDashboard() {
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back!</h2>
             <p className="text-gray-600">Manage your portfolio content from here.</p>
+          </div>
+
+          {/* Metrics Section */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Activity Metrics (Last 7 Days)</h3>
+            {metricsLoading ? (
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="animate-pulse">
+                  <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                  <div className="space-y-3">
+                    <div className="h-3 bg-gray-200 rounded"></div>
+                    <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+                  </div>
+                </div>
+              </div>
+            ) : metrics ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {/* Total Operations */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">📊</span>
+                      </div>
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-500">Total Operations</p>
+                      <p className="text-2xl font-bold text-gray-900">{metrics.totalOperations}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Most Active Section */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">🎯</span>
+                      </div>
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-500">Most Active</p>
+                      <p className="text-lg font-bold text-gray-900 capitalize">
+                        {metrics.sectionStats[0]?._id || 'N/A'}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {metrics.sectionStats[0]?.count || 0} operations
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Most Common Operation */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">⚡</span>
+                      </div>
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-500">Top Operation</p>
+                      <p className="text-lg font-bold text-gray-900">
+                        {metrics.operationStats[0]?._id || 'N/A'}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {metrics.operationStats[0]?.count || 0} times
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Data Retention */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">🗂️</span>
+                      </div>
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-500">Data Retention</p>
+                      <p className="text-lg font-bold text-gray-900">7 Days</p>
+                      <p className="text-sm text-gray-500">Auto-cleanup</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-white rounded-lg shadow p-6">
+                <p className="text-gray-500">No metrics data available</p>
+              </div>
+            )}
+
+            {/* Recent Activity */}
+            {metrics && metrics.recentActivity.length > 0 && (
+              <div className="bg-white rounded-lg shadow">
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <h4 className="text-lg font-medium text-gray-900">Recent Activity</h4>
+                </div>
+                <div className="divide-y divide-gray-200">
+                  {metrics.recentActivity.slice(0, 10).map((activity, index) => (
+                    <div key={index} className="px-6 py-4 flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-2 h-2 rounded-full ${
+                          activity.operation === 'CREATE' ? 'bg-green-500' :
+                          activity.operation === 'UPDATE' ? 'bg-blue-500' :
+                          activity.operation === 'DELETE' ? 'bg-red-500' :
+                          'bg-gray-500'
+                        }`}></div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">
+                            {activity.operation} - {activity.section}
+                          </p>
+                          <p className="text-sm text-gray-500">{activity.details}</p>
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {new Date(activity.timestamp).toLocaleString()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Dashboard Cards */}

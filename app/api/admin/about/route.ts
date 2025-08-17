@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '../../../lib/admin-auth';
 import connectDB from '../../../lib/mongodb';
 import mongoose from 'mongoose';
+import { MetricsTracker } from '../../../lib/metrics';
 
 // About model schema
 const aboutSchema = new mongoose.Schema({
@@ -138,6 +139,14 @@ export async function PUT(request: NextRequest) {
       },
       lastUpdated: aboutDoc.updatedAt
     };
+
+    // Track metrics
+    await MetricsTracker.aboutUpdated(request, {
+      name: data.name,
+      title: data.title,
+      bio1: data.bio1,
+      bio2: data.bio2
+    });
 
     return NextResponse.json({ success: true, data: responseData });
   } catch (error: unknown) {

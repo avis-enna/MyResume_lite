@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/app/lib/mongodb';
 import Project from '@/app/models/Project';
 import { requireAuth } from '@/app/lib/admin-auth';
+import { MetricsTracker } from '@/app/lib/metrics';
 
 export async function GET(request: NextRequest) {
   try {
@@ -41,6 +42,9 @@ export async function POST(request: NextRequest) {
     });
 
     await project.save();
+
+    // Track metrics
+    await MetricsTracker.projectCreated(request, project._id.toString(), project.title);
 
     return NextResponse.json(project, { status: 201 });
   } catch (error) {
@@ -106,6 +110,9 @@ export async function DELETE(request: NextRequest) {
     if (!project) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
+
+    // Track metrics
+    await MetricsTracker.projectDeleted(request, id, project.title);
 
     return NextResponse.json({ message: 'Project deleted successfully' });
   } catch (error) {
