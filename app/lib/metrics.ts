@@ -13,6 +13,11 @@ interface TrackMetricParams {
   metadata?: Record<string, any>;
   request?: NextRequest;
   userId?: string;
+  changes?: {
+    before?: Record<string, any>;
+    after?: Record<string, any>;
+    fields?: string[];
+  };
 }
 
 export async function trackMetric({
@@ -22,7 +27,8 @@ export async function trackMetric({
   recordId,
   metadata,
   request,
-  userId = 'admin'
+  userId = 'admin',
+  changes
 }: TrackMetricParams): Promise<void> {
   try {
     await connectDB();
@@ -33,7 +39,10 @@ export async function trackMetric({
       details,
       userId,
       recordId,
-      metadata,
+      metadata: {
+        ...metadata,
+        changes
+      },
       timestamp: new Date()
     };
 
@@ -52,21 +61,52 @@ export async function trackMetric({
   }
 }
 
-export async function getMetrics(days: number = 7) {
+export async function getMetrics(days: number = 7, page: number = 1, limit: number = 5) {
   try {
     await connectDB();
 
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
-    const metrics = await Metric.find({
-      timestamp: { $gte: startDate }
-    }).sort({ timestamp: -1 });
+    const skip = (page - 1) * limit;
 
-    return metrics;
+    const [metrics, total] = await Promise.all([
+      Metric.find({
+        timestamp: { $gte: startDate }
+      })
+      .sort({ timestamp: -1 })
+      .skip(skip)
+      .limit(limit),
+
+      Metric.countDocuments({
+        timestamp: { $gte: startDate }
+      })
+    ]);
+
+    return {
+      metrics,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1
+      }
+    };
   } catch (error) {
     console.error('Failed to get metrics:', error);
-    return [];
+    return {
+      metrics: [],
+      pagination: {
+        page: 1,
+        limit,
+        total: 0,
+        pages: 0,
+        hasNext: false,
+        hasPrev: false
+      }
+    };
   }
 }
 
@@ -144,24 +184,42 @@ export async function getMetricsSummary(days: number = 7) {
 // Helper function to track common operations
 export const MetricsTracker = {
   // About operations
-  aboutUpdated: (request?: NextRequest, changes?: Record<string, any>) =>
-    trackMetric({
+  aboutUpdated: (request?: NextRequest, before?: Record<string, any>, after?: Record<string, any>) => {
+    const changedFields = before && after ?
+      Object.keys(after).filter(key => JSON.stringify(before[key]) !== JSON.stringify(after[key])) :
+      [];
+
+    return trackMetric({
       operation: 'UPDATE',
       section: 'about',
-      details: 'About information updated',
-      metadata: { changes },
+      details: `About information updated${changedFields.length > 0 ? ` (${changedFields.join(', ')})` : ''}`,
+      changes: {
+        before,
+        after,
+        fields: changedFields
+      },
       request
-    }),
+    });
+  },
 
   // Contact operations
-  contactUpdated: (request?: NextRequest, changes?: Record<string, any>) =>
-    trackMetric({
+  contactUpdated: (request?: NextRequest, before?: Record<string, any>, after?: Record<string, any>) => {
+    const changedFields = before && after ?
+      Object.keys(after).filter(key => JSON.stringify(before[key]) !== JSON.stringify(after[key])) :
+      [];
+
+    return trackMetric({
       operation: 'UPDATE',
       section: 'contact',
-      details: 'Contact information updated',
-      metadata: { changes },
+      details: `Contact information updated${changedFields.length > 0 ? ` (${changedFields.join(', ')})` : ''}`,
+      changes: {
+        before,
+        after,
+        fields: changedFields
+      },
       request
-    }),
+    });
+  },
 
   // Skills operations
   skillsUpdated: (request?: NextRequest, changes?: Record<string, any>) =>

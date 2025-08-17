@@ -9,6 +9,8 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const days = parseInt(url.searchParams.get('days') || '7');
     const type = url.searchParams.get('type') || 'summary';
+    const page = parseInt(url.searchParams.get('page') || '1');
+    const limit = parseInt(url.searchParams.get('limit') || '5');
 
     if (type === 'summary') {
       const summary = await getMetricsSummary(days);
@@ -20,8 +22,17 @@ export async function GET(request: NextRequest) {
         }
       });
     } else if (type === 'raw') {
-      const metrics = await getMetrics(days);
-      return NextResponse.json(metrics, {
+      const result = await getMetrics(days, 1, 1000); // Get all for backward compatibility
+      return NextResponse.json(result.metrics, {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+    } else if (type === 'paginated') {
+      const result = await getMetrics(days, page, limit);
+      return NextResponse.json(result, {
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Pragma': 'no-cache',

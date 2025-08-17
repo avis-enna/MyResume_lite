@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ThemeToggle } from '../../components/ThemeProvider';
+import EnhancedMetricsDashboard from '../../components/EnhancedMetricsDashboard';
 
 interface MetricsSummary {
   totalOperations: number;
@@ -83,29 +85,30 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="admin-layout min-h-screen flex items-center justify-center">
+        <div className="admin-loading">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" data-testid="dashboard-root">
+    <div className="admin-layout min-h-screen" data-testid="dashboard-root">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="admin-header shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
+              <h1 className="text-xl font-semibold admin-title">Admin Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Link href="/" className="text-blue-600 hover:text-blue-700">
+              <ThemeToggle />
+              <Link href="/" className="admin-nav-link">
                 View Site
               </Link>
               <button
                 type="button"
                 onClick={handleLogout}
-                className="text-gray-600 hover:text-gray-900"
+                className="admin-nav-link"
               >
                 Logout
               </button>
@@ -122,32 +125,32 @@ export default function AdminDashboard() {
             <p className="text-gray-600">Manage your portfolio content from here.</p>
           </div>
 
-          {/* Metrics Section */}
+          {/* Enhanced Metrics Section */}
           <div className="mb-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Activity Metrics (Last 7 Days)</h3>
+            <h3 className="text-lg font-semibold admin-title mb-4">Activity Metrics (Last 7 Days)</h3>
             {metricsLoading ? (
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="admin-card rounded-lg shadow p-6">
                 <div className="animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                  <div className="h-4 admin-loading rounded w-1/4 mb-4"></div>
                   <div className="space-y-3">
-                    <div className="h-3 bg-gray-200 rounded"></div>
-                    <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+                    <div className="h-3 admin-loading rounded"></div>
+                    <div className="h-3 admin-loading rounded w-5/6"></div>
                   </div>
                 </div>
               </div>
             ) : metrics ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 {/* Total Operations */}
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="metrics-card rounded-lg shadow p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                        <span className="text-white text-sm font-bold">📊</span>
+                      <div className="metrics-icon w-8 h-8 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-bold">📊</span>
                       </div>
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Total Operations</p>
-                      <p className="text-2xl font-bold text-gray-900">{metrics.totalOperations}</p>
+                      <p className="metrics-label text-sm font-medium">Total Operations</p>
+                      <p className="metrics-value text-2xl font-bold">{metrics.totalOperations}</p>
                     </div>
                   </div>
                 </div>
@@ -209,58 +212,29 @@ export default function AdminDashboard() {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-lg shadow p-6">
-                <p className="text-gray-500">No metrics data available</p>
+              <div className="admin-card rounded-lg shadow p-6">
+                <p className="admin-loading">No metrics data available</p>
               </div>
             )}
 
-            {/* Recent Activity */}
-            {metrics && metrics.recentActivity.length > 0 && (
-              <div className="bg-white rounded-lg shadow">
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <h4 className="text-lg font-medium text-gray-900">Recent Activity</h4>
-                </div>
-                <div className="divide-y divide-gray-200">
-                  {metrics.recentActivity.slice(0, 10).map((activity, index) => (
-                    <div key={index} className="px-6 py-4 flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-2 h-2 rounded-full ${
-                          activity.operation === 'CREATE' ? 'bg-green-500' :
-                          activity.operation === 'UPDATE' ? 'bg-blue-500' :
-                          activity.operation === 'DELETE' ? 'bg-red-500' :
-                          'bg-gray-500'
-                        }`}></div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">
-                            {activity.operation} - {activity.section}
-                          </p>
-                          <p className="text-sm text-gray-500">{activity.details}</p>
-                        </div>
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {new Date(activity.timestamp).toLocaleString()}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Enhanced Recent Activity with Pagination */}
+            <EnhancedMetricsDashboard />
           </div>
 
           {/* Dashboard Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             {/* About Management */}
-            <Link href="/admin/about" className="card hover:shadow-lg transition-shadow">
+            <Link href="/admin/about" className="admin-card p-6 rounded-lg hover:shadow-lg transition-all duration-300 block">
               <div className="flex items-center mb-4">
-                <div className="bg-indigo-100 p-3 rounded-lg mr-4">
-                  <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="metrics-icon p-3 rounded-lg mr-4">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">About</h3>
-                  <p className="text-gray-600 text-sm">Manage personal information</p>
+                  <h3 className="text-lg font-semibold admin-title">About</h3>
+                  <p className="admin-loading text-sm">Manage personal information</p>
                 </div>
               </div>
             </Link>
