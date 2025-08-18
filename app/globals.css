@@ -1,37 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   html {
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-    background-color: #000000;
-  }
-
-  body {
-    background-color: #000000;
-  }
-
-  /* Smooth scrolling with offset for fixed nav */
-  html {
     scroll-behavior: smooth;
     scroll-padding-top: 4rem;
   }
-}
 
-@layer components {
-  .dot-pattern {
-    background-image: radial-gradient(circle, #333 1px, transparent 1px);
-    background-size: 30px 30px;
+  body {
+    @apply font-sans antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
 @layer components {
+  /* Modern Card Components */
+  .modern-card {
+    @apply border border-gray-200 dark:border-gray-800 rounded-lg p-6
+           bg-white dark:bg-gray-900
+           transition-all duration-300
+           hover:shadow-lg hover:scale-[1.02];
+  }
+
+  .modern-button {
+    @apply px-8 py-3 border-2 font-light tracking-wider text-sm uppercase
+           transition-all duration-500 hover:scale-[1.02]
+           border-gray-700 text-gray-700 hover:bg-gray-700 hover:text-white
+           dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black;
+  }
+
+  .modern-button-secondary {
+    @apply px-8 py-3 font-light tracking-wider text-sm uppercase
+           transition-all duration-500 hover:scale-[1.02]
+           text-gray-600 hover:text-gray-800 border-b border-transparent hover:border-gray-700
+           dark:text-gray-400 dark:hover:text-white dark:hover:border-white;
+  }
+
+  /* Navigation */
+  .modern-nav {
+    @apply fixed top-0 w-full z-50
+           bg-white/80 dark:bg-gray-900/80
+           backdrop-blur-md border-b border-gray-200 dark:border-gray-800
+           transition-all duration-300;
+  }
+
+  .modern-nav-link {
+    @apply text-sm font-medium tracking-wide uppercase
+           text-gray-600 hover:text-gray-900
+           dark:text-gray-400 dark:hover:text-white
+           transition-colors duration-300;
+  }
+
+  /* Typography */
+  .modern-heading {
+    @apply font-light tracking-wider uppercase;
+  }
+
+  .modern-title {
+    @apply text-4xl md:text-6xl font-light tracking-wider;
+  }
+
+  .modern-subtitle {
+    @apply text-lg md:text-xl font-light tracking-wide text-gray-600 dark:text-gray-400;
+  }
+
+  /* Layout */
+  .modern-section {
+    @apply py-20 px-4 md:px-8 lg:px-16;
+  }
+
+  .modern-container {
+    @apply max-w-7xl mx-auto;
+  }
+
+  /* Grid Systems */
+  .modern-grid-2 {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+  }
+
+  .modern-grid-3 {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+  }
+
+  .modern-grid-4 {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+  }
+
+  /* Legacy Support */
   .btn-primary {
-    @apply bg-gray-800 text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors font-light tracking-[0.1em] uppercase text-sm;
+    @apply modern-button;
   }
 
   .btn-secondary {
-    @apply border border-gray-700 text-gray-400 px-6 py-3 rounded-lg hover:border-gray-600 hover:text-gray-300 transition-colors font-light tracking-[0.1em] uppercase text-sm;
+    @apply modern-button-secondary;
+  }
+
+  .card {
+    @apply modern-card;
+  }
+
+  .admin-card {
+    @apply modern-card;
+  }
+
+  .admin-nav-link {
+    @apply modern-nav-link;
   }
 }

@@ -1,0 +1,356 @@
+/* Old Money Theme System */
+
+/* Monochrome Icon System */
+.monochrome-icon {
+  transition: all 0.2s ease-in-out;
+  stroke: currentColor;
+  fill: none;
+}
+
+.monochrome-icon:hover {
+  transform: scale(1.05);
+}
+
+/* Icon color variants */
+.monochrome-icon.text-green-500 {
+  color: var(--success-text);
+}
+
+.monochrome-icon.text-blue-500 {
+  color: var(--accent-gold);
+}
+
+.monochrome-icon.text-red-500 {
+  color: var(--error-text);
+}
+
+.monochrome-icon.text-gray-500 {
+  color: var(--text-muted);
+}
+
+/* Simple Icon System */
+.simple-icon {
+  transition: all 0.2s ease-in-out;
+  stroke: currentColor;
+  fill: none;
+}
+
+.simple-icon:hover {
+  transform: scale(1.05);
+}
+
+/* Simple icon color variants */
+.simple-icon.text-green-500 {
+  color: var(--success-text);
+}
+
+.simple-icon.text-blue-500 {
+  color: var(--accent-gold);
+}
+
+.simple-icon.text-red-500 {
+  color: var(--error-text);
+}
+
+.simple-icon.text-gray-500 {
+  color: var(--text-muted);
+}
+
+:root {
+  /* Light Theme (Old Money) */
+  --bg-primary: #000000;           /* Complete black background */
+  --bg-secondary: #1a1a1a;         /* Slightly lighter black for cards */
+  --bg-tertiary: #2a2a2a;          /* Input backgrounds */
+  
+  --text-primary: #f5f5dc;         /* Cream/beige text */
+  --text-secondary: #d4af37;       /* Gold accents */
+  --text-muted: #8b7355;           /* Muted brown */
+  
+  --accent-gold: #d4af37;          /* Primary gold */
+  --accent-cream: #f5f5dc;         /* Cream */
+  --accent-brown: #8b4513;         /* Deep brown */
+  
+  --border-color: #3a3a3a;         /* Dark borders */
+  --border-accent: #d4af37;        /* Gold borders for focus */
+  
+  /* Status colors */
+  --success-bg: #1a2e1a;
+  --success-text: #90ee90;
+  --success-border: #2d5a2d;
+  
+  --error-bg: #2e1a1a;
+  --error-text: #ffb3b3;
+  --error-border: #5a2d2d;
+  
+  --warning-bg: #2e2a1a;
+  --warning-text: #ffd700;
+  --warning-border: #5a4d2d;
+}
+
+[data-theme="dark"] {
+  /* Dark Theme (Grey shades with brownish accents) */
+  --bg-primary: #1a1a1a;           /* Dark grey background */
+  --bg-secondary: #2d2d2d;         /* Medium grey for cards */
+  --bg-tertiary: #3a3a3a;          /* Input backgrounds */
+  
+  --text-primary: #ffffff;         /* White text */
+  --text-secondary: #e0e0e0;       /* Light grey */
+  --text-muted: #a0a0a0;           /* Muted grey */
+  
+  --accent-gold: #b8860b;          /* Darker gold */
+  --accent-cream: #f0f0f0;         /* Light grey instead of cream */
+  --accent-brown: #8b6f47;         /* Brownish accent */
+  
+  --border-color: #4a4a4a;         /* Grey borders */
+  --border-accent: #b8860b;        /* Gold borders for focus */
+  
+  /* Status colors */
+  --success-bg: #1a2e1a;
+  --success-text: #90ee90;
+  --success-border: #2d5a2d;
+  
+  --error-bg: #2e1a1a;
+  --error-text: #ffb3b3;
+  --error-border: #5a2d2d;
+  
+  --warning-bg: #2e2a1a;
+  --warning-text: #ffd700;
+  --warning-border: #5a4d2d;
+}
+
+/* Base styles */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Admin Layout Overrides */
+.admin-layout {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.admin-header {
+  background-color: var(--bg-secondary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.admin-card {
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Form Elements */
+.admin-input {
+  background-color: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease;
+}
+
+.admin-input:focus {
+  border-color: var(--border-accent) !important;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2) !important;
+  outline: none !important;
+}
+
+.admin-input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+.admin-textarea {
+  background-color: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease;
+}
+
+.admin-textarea:focus {
+  border-color: var(--border-accent) !important;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2) !important;
+  outline: none !important;
+}
+
+.admin-textarea::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* Labels and Titles */
+.admin-label {
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+}
+
+.admin-title {
+  color: var(--text-primary) !important;
+}
+
+/* Buttons */
+.admin-btn-primary {
+  background-color: var(--accent-gold) !important;
+  color: var(--bg-primary) !important;
+  border: 1px solid var(--accent-gold) !important;
+  transition: all 0.3s ease;
+}
+
+.admin-btn-primary:hover {
+  background-color: var(--accent-cream) !important;
+  color: var(--bg-primary) !important;
+  transform: translateY(-1px);
+}
+
+.admin-btn-secondary {
+  background-color: transparent !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  transition: all 0.3s ease;
+}
+
+.admin-btn-secondary:hover {
+  background-color: var(--bg-tertiary) !important;
+  border-color: var(--border-accent) !important;
+}
+
+/* Navigation */
+.admin-nav-link {
+  color: var(--text-secondary) !important;
+  transition: color 0.3s ease;
+}
+
+.admin-nav-link:hover {
+  color: var(--accent-gold) !important;
+}
+
+/* Status Messages */
+.admin-alert-success {
+  background-color: var(--success-bg) !important;
+  color: var(--success-text) !important;
+  border: 1px solid var(--success-border) !important;
+}
+
+.admin-alert-error {
+  background-color: var(--error-bg) !important;
+  color: var(--error-text) !important;
+  border: 1px solid var(--error-border) !important;
+}
+
+.admin-alert-warning {
+  background-color: var(--warning-bg) !important;
+  color: var(--warning-text) !important;
+  border: 1px solid var(--warning-border) !important;
+}
+
+/* Metrics Dashboard */
+.metrics-card {
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.metrics-value {
+  color: var(--accent-gold) !important;
+  font-weight: bold;
+}
+
+.metrics-label {
+  color: var(--text-secondary) !important;
+}
+
+.metrics-icon {
+  background-color: var(--accent-gold) !important;
+  color: var(--bg-primary) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.metrics-icon:hover {
+  background-color: var(--accent-cream) !important;
+  transform: scale(1.05);
+}
+
+.metrics-icon .monochrome-icon,
+.metrics-icon .simple-icon {
+  color: var(--bg-primary) !important;
+}
+
+/* Activity Feed */
+.activity-item {
+  background-color: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.activity-operation {
+  color: var(--accent-gold) !important;
+  font-weight: 600;
+}
+
+.activity-timestamp {
+  color: var(--text-muted) !important;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  background-color: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--border-accent) !important;
+  background-color: var(--bg-secondary) !important;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-cream);
+}
+
+/* Loading States */
+.admin-loading {
+  color: var(--text-muted) !important;
+}
+
+.admin-spinner {
+  border-color: var(--border-color) !important;
+  border-top-color: var(--accent-gold) !important;
+}
+
+/* Tables */
+.admin-table {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+.admin-table th {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-secondary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.admin-table td {
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.admin-table tr:hover {
+  background-color: var(--bg-tertiary) !important;
+}

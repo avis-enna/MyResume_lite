@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import '../../styles/themes.css';
 
 // MongoDB contact data structure
 interface ContactData {
@@ -121,16 +122,16 @@ export default function AdminContact() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="admin-layout min-h-screen">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="admin-header shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
-              <Link href="/admin/dashboard" className="text-gray-600 hover:text-gray-900 mr-4">
+              <Link href="/admin/dashboard" className="admin-nav-link mr-4">
                 ← Back to Dashboard
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">Edit Contact Section</h1>
+              <h1 className="text-2xl font-bold admin-title">Edit Contact Section</h1>
             </div>
           </div>
         </div>
@@ -141,87 +142,90 @@ export default function AdminContact() {
         {/* Success/Error Messages */}
         {message && (
           <div className={`mb-6 p-4 rounded-md ${
-            message.type === 'success' 
-              ? 'bg-green-50 border border-green-200 text-green-800' 
-              : 'bg-red-50 border border-red-200 text-red-800'
+            message.type === 'success'
+              ? 'admin-alert-success bg-green-50'
+              : 'admin-alert-error bg-red-50'
           }`}>
             {message.text}
           </div>
         )}
 
         {/* Contact Information Form */}
-        <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-6">Contact Information</h2>
+        <div className="admin-card shadow rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-6 admin-title">Contact Information</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <label className="admin-label block text-sm font-medium mb-2">Email</label>
               <input
                 type="email"
                 name="email"
+                data-testid="contact-email-input"
                 value={contactData.email}
                 onChange={(e) => updateField('email', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="admin-input w-full px-3 py-2 rounded-md"
                 placeholder="Enter your email"
+                required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+              <label className="admin-label block text-sm font-medium mb-2">Phone</label>
               <input
                 type="tel"
                 name="phone"
                 value={contactData.phone}
                 onChange={(e) => updateField('phone', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="admin-input w-full px-3 py-2 rounded-md"
                 placeholder="Enter your phone number"
+                required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+              <label className="admin-label block text-sm font-medium mb-2">Location</label>
               <input
                 type="text"
                 name="location"
                 value={contactData.location}
                 onChange={(e) => updateField('location', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="admin-input w-full px-3 py-2 rounded-md"
                 placeholder="Enter your location"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">LinkedIn URL</label>
+              <label className="admin-label block text-sm font-medium mb-2">LinkedIn URL</label>
               <input
                 type="url"
                 name="linkedin"
                 value={contactData.linkedin}
                 onChange={(e) => updateField('linkedin', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="admin-input w-full px-3 py-2 rounded-md"
                 placeholder="https://linkedin.com/in/yourprofile"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">GitHub URL</label>
+              <label className="admin-label block text-sm font-medium mb-2">GitHub URL</label>
               <input
                 type="url"
                 name="github"
                 value={contactData.github}
                 onChange={(e) => updateField('github', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="admin-input w-full px-3 py-2 rounded-md"
                 placeholder="https://github.com/yourusername"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Website URL</label>
+              <label className="admin-label block text-sm font-medium mb-2">Website URL</label>
               <input
                 type="url"
                 name="website"
                 value={contactData.website}
                 onChange={(e) => updateField('website', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="admin-input w-full px-3 py-2 rounded-md"
                 placeholder="https://yourwebsite.com"
               />
             </div>
@@ -230,10 +234,10 @@ export default function AdminContact() {
           {/* Save Button */}
           <div className="mt-8 flex justify-end">
             <button
-              type="button"
+              type="submit"
               onClick={handleSave}
               disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              className="admin-btn-primary px-6 py-2 rounded-md disabled:opacity-50"
             >
               {saving ? 'Saving...' : 'Save Changes'}
             </button>

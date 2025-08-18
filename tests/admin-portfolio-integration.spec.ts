@@ -59,7 +59,7 @@ test.describe('Admin-Portfolio Integration', () => {
   test('should reflect contact information changes on portfolio', async ({ page }) => {
     // Navigate to admin contact page
     await page.click('a[href="/admin/contact"]');
-    await page.waitForSelector('h1:has-text("Contact Management")');
+    await page.waitForSelector('h1:has-text("Edit Contact Section")');
     
     // Update contact information
     const testEmail = 'integration@test.com';
@@ -97,27 +97,24 @@ test.describe('Admin-Portfolio Integration', () => {
     await page.waitForSelector('h1:has-text("Skills Management")');
     
     // Add a new skill to test integration
-    const addSkillButton = page.locator('button:has-text("Add Skill")').first();
-    await addSkillButton.click();
-    
+    const addSkillToggle = page.locator('button:has-text("+ Add Skill")').first();
+    await addSkillToggle.click();
+
     const newSkillInput = page.locator('input[placeholder*="Enter new skill"]');
     await newSkillInput.fill('Integration Testing');
-    
-    const addButton = page.locator('input[placeholder*="Enter new skill"]').locator('..').locator('button:has-text("Add")');
-    await addButton.click();
+
+    const addSkillSubmitButton = page.locator('button:has-text("Add")').first();
+    await addSkillSubmitButton.click();
     
     // Wait for success message
     await expect(page.locator('.bg-green-50')).toBeVisible();
     
     // Add a new certification
-    const addCertButton = page.locator('button:has-text("Add Certification")');
-    await addCertButton.click();
-    
     const newCertInput = page.locator('input[placeholder*="Enter new certification"]');
     await newCertInput.fill('Certified Integration Specialist');
-    
-    const addCertSubmitButton = page.locator('input[placeholder*="Enter new certification"]').locator('..').locator('button:has-text("Add")');
-    await addCertSubmitButton.click();
+
+    const addCertButton = page.locator('button:has-text("Add Certification")');
+    await addCertButton.click();
     
     // Wait for success message
     await expect(page.locator('.bg-green-50')).toBeVisible();
@@ -135,11 +132,11 @@ test.describe('Admin-Portfolio Integration', () => {
     // Navigate to public portfolio
     await page.goto('/');
     
-    // Verify skills section reflects changes
-    await expect(page.locator('text=Integration Testing')).toBeVisible();
+    // Verify skills section reflects changes (use more specific selectors)
+    await expect(page.locator('span.text-amber-200\\/80:has-text("Integration Testing")')).toBeVisible();
     await expect(page.locator('text=Certified Integration Specialist')).toBeVisible();
-    await expect(page.locator('text=Integration Technical Expertise')).toBeVisible();
-    await expect(page.locator('text=Comprehensive integration testing and automation expertise')).toBeVisible();
+    await expect(page.locator('h2:has-text("Integration Technical Expertise")')).toBeVisible();
+    await expect(page.locator('p:has-text("Comprehensive integration testing and automation expertise")')).toBeVisible();
   });
 
   test('should reflect experience changes on portfolio', async ({ page }) => {
@@ -148,7 +145,7 @@ test.describe('Admin-Portfolio Integration', () => {
     await page.waitForSelector('h1:has-text("Experience Management")');
     
     // Navigate to add experience page
-    await page.click('a[href="/admin/experience/add"]');
+    await page.click('a[href="/admin/experience/new"]');
     await page.waitForSelector('h1:has-text("Add Experience")');
     
     // Fill out new experience

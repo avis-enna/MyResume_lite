@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getContactData, updateContactData } from '../../../lib/contact-mongo';
 import { requireAuth } from '../../../lib/admin-auth';
+import { MetricsTracker } from '../../../lib/metrics';
 
 export async function GET(_request: NextRequest) {
   try {
@@ -30,6 +31,10 @@ export async function PUT(request: NextRequest) {
     await requireAuth();
     const updates = await request.json();
     const updatedData = await updateContactData(updates);
+
+    // Track metrics
+    await MetricsTracker.contactUpdated(request, updates);
+
     return NextResponse.json({
       success: true,
       message: 'Contact data updated successfully',
