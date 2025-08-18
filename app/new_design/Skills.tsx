@@ -1,16 +1,61 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { useDarkMode } from "./DarkModeContext";
 
-interface SkillsProps {
-  skillsData: any;
+interface SkillCategory {
+  id: string;
+  title: string;
+  skills: string[];
 }
 
-export default function Skills({ skillsData }: SkillsProps) {
-  const { isDarkMode } = useDarkMode();
+interface SkillsData {
+  skillCategories: SkillCategory[];
+  certifications: string[];
+  technicalExpertise: {
+    title: string;
+    description: string;
+  };
+}
 
-  const skillCategories = skillsData.skillCategories || [];
-  const certifications = skillsData.certifications || [];
+export default function Skills() {
+  const { isDarkMode } = useDarkMode();
+  const [skillsData, setSkillsData] = useState<SkillsData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchSkillsData = async () => {
+    try {
+      const response = await fetch('/api/skills');
+      if (response.ok) {
+        const data = await response.json();
+        setSkillsData(data);
+      }
+    } catch (error) {
+      console.error('Error fetching skills data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSkillsData();
+  }, []);
+
+  if (loading) {
+    return (
+      <section id="skills" className={`py-20 px-6 lg:px-8 transition-colors duration-300 ${
+        isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-black'
+      }`}>
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="w-8 h-8 border-2 border-current border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p>Loading skills...</p>
+        </div>
+      </section>
+    );
+  }
+
+  const skillCategories = skillsData?.skillCategories || [];
+  const certifications = skillsData?.certifications || [];
 
   return (
     <section id="skills" className={`py-20 px-6 lg:px-8 transition-colors duration-300 ${

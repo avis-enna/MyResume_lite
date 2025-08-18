@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDarkMode } from "./DarkModeContext";
 
 interface HeroProps {
@@ -12,7 +12,17 @@ export default function Hero({ aboutData, contactData }: HeroProps) {
   const [currentTitle, setCurrentTitle] = useState(0);
   const { isDarkMode } = useDarkMode();
 
-  console.log('Hero component received data:', { aboutData, contactData });
+  console.log('🎭 Hero component received data:', { aboutData, contactData });
+  console.log('🎭 Hero will display name:', aboutData?.name);
+  console.log('🎭 Hero aboutData type:', typeof aboutData);
+  console.log('🎭 Hero aboutData keys:', aboutData ? Object.keys(aboutData) : 'null');
+
+  // Add a one-time alert to see what's happening
+  React.useEffect(() => {
+    if (aboutData) {
+      console.log('🚨 ALERT: Hero received aboutData:', aboutData);
+    }
+  }, [aboutData]);
 
   const titles = [
     "software engineer",
@@ -51,8 +61,11 @@ export default function Hero({ aboutData, contactData }: HeroProps) {
               {aboutData ? (aboutData.name || 'VENNA VENKATA SIVA REDDY').toUpperCase() : 'LOADING...'}
             </h1>
             {/* Debug info */}
-            <div className="text-sm text-red-500 mt-4">
-              DEBUG: aboutData = {JSON.stringify(aboutData, null, 2)}
+            <div className="text-sm text-red-500 mt-4 bg-black/80 p-4 rounded">
+              <div>🔍 DEBUG INFO:</div>
+              <div>aboutData type: {typeof aboutData}</div>
+              <div>aboutData.name: {aboutData?.name || 'undefined'}</div>
+              <div>Raw aboutData: {JSON.stringify(aboutData, null, 2)}</div>
             </div>
           </div>
 
