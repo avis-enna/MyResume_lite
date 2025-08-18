@@ -83,9 +83,23 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back!</h2>
-            <p className="text-gray-600">Manage your portfolio content from here.</p>
+          {/* Profile Welcome Section */}
+          <div className="mb-8 admin-card p-6">
+            <div className="flex items-center space-x-6">
+              <div className="relative">
+                <img
+                  src="/profile-photo.png"
+                  alt="Profile"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700"
+                />
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></div>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold admin-title mb-1">Welcome back, Venna!</h2>
+                <p className="admin-loading">Manage your portfolio content from here.</p>
+                <p className="text-sm admin-loading mt-1">Last login: {new Date().toLocaleDateString()}</p>
+              </div>
+            </div>
           </div>
 
           {/* Enhanced Metrics Section */}

@@ -48,6 +48,19 @@ export default async function Home() {
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-600/50 to-transparent mx-auto mb-8"></div>
           </div>
 
+          {/* Profile Photo */}
+          <div className="mb-12">
+            <div className="relative w-48 h-48 mx-auto mb-8">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-amber-600/20 via-amber-700/10 to-amber-800/20 blur-xl"></div>
+              <img
+                src="/profile-photo.png"
+                alt="Venna Venkata Siva Reddy"
+                className="relative w-full h-full object-cover rounded-full border-2 border-amber-600/30 shadow-2xl"
+              />
+              <div className="absolute inset-0 rounded-full border border-amber-500/20"></div>
+            </div>
+          </div>
+
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-[0.3em] mb-8">
             <div className="text-amber-100">{aboutData.name?.toUpperCase() || 'VENNA VENKATA SIVA REDDY'}</div>
           </h1>
@@ -113,25 +126,54 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="space-y-6">
-              <div className="bg-amber-950/20 border border-amber-800/30 p-8 rounded">
-                <h4 className="text-xl font-light tracking-[0.2em] text-amber-200 mb-4 uppercase">Current Role</h4>
-                <p className="text-amber-200/80 font-light">Software Engineer</p>
-                <p className="text-amber-300/60 font-light">Cisco Systems</p>
-                <p className="text-amber-400/50 font-light text-sm mt-2">August 2024 - Present</p>
+            <div className="space-y-8">
+              {/* Profile Photo Section */}
+              <div className="text-center">
+                <div className="relative w-64 h-64 mx-auto mb-8">
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-amber-600/20 via-amber-700/10 to-amber-800/20 blur-xl"></div>
+                  <img
+                    src="/profile-photo.png"
+                    alt="Venna Venkata Siva Reddy"
+                    className="relative w-full h-full object-cover rounded-lg border border-amber-600/30 shadow-2xl"
+                  />
+                  <div className="absolute inset-0 rounded-lg border border-amber-500/20"></div>
+                </div>
+
+                <h3 className="text-2xl font-light tracking-[0.2em] text-amber-200 mb-2 uppercase">
+                  {aboutData.name || 'Venna Venkata Siva Reddy'}
+                </h3>
+                <p className="text-amber-300/70 font-light mb-6">
+                  {aboutData.title || 'Software Engineer'} · {contactData.company || 'Cisco Systems'}
+                </p>
+
+                {/* Social Links */}
+                <div className="flex justify-center space-x-6 mb-8">
+                  <a href={contactData.linkedin || '#'} className="text-amber-400/60 hover:text-amber-300 transition-colors">
+                    <span className="text-sm tracking-[0.1em] uppercase">LinkedIn</span>
+                  </a>
+                  <a href={contactData.github || '#'} className="text-amber-400/60 hover:text-amber-300 transition-colors">
+                    <span className="text-sm tracking-[0.1em] uppercase">GitHub</span>
+                  </a>
+                  <a href={`mailto:${contactData.email || ''}`} className="text-amber-400/60 hover:text-amber-300 transition-colors">
+                    <span className="text-sm tracking-[0.1em] uppercase">Email</span>
+                  </a>
+                </div>
               </div>
 
-              <div className="bg-amber-950/20 border border-amber-800/30 p-8 rounded">
-                <h4 className="text-xl font-light tracking-[0.2em] text-amber-200 mb-4 uppercase">Education</h4>
-                <p className="text-amber-200/80 font-light">Bachelor of Engineering</p>
-                <p className="text-amber-300/60 font-light">Electronics & Telecommunication</p>
-                <p className="text-amber-400/50 font-light text-sm mt-2">Sir M Visvesvaraya Institute of Technology</p>
-              </div>
+              {/* Quick Info Cards */}
+              <div className="space-y-4">
+                <div className="bg-amber-950/20 border border-amber-800/30 p-6 rounded">
+                  <h4 className="text-lg font-light tracking-[0.2em] text-amber-200 mb-3 uppercase">Current Role</h4>
+                  <p className="text-amber-200/80 font-light">Software Engineer</p>
+                  <p className="text-amber-300/60 font-light">Cisco Systems</p>
+                  <p className="text-amber-400/50 font-light text-sm mt-2">August 2024 - Present</p>
+                </div>
 
-              <div className="bg-amber-950/20 border border-amber-800/30 p-8 rounded">
-                <h4 className="text-xl font-light tracking-[0.2em] text-amber-200 mb-4 uppercase">Location</h4>
-                <p className="text-amber-200/80 font-light">{contactData.location || 'Bengaluru, India'}</p>
-                <p className="text-amber-300/60 font-light">Available for Remote & On-site</p>
+                <div className="bg-amber-950/20 border border-amber-800/30 p-6 rounded">
+                  <h4 className="text-lg font-light tracking-[0.2em] text-amber-200 mb-3 uppercase">Location</h4>
+                  <p className="text-amber-200/80 font-light">{contactData.location || 'Bengaluru, India'}</p>
+                  <p className="text-amber-300/60 font-light">Available for Remote & On-site</p>
+                </div>
               </div>
             </div>
           </div>
