@@ -41,6 +41,8 @@ function LayoutContent({ aboutData, contactData, skillsData, experiences, projec
 }
 
 export default function NewDesignLayout() {
+  console.log('NewDesignLayout component mounted');
+
   const [data, setData] = useState({
     aboutData: null,
     contactData: null,
@@ -51,98 +53,36 @@ export default function NewDesignLayout() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('useEffect running - starting to fetch data');
+
     async function fetchData() {
+      console.log('fetchData function called');
       try {
         // Fetch data from API endpoints
-        const [aboutRes, contactRes, experienceRes] = await Promise.all([
+        const [aboutRes, contactRes, experienceRes, skillsRes, projectsRes] = await Promise.all([
           fetch('/api/about'),
           fetch('/api/contact'),
-          fetch('/api/experience')
+          fetch('/api/experience'),
+          fetch('/api/skills'),
+          fetch('/api/projects')
         ]);
 
-        const [aboutData, contactData, experienceData] = await Promise.all([
+        const [aboutData, contactData, experienceData, skillsData, projectsData] = await Promise.all([
           aboutRes.json(),
           contactRes.json(),
-          experienceRes.json()
+          experienceRes.json(),
+          skillsRes.json(),
+          projectsRes.json()
         ]);
 
-        console.log('Fetched data:', { aboutData, contactData, experienceData });
-
-        // For skills and projects, use default data since the endpoints don't exist publicly
-        const defaultSkillsData = {
-          skillCategories: [
-            {
-              title: "Cloud & DevOps",
-              skills: ["Kubernetes", "Docker", "Helm", "FluxCD", "CI/CD", "AWS", "GCP"]
-            },
-            {
-              title: "Programming Languages",
-              skills: ["Java", "Python", "JavaScript", "SQL", "Shell Scripting", "COBOL"]
-            },
-            {
-              title: "Backend",
-              skills: ["Spring Boot", "REST APIs", "SOAP Web Services", "Microservices"]
-            },
-            {
-              title: "Frontend",
-              skills: ["React", "JavaScript", "HTML", "CSS"]
-            },
-            {
-              title: "Databases",
-              skills: ["SQL", "MongoDB", "IBM DB2", "VSAM"]
-            },
-            {
-              title: "Mainframe",
-              skills: ["JCL", "COBOL"]
-            },
-            {
-              title: "Networking",
-              skills: ["TCP/IP", "HTTP", "Network Device Configuration & Troubleshooting"]
-            }
-          ],
-          certifications: [
-            "Cisco Certified DevNet Associate (DEVASC)",
-            "Cisco Certified Network Associate (CCNA)",
-            "Cisco Certified Cybersecurity Associate (CCCA)"
-          ],
-          technicalExpertise: {
-            description: "A results-driven Software Engineer with hands-on experience in migrating legacy systems to modern, cloud-native environments. Proven expertise in the full software development lifecycle, from backend development with Java/Spring Boot to frontend implementation with React. Specialized in Kubernetes, Docker, and GitOps workflows using Helm and FluxCD."
-          }
-        };
-
-        const defaultProjectsData = [
-          {
-            title: "IoT Control Center Migration",
-            description: "Led the migration of IoT Control Center's core services from Docker to scalable Kubernetes architecture, improving service reliability and deployment velocity.",
-            technologies: ["Kubernetes", "Docker", "Helm", "FluxCD", "Java", "Spring Boot"],
-            featured: true
-          },
-          {
-            title: "HLR Network Service",
-            description: "Developed and maintained resilient Java Spring Boot microservices for HLR-level network service, designing and exposing both REST and SOAP APIs.",
-            technologies: ["Java", "Spring Boot", "REST APIs", "SOAP", "Microservices"],
-            featured: true
-          },
-          {
-            title: "SSO Integration",
-            description: "Implemented Single Sign-On (SSO) for new services using Duo, enhancing security and streamlining user access.",
-            technologies: ["SSO", "Duo", "Security", "Authentication"],
-            featured: false
-          },
-          {
-            title: "Data Analytics Tool",
-            description: "Developed a data analytics tool by integrating with Jira APIs to pull, model, and visualize project data, enabling predictive insights into team productivity.",
-            technologies: ["Jira APIs", "Data Analytics", "Visualization", "React"],
-            featured: false
-          }
-        ];
+        console.log('Fetched data:', { aboutData, contactData, experienceData, skillsData, projectsData });
 
         const processedData = {
           aboutData: aboutData.personal || aboutData,
           contactData: contactData.contacts?.[0] || contactData,
-          skillsData: defaultSkillsData,
+          skillsData: skillsData,
           experiences: experienceData.data || experienceData,
-          projects: defaultProjectsData
+          projects: projectsData.data || projectsData
         };
 
         console.log('Processed data:', processedData);

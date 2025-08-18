@@ -48,8 +48,12 @@ export default function Hero({ aboutData, contactData }: HeroProps) {
             <h1 className={`text-6xl md:text-8xl lg:text-9xl font-light tracking-wider leading-none transition-colors duration-300 ${
               isDarkMode ? 'text-white' : 'text-black'
             }`}>
-              {(aboutData.name || 'VENNA VENKATA SIVA REDDY').toUpperCase()}
+              {aboutData ? (aboutData.name || 'VENNA VENKATA SIVA REDDY').toUpperCase() : 'LOADING...'}
             </h1>
+            {/* Debug info */}
+            <div className="text-sm text-red-500 mt-4">
+              DEBUG: aboutData = {JSON.stringify(aboutData, null, 2)}
+            </div>
           </div>
 
           {/* Animated Title */}
